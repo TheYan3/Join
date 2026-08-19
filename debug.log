@@ -1,0 +1,17 @@
+Debug-Log — Join-Projekt
+=========================
+Hier wird jede Code-Änderung an diesem Projekt einfach und verständlich
+festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Commit,
+neuester Eintrag oben.
+
+
+[2026-08-19] Sicherheitslücke geschlossen: eingegebener HTML-Code wurde ausgeführt
+-------------------------------------------------------------------------------------
+- Bug: Task-Titel/-Beschreibung, Kontakt-Name/-Email, Subtask-Text und
+  Assignee-Name wurden ungeprüft in die Seite eingebaut. Wer z.B.
+  "<img src=x onerror=...>" als Titel eingegeben hätte, hätte damit Code im
+  Browser anderer Nutzer ausführen können (Stored XSS).
+- Fix: neue Funktion escapeHtml() in scripts/template.js macht Sonderzeichen
+  (< > & " ') vor der Anzeige unschädlich. An allen 5 betroffenen Stellen
+  eingebaut.
+- Datei: scripts/template.js

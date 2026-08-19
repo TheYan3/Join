@@ -14,6 +14,23 @@ function templateAssetPath(relativePath) {
 
 
 /**
+ * Escapes HTML special characters so user input can't inject markup.
+ *
+ * @param {*} value - The raw value.
+ * @returns {string} The escaped text.
+ */
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+    })[char]);
+}
+
+
+/**
  * Sets the good morning.
  * @returns {string} The good morning.
  */
@@ -158,8 +175,8 @@ function taskCardAvatarOverflowHTML(remainingCount) {
 function taskCardHTML(categoryClass, categoryLabel, title, description, subtasksHTML, avatarsHTML, priorityIconSrc) {
    return `
       <span class="task-card__label ${categoryClass}">${categoryLabel}</span>
-      <h3 class="task-card__title">${title}</h3>
-      <p class="task-card__description">${description}</p>
+      <h3 class="task-card__title">${escapeHtml(title)}</h3>
+      <p class="task-card__description">${escapeHtml(description)}</p>
       ${subtasksHTML}
       <div class="task-card__meta">
          <div class="task-card__avatars">
@@ -184,7 +201,7 @@ function taskCardHTML(categoryClass, categoryLabel, title, description, subtasks
  * @returns {string} The task card fallback HTML.
  */
 function taskCardFallbackHTML(categoryClass, categoryLabel, title, description, subtasksHTML, avatarsHTML, priorityIconSrc) {
-   return `<span class="task-card__label ${categoryClass}">${categoryLabel}</span><h3 class="task-card__title">${title}</h3><p class="task-card__description">${description}</p>${subtasksHTML}<div class="task-card__meta"><div class="task-card__avatars">${avatarsHTML}</div><img class="task-card__priority" src="${priorityIconSrc}" alt="Priority" /></div>`;
+   return `<span class="task-card__label ${categoryClass}">${categoryLabel}</span><h3 class="task-card__title">${escapeHtml(title)}</h3><p class="task-card__description">${escapeHtml(description)}</p>${subtasksHTML}<div class="task-card__meta"><div class="task-card__avatars">${avatarsHTML}</div><img class="task-card__priority" src="${priorityIconSrc}" alt="Priority" /></div>`;
 }
 
 
@@ -253,7 +270,7 @@ function taskDetailEmptyItemHTML(text) {
  * @returns {string} The task detail assigned item HTML.
  */
 function taskDetailAssignedItemHTML(colorClass, initialsText, name) {
-   return `<span class="avatar avatar--${colorClass}">${initialsText}</span><span class="task-detail__assigned-name">${name}</span>`;
+   return `<span class="avatar avatar--${colorClass}">${escapeHtml(initialsText)}</span><span class="task-detail__assigned-name">${escapeHtml(name)}</span>`;
 }
 
 
@@ -268,7 +285,7 @@ function taskDetailAssignedItemHTML(colorClass, initialsText, name) {
 function taskDetailSubtaskItemHTML(index, checked, text) {
    const checkedAttribute = checked ? " checked" : "";
    const textClass = checked ? " task-detail__subtask-text--done" : "";
-   return `<input type="checkbox" class="task-detail__subtask-checkbox"${checkedAttribute} data-subtask-index="${index}"><span class="task-detail__subtask-text${textClass}">${text}</span>`;
+   return `<input type="checkbox" class="task-detail__subtask-checkbox"${checkedAttribute} data-subtask-index="${index}"><span class="task-detail__subtask-text${textClass}">${escapeHtml(text)}</span>`;
 }
 
 
@@ -294,10 +311,10 @@ function contactGroupHeaderHTML(letter) {
 function contactListItemHTML(contact, initials, activeClass) {
    return `
       <div class="contact-item ${activeClass}" data-id="${contact.id}">
-         <div class="initials" style="background:${contact.color}">${initials}</div>
+         <div class="initials" style="background:${contact.color}">${escapeHtml(initials)}</div>
          <div class="contact-info">
-            <span class="name">${contact.name}</span>
-            <span class="email">${contact.email}</span>
+            <span class="name">${escapeHtml(contact.name)}</span>
+            <span class="email">${escapeHtml(contact.email)}</span>
          </div>
       </div>
    `;
