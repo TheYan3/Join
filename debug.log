@@ -5,6 +5,25 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-19] Aufräumen: drei überflüssige Code-Stellen entfernt
+-------------------------------------------------------------------------------------
+- Eine Funktion (prepareLoginLegalNavigation) tat nichts außer "true"
+  zurückzugeben, hing aber an zwei Links auf der Login-Seite. Entfernt, Links
+  funktionieren unverändert weiter.
+  Dateien: scripts/legalInformation.js, index.html
+- Die Prüfung "ist diese Email schon registriert?" hatte ihre eigene Suchlogik,
+  obwohl es im selben Ladevorgang schon eine fast identische Funktion gab. Nutzt
+  jetzt die vorhandene Funktion mit statt sie zu duplizieren.
+  Datei: scripts/auth/index.js
+- Eine zweite, fest einprogrammierte Kopie der Firebase-Datenbank-Adresse wurde nie
+  wirklich gebraucht (die richtige Adresse ist zu dem Zeitpunkt immer schon
+  gesetzt). Entfernt.
+  Datei: scripts/contacts/contacts-data.js
+- Bewusst nicht angefasst: eine doppelte Email-Prüfregel (Login vs. Kontakte) und
+  ein paar Variablen, die nur den Namen der Datenbank-Adresse wiederholen — beides
+  harmlos, ein Aufräumen hätte mehr Aufwand als Nutzen gebracht.
+
+
 [2026-08-19] Sicherheitslücke geschlossen: eingegebener HTML-Code wurde ausgeführt
 -------------------------------------------------------------------------------------
 - Bug: Task-Titel/-Beschreibung, Kontakt-Name/-Email, Subtask-Text und

@@ -84,9 +84,7 @@ async function getUsersFromDatabase() {
  * @returns {boolean} Whether the email already is registered.
  */
 function isEmailAlreadyRegistered(usersObject, email) {
-    return Object.values(usersObject).some((user) => {
-        return user && typeof user.email === "string" && user.email.toLowerCase() === email;
-    });
+    return Boolean(getUserEntryByEmail(usersObject, email));
 }
 
 

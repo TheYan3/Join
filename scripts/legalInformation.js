@@ -5,16 +5,6 @@
     document.addEventListener("DOMContentLoaded", transformNavbarForLogin);
 
     /**
-     * Prepares the login legal navigation flow.
-     * @returns {boolean} Always returns true.
-     */
-    function prepareLoginLegalNavigation() {
-        return true;
-    }
-
-    window.prepareLoginLegalNavigation = prepareLoginLegalNavigation;
-
-    /**
      * Transforms the navbar for login.
      * @returns {void} Nothing.
      */

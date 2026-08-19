@@ -1,8 +1,6 @@
 "use strict";
 
 {
-   const DEFAULT_CONTACTS_BASE_URL =
-      "https://join-4bce1-default-rtdb.europe-west1.firebasedatabase.app/";
    const ContactsFeature = window.ContactsFeature || {};
    ContactsFeature.state = ContactsFeature.state || {
       selectedContactId: null,
@@ -17,7 +15,7 @@
     * @returns {string} The contacts base URL.
     */
    function getContactsBaseUrl() {
-      return (window.JOIN_CONFIG && window.JOIN_CONFIG.BASE_URL) || DEFAULT_CONTACTS_BASE_URL;
+      return window.JOIN_CONFIG.BASE_URL;
    }
 
    /**
