@@ -5,6 +5,14 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-19] Neue Regel: jede Änderung bekommt einen Eintrag hier
+-------------------------------------------------------------------------------------
+- CLAUDE.md angelegt: hält fest, dass ab jetzt jede Code-Änderung an diesem
+  Projekt einen eigenen debug.log-Eintrag bekommt, passend zu genau einem Commit,
+  in einfacher verständlicher Sprache.
+- Datei: CLAUDE.md
+
+
 [2026-08-19] Aufräumen: drei überflüssige Code-Stellen entfernt
 -------------------------------------------------------------------------------------
 - Eine Funktion (prepareLoginLegalNavigation) tat nichts außer "true"
