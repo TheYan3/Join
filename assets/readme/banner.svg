@@ -25,8 +25,8 @@
     <rect x="1130" y="104" width="26" height="26" rx="6" fill="#ffffff" opacity="0.35"/>
   </g>
 
-  <!-- Join logotype (from assets/icons/desktop/logo.svg), scaled ~1.55x -->
-  <g transform="translate(90,60) scale(1.55)">
+  <!-- Join logotype (from assets/icons/desktop/logo.svg), scaled ~1.1x, top-aligned -->
+  <g transform="translate(90,44) scale(1.1)">
     <path d="M71.6725 0H49.5146V25.4923H71.6725V0Z" fill="#ffffff"/>
     <path d="M49.5142 46.2251H71.6721V82.1779C71.7733 90.8292 69.3112 99.3153 64.5986 106.557C59.9455 113.594 50.963 121.966 34.3446 121.966C16.2434 121.966 5.69286 113.406 0 108.715L13.9765 91.4743C19.533 96.0112 24.885 99.7435 34.4299 99.7435C41.6567 99.7435 44.5372 96.7988 46.2247 94.2307C48.5186 90.6637 49.7052 86.4923 49.6335 82.2464L49.5142 46.2251Z" fill="#ffffff"/>
     <path d="M38.2135 30.1318H16.0557V52.3884H38.2135V30.1318Z" fill="#29abe2"/>
@@ -35,6 +35,7 @@
     <path d="M90.3359 118.593V104.76H93.0631L95.9947 110.461C96.7494 111.952 97.4209 113.483 98.006 115.049C97.8526 113.337 97.7844 111.368 97.7844 109.177V104.76H100.034V118.593H97.4946L94.5289 112.772C93.7437 111.243 93.0438 109.671 92.4324 108.064C92.4324 109.776 92.5517 111.711 92.5517 114.09V118.576L90.3359 118.593Z" fill="#ffffff"/>
   </g>
 
-  <text x="90" y="255" font-family="Poppins, 'Segoe UI', Arial, sans-serif" font-size="27" font-weight="600" fill="#ffffff">Kanban Project Management</text>
-  <text x="90" y="284" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="16" fill="#a8b3c0">Plan, assign and track your team&#8217;s work on one visual board.</text>
+  <!-- text block sits clearly below the logo (logo bottom ~178px) -->
+  <text x="90" y="222" font-family="Poppins, 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="600" fill="#ffffff">Kanban Project Management</text>
+  <text x="90" y="253" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="17" fill="#a8b3c0">Plan, assign and track your team&#8217;s work on one visual board.</text>
 </svg>

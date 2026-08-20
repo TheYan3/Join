@@ -5,6 +5,16 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-20] Banner-Grafik im README korrigiert: Text überlappte mit Logo
+-------------------------------------------------------------------------------------
+- Im neuen README-Banner (letzter Eintrag) überschnitt sich das Logo mit der
+  Überschrift "Kanban Project Management" — das Logo war zu groß skaliert und der
+  Text zu nah dran.
+- Fix: Logo verkleinert und weiter oben platziert, Textblock mit klarem Abstand
+  darunter positioniert. Keine Überschneidung mehr.
+- Datei: assets/readme/banner.svg
+
+
 [2026-08-20] Documents-Ordner aus Git rausgehalten
 -------------------------------------------------------------------------------------
 - Im Projektordner liegt ein "Documents/"-Ordner mit einer privaten Checkliste
