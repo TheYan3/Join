@@ -5,6 +5,15 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-20] Documents-Ordner aus Git rausgehalten
+-------------------------------------------------------------------------------------
+- Im Projektordner liegt ein "Documents/"-Ordner mit einer privaten Checkliste
+  (PDF) für dieses Projekt. Der soll nicht auf GitHub landen.
+- .gitignore um "Documents/" ergänzt, damit der Ordner nie versehentlich mit
+  committet wird.
+- Datei: .gitignore
+
+
 [2026-08-20] README bekommt Banner und Bilder
 -------------------------------------------------------------------------------------
 - README.md war bisher reiner Text ohne Bilder. Zwei neue SVG-Grafiken ergänzt:
