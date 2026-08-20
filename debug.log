@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-20] Live-Server repariert + sensible Pfade gesperrt
+-------------------------------------------------------------------------------------
+Vorbereitung für das Issue-Collector-Projekt. Zwei Probleme auf dem Server gefunden
+und behoben:
+
+1. Der Live-Server (join.yannicjundt.de) holte seinen Code aus dem FALSCHEN Repo
+   (matthiasarnoldy/Join statt deinem) und war Monate alt — der Sicherheitsfix von
+   gestern war dort gar nicht angekommen. Server-Remote auf TheYan3/Join umgestellt
+   und aktualisiert. Der XSS-Fix ist jetzt live.
+
+2. Das komplette .git-Verzeichnis war über die Webseite herunterladbar
+   (join.yannicjundt.de/.git/config lieferte echten Inhalt). Das Repo ist zwar
+   öffentlich, aber sobald mal versehentlich ein Passwort oder Key committet wird,
+   läge er damit offen im Netz. Jetzt gesperrt: .git, .vscode, debug.log, CLAUDE.md
+   und die .gitignore liefern nur noch "404 nicht gefunden".
+
+Wie das technisch gemacht wurde (falls du dich später wunderst): Auf dem Server liegt
+/data/docker/join/nginx-deny.conf mit den Sperrregeln, eingebunden über einen neuen
+Mount in /data/docker/join/docker-compose.yml. Ein Backup der alten Compose-Datei
+liegt daneben.
+
+Bekanntes Risiko, das wir bewusst NICHT angefasst haben: Die Firebase-Datenbank ist
+ohne Passwortschutz les- und schreibbar; die Nutzerliste enthält Passwörter im
+Klartext und ist öffentlich abrufbar. Ein richtiger Fix bräuchte einen Umbau des
+Logins auf Firebase-Authentifizierung.
+
+
 [2026-08-20] Banner-Grafik im README korrigiert: Text überlappte mit Logo
 -------------------------------------------------------------------------------------
 - Im neuen README-Banner (letzter Eintrag) überschnitt sich das Logo mit der
