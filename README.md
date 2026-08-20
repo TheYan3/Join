@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/readme/banner.svg" alt="Join – Kanban Project Management Tool" width="100%" />
+</p>
+
 # 📋 Join - Kanban Project Management Tool
 
 Welcome to the help page for **Join**, your guide to using our kanban project management tool. Here, we'll provide an overview of what **Join** is, how it can benefit you, and how to use it.
@@ -21,6 +25,12 @@ When you log in to **Join**, you'll find a default board. This board represents 
 - **In Progress** - Tasks currently being worked on
 - **Await feedback** - Tasks waiting for feedback
 - **Done** - Completed tasks
+
+<p align="center">
+  <img src="assets/readme/board-preview.svg" alt="Illustration of the Join board with four columns: To do, In progress, Await feedback, Done" width="100%" />
+  <br />
+  <sub><em>Illustration of the board layout — not a live screenshot.</em></sub>
+</p>
 
 ### 2️⃣ Creating Contacts
 

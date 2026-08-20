@@ -5,6 +5,19 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-20] README bekommt Banner und Bilder
+-------------------------------------------------------------------------------------
+- README.md war bisher reiner Text ohne Bilder. Zwei neue SVG-Grafiken ergänzt:
+  ein Banner mit dem Join-Logo ganz oben, und eine Illustration des Kanban-Boards
+  (4 Spalten mit Beispiel-Karten) im Abschnitt "Exploring the Board".
+- Wichtig: die Board-Illustration ist eine selbst gebaute Grafik, KEIN echter
+  Screenshot der laufenden App — dafür fehlt in dieser Umgebung ein
+  Browser-Werkzeug. Im README als "Illustration" gekennzeichnet, damit das klar
+  ist.
+- Neue Dateien: assets/readme/banner.svg, assets/readme/board-preview.svg
+- Datei: README.md
+
+
 [2026-08-19] Neue Regel: jede Änderung bekommt einen Eintrag hier
 -------------------------------------------------------------------------------------
 - CLAUDE.md angelegt: hält fest, dass ab jetzt jede Code-Änderung an diesem

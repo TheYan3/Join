@@ -1,0 +1,90 @@
+<svg width="1000" height="560" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of the Join kanban board with four columns: To do, In progress, Await feedback, Done">
+  <defs>
+    <style>
+      .col-title { font-family: Poppins, 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: 600; fill: #2a3647; }
+      .card-title { font-family: Poppins, 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #2a3647; }
+      .card-desc { font-family: Inter, 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #a8a8a8; }
+      .label { font-family: Inter, 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="560" fill="#f6f7f8"/>
+
+  <!-- column headers -->
+  <text x="30" y="42" class="col-title">To do</text>
+  <text x="280" y="42" class="col-title">In progress</text>
+  <text x="530" y="42" class="col-title">Await feedback</text>
+  <text x="780" y="42" class="col-title">Done</text>
+
+  <!-- column plus buttons -->
+  <g fill="none" stroke="#2a3647" stroke-width="2">
+    <circle cx="230" cy="33" r="12"/><path d="M230 27v12M224 33h12"/>
+    <circle cx="480" cy="33" r="12"/><path d="M480 27v12M474 33h12"/>
+    <circle cx="740" cy="33" r="12"/><path d="M740 27v12M734 33h12"/>
+    <circle cx="965" cy="33" r="12"/><path d="M965 27v12M959 33h12"/>
+  </g>
+
+  <!-- column separators -->
+  <g stroke="#e2e4e7" stroke-width="1">
+    <line x1="255" y1="10" x2="255" y2="550"/>
+    <line x1="505" y1="10" x2="505" y2="550"/>
+    <line x1="755" y1="10" x2="755" y2="550"/>
+  </g>
+
+  <!-- To do: 2 cards -->
+  <g>
+    <rect x="20" y="70" width="220" height="150" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="36" y="86" width="118" height="24" rx="7" fill="#1fd7c1"/>
+    <text x="46" y="102" class="label">Technical Task</text>
+    <text x="36" y="132" class="card-title">Set up CI pipeline</text>
+    <text x="36" y="152" class="card-desc">Automate build &amp; tests</text>
+    <circle cx="46" cy="195" r="14" fill="#ff7a00"/>
+    <text x="46" y="200" text-anchor="middle" class="label" font-size="11">AM</text>
+    <circle cx="70" cy="195" r="14" fill="#9327ff"/>
+    <text x="70" y="200" text-anchor="middle" class="label" font-size="11">JD</text>
+
+    <rect x="20" y="235" width="220" height="120" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="36" y="251" width="100" height="24" rx="7" fill="#ff7a00"/>
+    <text x="46" y="267" class="label">User Story</text>
+    <text x="36" y="297" class="card-title">Design empty states</text>
+    <text x="36" y="317" class="card-desc">Board, contacts, search</text>
+  </g>
+
+  <!-- In progress: 1 card -->
+  <g>
+    <rect x="270" y="70" width="220" height="160" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="286" y="86" width="118" height="24" rx="7" fill="#1fd7c1"/>
+    <text x="296" y="102" class="label">Technical Task</text>
+    <text x="286" y="132" class="card-title">Contacts drag &amp; drop</text>
+    <text x="286" y="152" class="card-desc">Move cards between columns</text>
+    <rect x="286" y="170" width="188" height="6" rx="3" fill="#e2e4e7"/>
+    <rect x="286" y="170" width="120" height="6" rx="3" fill="#29abe2"/>
+    <text x="286" y="196" class="card-desc">3/5 Subtasks</text>
+  </g>
+
+  <!-- Await feedback: 1 card -->
+  <g>
+    <rect x="520" y="70" width="220" height="140" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="536" y="86" width="100" height="24" rx="7" fill="#ff7a00"/>
+    <text x="546" y="102" class="label">User Story</text>
+    <text x="536" y="132" class="card-title">Add task validation</text>
+    <text x="536" y="152" class="card-desc">Check required fields</text>
+    <circle cx="546" cy="185" r="14" fill="#1fd7c1"/>
+    <text x="546" y="190" text-anchor="middle" class="label" font-size="11">SK</text>
+  </g>
+
+  <!-- Done: 2 cards -->
+  <g>
+    <rect x="770" y="70" width="210" height="120" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="786" y="86" width="118" height="24" rx="7" fill="#1fd7c1"/>
+    <text x="796" y="102" class="label">Technical Task</text>
+    <text x="786" y="132" class="card-title">Login &amp; signup flow</text>
+    <text x="786" y="152" class="card-desc">Auth with Firebase</text>
+
+    <rect x="770" y="205" width="210" height="120" rx="20" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+    <rect x="786" y="221" width="100" height="24" rx="7" fill="#ff7a00"/>
+    <text x="796" y="237" class="label">User Story</text>
+    <text x="786" y="267" class="card-title">Kanban board layout</text>
+    <text x="786" y="287" class="card-desc">Four responsive columns</text>
+  </g>
+</svg>
