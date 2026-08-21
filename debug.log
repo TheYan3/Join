@@ -5,6 +5,54 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-21] E-Mails werden automatisch zu Tickets (n8n-Workflow)
+-------------------------------------------------------------------------------------
+Das Herzstück steht: Eine Mail an join-issues@gmx.de wird automatisch abgeholt, von
+einer KI gelesen und landet als fertiges Ticket in der Triage-Spalte.
+
+Der Ablauf in fünf Schritten (in n8n als "Join Issue Collector"):
+1. Neue E-Mail wird aus dem Postfach abgeholt und als gelesen markiert
+2. Absender, Betreff und Text werden herausgezogen
+3. Google Gemini analysiert den Text
+4. Aus der Antwort wird ein Ticket gebaut
+5. Das Ticket wird in die Datenbank geschrieben
+
+Was die KI aus einer Mail herausliest: ob es überhaupt eine echte Anfrage ist,
+einen kurzen Titel, die Kategorie (Fehler oder Wunsch), die Dringlichkeit anhand
+der Wortwahl, ein genanntes Fälligkeitsdatum und eine knappe Zusammenfassung. Der
+Absender wird als externer Ersteller eingetragen, und in der Beschreibung steht ein
+Hinweis, dass das Ticket von der KI erzeugt wurde.
+
+Spam bleibt draußen: Werbung, Abwesenheitsnotizen und inhaltslose Mails ("Bitte um
+Rückruf") werden erkannt und erzeugen bewusst KEIN Ticket. Damit wird das
+Tageskontingent nicht von Müll aufgefressen.
+
+Drei Probleme, die unterwegs auftraten und behoben wurden:
+1. Der Absender kam als "[object object]" an. Die Mail-Komponente liefert den
+   Absender als verschachteltes Objekt, nicht als Text. Auslesen korrigiert.
+2. Ich hatte den Abstand zwischen Wiederholversuchen auf 30 Sekunden gesetzt.
+   Wirkungslos: n8n begrenzt das intern auf 5 Sekunden. Wieder zurückgesetzt.
+3. Wichtigster Fund: Das kostenlose Gemini-Kontingent gilt PRO TAG, nicht pro
+   Minute — und beträgt beim ursprünglich gewählten Modell nur 20 Anfragen am Tag.
+   Die Fehlermeldung von Google ("bitte in 41 Sekunden erneut versuchen") führt in
+   die Irre. Deshalb Wechsel auf ein Modell mit größerem Tageskontingent
+   (gemini-3.5-flash-lite). Die Qualität ist bei allen fünf Testfällen identisch
+   und es antwortet viermal schneller. Zusätzlich wurden die Wiederholversuche von
+   drei auf zwei reduziert, weil jeder Versuch vom Tageskontingent abgeht.
+
+Nachweis: Testmail verschickt, Ticket erschien mit korrektem Titel, Kategorie
+"technical", Priorität "urgent" (aus "blockiert die komplette Produktion"),
+Fälligkeit 05/09/2026 (aus dem Fließtext) und dem Absender als externem Ersteller.
+
+Kleinigkeit, bewusst so gelassen: Der KI-Hinweis steht direkt hinter dem
+Beschreibungstext statt in einer eigenen Zeile — Zeilenumbrüche werden in diesem
+Feld nicht dargestellt.
+
+Neue Dateien: n8n/issue-collector.json (der Workflow), n8n/README.md (Erklärung)
+Hinweis: In der Workflow-Datei stehen nur die Kennungen der Zugangsdaten, niemals
+Passwörter oder Schlüssel. Die liegen ausschließlich verschlüsselt in n8n.
+
+
 [2026-08-21] Startseite ist jetzt eine Landing Page, Login zieht um
 -------------------------------------------------------------------------------------
 Wer join.yannicjundt.de aufruft, landete bisher direkt im Login-Formular. Jetzt
