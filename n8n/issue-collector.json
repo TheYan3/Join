@@ -1,0 +1,158 @@
+{
+  "name": "Join Issue Collector",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "format": "resolved",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Neue E-Mail",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        300
+      ],
+      "credentials": {
+        "imap": {
+          "id": "y3QNQfruqNqNhhQB",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Absender, Betreff und Text aus der Mail holen und die Anfrage an\n// Gemini vorbereiten. Der Prompt wurde vorab gegen echte Beispielmails\n// getestet (Bug, Feature-Wunsch, Spam, Autoresponder, Werbung).\n\nconst mail = $json;\n\n// Die IMAP-Node liefert \"from\" als Objekt: { value: [{address, name}], text, html }.\n// Aeltere Formate liefern einen reinen String - beides wird unterstuetzt.\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n\nconst systemPrompt = [\n  'Du bist der Issue-Collector eines Kanban-Boards. Analysiere die E-Mail eines',\n  'Stakeholders und extrahiere daraus genau ein Ticket.',\n  '',\n  'Regeln:',\n  '- istEchteAnfrage: true, wenn die Mail ein konkretes Anliegen zum Produkt enthält',\n  '  (Fehlermeldung, Feature-Wunsch, technische Aufgabe). false bei Spam, Werbung,',\n  '  Autorespondern (\"bin im Urlaub\"), reinen Grußnachrichten oder Mails ohne',\n  '  erkennbares inhaltliches Anliegen (z.B. nur \"Bitte um Rückruf\").',\n  '  Im Zweifel true – lieber ein Ticket zu viel als ein verlorenes Anliegen.',\n  '- category: \"technical\" für technische Aufgaben UND Bug-Meldungen, \"user-story\"',\n  '  für Feature-Wünsche und fachliche Anforderungen.',\n  '- title: prägnant, max 60 Zeichen, keine Anrede, kein \"Bitte\".',\n  '- priority: \"urgent\" bei Wörtern wie dringend, sofort, kritisch, Ausfall,',\n  '  Produktion, blockiert. \"low\" bei irgendwann, Kleinigkeit, nice to have,',\n  '  kein Stress. Sonst \"medium\".',\n  '- deadline: Datum aus dem Text streng im ISO-Format JJJJ-MM-TT',\n  '  (Beispiel: 2026-09-05). Wenn keins genannt wird: null.',\n  '- description: 1-3 Sätze, sachlich zusammengefasst, ohne Grußformeln.',\n  '',\n  'Schreibe durchgängig korrektes Deutsch MIT Umlauten (ä, ö, ü, ß) – niemals',\n  'Umschreibungen wie \"ae\", \"oe\", \"ue\" oder \"ss\".',\n  'Antworte ausschließlich im vorgegebenen JSON-Schema.'\n].join('\\n');\n\nconst schema = {\n  type: 'object',\n  properties: {\n    istEchteAnfrage: { type: 'boolean' },\n    category: { type: 'string', enum: ['technical', 'user-story'] },\n    title: { type: 'string' },\n    priority: { type: 'string', enum: ['urgent', 'medium', 'low'] },\n    deadline: { type: 'string', nullable: true },\n    description: { type: 'string' }\n  },\n  required: ['istEchteAnfrage', 'category', 'title', 'priority', 'deadline', 'description']\n};\n\nconst geminiBody = {\n  systemInstruction: { parts: [{ text: systemPrompt }] },\n  contents: [{\n    role: 'user',\n    parts: [{ text: `Von: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}` }]\n  }],\n  generationConfig: {\n    responseMimeType: 'application/json',\n    responseSchema: schema,\n    temperature: 0\n  }\n};\n\nreturn {\n  json: {\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    text,\n    geminiBody\n  }\n};"
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Mail aufbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.geminiBody) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Gemini analysiert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dSqEjj6BpPDXJN82",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Gemini-Antwort auswerten und daraus ein Join-Ticket bauen.\n// Gibt bewusst NICHTS zurück, wenn die Mail keine echte Anfrage war –\n// dann entsteht kein Ticket und das Tageskontingent bleibt unberührt.\n\nconst antwort = $json;\nconst quelle = $('Mail aufbereiten').item.json;\n\nlet analyse;\ntry {\n  const rohtext = antwort.candidates[0].content.parts[0].text;\n  analyse = JSON.parse(rohtext);\n} catch (fehler) {\n  throw new Error('Gemini-Antwort nicht lesbar: ' + fehler.message);\n}\n\nif (analyse.istEchteAnfrage !== true) {\n  return null;\n}\n\n// Gemini liefert ISO (JJJJ-MM-TT); Join erwartet TT/MM/JJJJ.\n// Umwandlung im Code statt im Prompt, weil das Modell beim Format schwankte.\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst hinweis = 'Dieses Ticket wurde KI-generiert.';\n\nconst ticket = {\n  id: Date.now(),\n  title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n  description: `${String(analyse.description || '').trim()}\\n\\n${hinweis}`,\n  date: alsJoinDatum(analyse.deadline),\n  priority: analyse.priority || 'medium',\n  category: analyse.category || 'user-story',\n  status: 'triage',\n  assigned: [],\n  subtasks: [],\n  creator: {\n    email: quelle.absenderMail,\n    name: quelle.absenderName || quelle.absenderMail,\n    type: 'extern'\n  }\n};\n\nreturn { json: { ticket, absenderMail: quelle.absenderMail, betreff: quelle.betreff } };"
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Ticket bauen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://join-4bce1-default-rtdb.europe-west1.firebasedatabase.app/tasks.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.ticket) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Ticket in Triage anlegen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    }
+  ],
+  "connections": {
+    "Neue E-Mail": {
+      "main": [
+        [
+          {
+            "node": "Mail aufbereiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail aufbereiten": {
+      "main": [
+        [
+          {
+            "node": "Gemini analysiert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini analysiert": {
+      "main": [
+        [
+          {
+            "node": "Ticket bauen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ticket bauen": {
+      "main": [
+        [
+          {
+            "node": "Ticket in Triage anlegen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
