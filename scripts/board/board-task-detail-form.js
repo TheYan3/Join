@@ -295,6 +295,11 @@
       dialog.dataset.taskStatus = taskData.status || "triage";
       dialog.dataset.editTaskId = String(taskId);
       if (taskKey) dialog.dataset.editTaskKey = taskKey;
+      if (taskData.creator) {
+         dialog.dataset.editTaskCreator = JSON.stringify(taskData.creator);
+      } else {
+         delete dialog.dataset.editTaskCreator;
+      }
    }
 
    /**

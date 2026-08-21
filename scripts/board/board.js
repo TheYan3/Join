@@ -58,6 +58,7 @@ function resetAddTaskDialogMode() {
    if (!dialog) return;
    delete dialog.dataset.editTaskId;
    delete dialog.dataset.editTaskKey;
+   delete dialog.dataset.editTaskCreator;
    setAddTaskDialogMode(false);
 }
 

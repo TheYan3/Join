@@ -187,6 +187,29 @@ function getBasicInputs() {
 
 
 /**
+ * Returns the creator to store with the task.
+ *
+ * When editing, the original creator is carried through the dialog dataset so
+ * saving an existing task never overwrites who reported it. Only genuinely new
+ * tasks get the signed-in user as creator.
+ * @returns {object} The creator object.
+ */
+function resolveTaskCreator() {
+   const dialog = document.getElementById("addTaskDialog");
+   const stored = dialog?.dataset.editTaskCreator;
+   if (stored) {
+      try {
+         const parsed = JSON.parse(stored);
+         if (parsed && typeof parsed === "object") return parsed;
+      } catch (error) {
+         console.error("Reading stored task creator failed:", error);
+      }
+   }
+   return window.getInternalCreator ? window.getInternalCreator() : { type: "intern" };
+}
+
+
+/**
  * Creates the task data.
  *
  * @param {string|number|null} [existingId=null] - The existing ID used for this operation. Defaults to null.
@@ -200,6 +223,7 @@ function createTaskData(existingId = null) {
       assigned: getSelectedContacts(),
       subtasks: getSubtasksList(),
       status: getDialogStatus(),
+      creator: resolveTaskCreator(),
    };
 }
 

@@ -429,12 +429,35 @@ async function applyHeaderInitials() {
    if (!userId) return;
    try {
       const authUser = await fetchAuthUserFromDatabase(userId);
+      window.JOIN_CURRENT_USER = {
+         email: String(authUser?.email || "").trim(),
+         name: String(authUser?.name || "").trim(),
+      };
       const initial = resolveHeaderInitial(authUser);
       if (initial) initialsElement.textContent = initial;
    } catch (error) {
       console.error("Loading header initials failed:", error);
    }
 }
+
+
+/**
+ * Returns the creator record for the signed-in user.
+ *
+ * Tasks created inside the app are always "intern"; tickets generated from
+ * stakeholder e-mails are written by n8n with type "extern".
+ * @returns {object} The creator object with email, name and type.
+ */
+function getInternalCreator() {
+   const user = window.JOIN_CURRENT_USER || {};
+   return {
+      email: user.email || "",
+      name: user.name || "",
+      type: "intern",
+   };
+}
+
+window.getInternalCreator = getInternalCreator;
 
 /**
  * Initializes the global UI.

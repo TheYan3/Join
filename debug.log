@@ -5,6 +5,35 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-21] Jede Aufgabe hat jetzt einen "Ersteller"
+-------------------------------------------------------------------------------------
+Zweiter Baustein für den Issue Collector. In der Detailansicht einer Aufgabe steht
+jetzt eine Zeile "Created by:" mit der Person, von der die Aufgabe stammt — plus
+einem farbigen Abzeichen, ob sie von innen oder außen kommt:
+
+- "Internal" (dunkelblau): jemand aus dem Team hat die Aufgabe im Board angelegt.
+- "External" (orange): die Aufgabe stammt aus einer Stakeholder-Mail. Das setzt
+  später der n8n-Workflow.
+
+Wer als Ersteller eingetragen wird, ist der gerade eingeloggte Nutzer.
+
+Wichtiger Fehler, der dabei gleich mitverhindert wurde: Beim Bearbeiten einer
+Aufgabe baut das Programm das Aufgaben-Objekt komplett neu zusammen. Ohne
+Gegenmaßnahme wäre der Ersteller beim ersten Speichern spurlos verschwunden — aus
+einem Kundenticket wäre stillschweigend deins geworden. Der Ersteller wird jetzt
+durch den Bearbeiten-Vorgang durchgereicht und bleibt erhalten. Getestet mit einem
+externen Ticket: Ersteller überlebt das Bearbeiten.
+
+Bestehende Aufgaben: Die haben noch keinen Ersteller und zeigen schlicht "Unknown",
+das Abzeichen bleibt dann ausgeblendet. In der Datenbank wurde nichts angefasst.
+
+Angefasste Dateien: script.js (merkt sich den eingeloggten Nutzer),
+scripts/tasks/saveTask.js, scripts/board/board.js,
+scripts/board/board-task-detail.js (Anzeige),
+scripts/board/board-task-detail-form.js (Durchreichen beim Bearbeiten),
+templates/board.html (neue Zeile im Dialog), styles/board/task-detail.css (Abzeichen).
+
+
 [2026-08-21] Neue Board-Spalte "Triage" als Eingangskorb
 -------------------------------------------------------------------------------------
 Erster Baustein für den Issue Collector: Das Board hat jetzt eine fünfte Spalte

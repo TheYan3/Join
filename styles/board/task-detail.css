@@ -91,6 +91,28 @@
    color: #000000;
 }
 
+.task-detail__creator-badge {
+   font-size: 14px;
+   line-height: 1;
+   padding: 4px 10px;
+   margin-left: 8px;
+   border-radius: 8px;
+   color: #ffffff;
+   vertical-align: middle;
+}
+
+.task-detail__creator-badge:empty {
+   display: none;
+}
+
+.task-detail__creator-badge--intern {
+   background: #2a3647;
+}
+
+.task-detail__creator-badge--extern {
+   background: #ff7a00;
+}
+
 .task-detail__priority {
    display: inline-flex;
    align-items: center;

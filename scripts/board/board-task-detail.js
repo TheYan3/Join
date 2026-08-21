@@ -179,6 +179,26 @@
    }
 
    /**
+    * Sets the task detail creator line.
+    *
+    * Shows the reporter and whether they are a team member ("intern") or an
+    * external stakeholder who submitted the request by e-mail ("extern").
+    * @param {object|null} creator - The creator object.
+    * @returns {void} Nothing.
+    */
+   function setTaskDetailCreator(creator) {
+      const label = creator?.email || creator?.name || "";
+      setTaskDetailText("taskDetailCreator", label, "Unknown");
+      const badge = document.getElementById("taskDetailCreatorType");
+      if (!badge) return;
+      const type = creator?.type === "extern" ? "extern" : creator?.type === "intern" ? "intern" : "";
+      badge.textContent = type ? (type === "extern" ? "External" : "Internal") : "";
+      badge.className = type
+         ? `task-detail__creator-badge task-detail__creator-badge--${type}`
+         : "task-detail__creator-badge";
+   }
+
+   /**
     * Renders the task detail.
     *
     * @param {object} taskData - The task data object.
@@ -190,6 +210,7 @@
       setTaskDetailText("taskDetailDescription", taskData.description, "No description");
       setTaskDetailText("taskDetailDate", taskData.date, "No due date");
       setTaskDetailPriority(taskData.priority);
+      setTaskDetailCreator(taskData.creator);
       renderTaskDetailAssigned(taskData.assigned || []);
       renderTaskDetailSubtasks(taskData.subtasks || []);
    }
