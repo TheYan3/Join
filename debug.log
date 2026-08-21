@@ -55,6 +55,13 @@ externen Ticket: Ersteller überlebt das Bearbeiten.
 Bestehende Aufgaben: Die haben noch keinen Ersteller und zeigen schlicht "Unknown",
 das Abzeichen bleibt dann ausgeblendet. In der Datenbank wurde nichts angefasst.
 
+Bewusst so entschieden (21.08.2026): Wer eine solche alte Aufgabe ohne Ersteller
+bearbeitet und speichert, wird dabei als deren Ersteller eingetragen. Die Lücken
+füllen sich damit mit der Zeit von selbst. Der Nachteil ist bekannt und akzeptiert:
+Es steht dann jemand als Ersteller drin, der die Aufgabe nicht angelegt hat.
+E-Mail-Tickets sind davon nicht betroffen, die haben immer einen Ersteller und
+behalten ihn auch beim Bearbeiten.
+
 Angefasste Dateien: script.js (merkt sich den eingeloggten Nutzer),
 scripts/tasks/saveTask.js, scripts/board/board.js,
 scripts/board/board-task-detail.js (Anzeige),

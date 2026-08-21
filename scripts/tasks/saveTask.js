@@ -192,6 +192,10 @@ function getBasicInputs() {
  * When editing, the original creator is carried through the dialog dataset so
  * saving an existing task never overwrites who reported it. Only genuinely new
  * tasks get the signed-in user as creator.
+ *
+ * Deliberate exception: legacy tasks that never had a creator adopt whoever
+ * edits them next, so the gaps fill in over time. Decided 2026-08-21; e-mail
+ * tickets are unaffected because they always carry an external creator.
  * @returns {object} The creator object.
  */
 function resolveTaskCreator() {
