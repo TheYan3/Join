@@ -35,6 +35,15 @@ Neue Dateien: index.html (Landing Page), styles/landing.css
 Umbenannt: index.html -> login.html
 Angepasst: script.js, scripts/legalInformation.js, scripts/summary.js
 
+Nachtrag am selben Tag:
+- "Try it yourself" zeigt jetzt eine Beispiel-Mail nebeneinander mit allem, was
+  daraus gelesen wird: ob es überhaupt eine echte Anfrage ist, Titel, Kategorie,
+  Priorität samt der Wörter die dazu geführt haben, Fälligkeitsdatum,
+  Zusammenfassung und Absender. Damit sieht man vorab genau, was passiert.
+- Alle Seiten stehen jetzt auf lang="en" statt lang="de". Die Inhalte waren schon
+  immer englisch; das "de" war nur da, um das Übersetzungs-Popup von Google zu
+  unterdrücken. Für Vorleseprogramme war die falsche Angabe hinderlich.
+
 
 [2026-08-21] Veraltete Skripte im Browser abgestellt
 -------------------------------------------------------------------------------------

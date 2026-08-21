@@ -256,6 +256,76 @@
    color: var(--landing-muted);
 }
 
+.landing__example {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+   gap: 28px;
+   margin-bottom: 32px;
+   align-items: start;
+}
+
+.landing__mail {
+   padding: 24px;
+   border-radius: 16px;
+   border: 1px solid #e2e4e7;
+   background: var(--landing-surface);
+}
+
+.landing__mail-head {
+   font-size: 16px;
+   line-height: 1.6;
+   color: var(--landing-ink);
+   border-bottom: 1px solid #e2e4e7;
+   padding-bottom: 8px;
+   margin-bottom: 8px;
+}
+
+.landing__mail-field {
+   display: inline-block;
+   min-width: 72px;
+   font-weight: 600;
+   color: var(--landing-muted);
+}
+
+.landing__mail-body {
+   font-size: 16px;
+   line-height: 1.6;
+   margin-top: 16px;
+   color: var(--landing-ink);
+}
+
+.landing__result {
+   padding: 24px;
+   border-radius: 16px;
+   border: 1px solid #e2e4e7;
+}
+
+.landing__result-title {
+   font-size: 18px;
+   font-weight: 700;
+   color: var(--landing-navy);
+   margin-bottom: 18px;
+}
+
+.landing__fields {
+   display: grid;
+   gap: 14px;
+}
+
+.landing__field-name {
+   font-size: 16px;
+   font-weight: 700;
+   color: var(--landing-navy);
+}
+
+.landing__field-value {
+   font-size: 16px;
+   line-height: 1.5;
+   color: var(--landing-muted);
+   padding-left: 14px;
+   border-left: 3px solid var(--landing-teal);
+}
+
 /* Footer */
 
 .landing__footer {
