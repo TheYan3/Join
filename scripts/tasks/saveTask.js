@@ -205,7 +205,14 @@ function resolveTaskCreator() {
          console.error("Reading stored task creator failed:", error);
       }
    }
-   return window.getInternalCreator ? window.getInternalCreator() : { type: "intern" };
+   if (typeof window.getInternalCreator !== "function") {
+      console.error(
+         "getInternalCreator is missing - script.js did not load or is stale. " +
+            "Task is saved without creator details."
+      );
+      return { email: "", name: "", type: "intern" };
+   }
+   return window.getInternalCreator();
 }
 
 

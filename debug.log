@@ -5,6 +5,34 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-21] Veraltete Skripte im Browser abgestellt
+-------------------------------------------------------------------------------------
+Beim Testen des Ersteller-Feldes stand bei neuen Aufgaben kein Name und kein
+Abzeichen. Ursache war nicht der neue Code, sondern der Browser: Er hatte noch die
+alte Fassung von script.js gespeichert und kannte die neue Funktion gar nicht.
+
+Warum das passieren konnte: Der Server hat bisher nicht mitgeteilt, wie lange
+Browser eine Datei behalten dürfen. Ohne diese Angabe raten Browser — und behalten
+Dateien manchmal stundenlang. Nach jedem Deploy hätten Besucher also alte Skripte
+benutzt.
+
+Zwei Gegenmaßnahmen:
+1. Server: HTML-, JS- und CSS-Dateien werden jetzt mit dem Hinweis "vor Benutzung
+   beim Server nachfragen" ausgeliefert. Das kostet fast nichts, weil der Server
+   meist nur "unverändert" zurückmeldet. Bilder und Icons bleiben wie bisher
+   gespeichert, die ändern sich ohnehin selten.
+   (Geregelt in /data/docker/join/nginx-deny.conf auf dem Server.)
+2. Code: Falls die Funktion trotzdem einmal fehlt, wird das jetzt als deutlicher
+   Fehler in der Browser-Konsole gemeldet, statt still eine unvollständige Aufgabe
+   zu speichern.
+
+Hinweis zu den Testaufgaben: Die beim Testen angelegten Aufgaben ("test", "test 2",
+"test ersteller") haben deshalb einen leeren bzw. fehlenden Ersteller. Sie können
+gelöscht werden, neue Aufgaben sind davon nicht betroffen.
+
+Angefasste Datei im Projekt: scripts/tasks/saveTask.js
+
+
 [2026-08-21] Jede Aufgabe hat jetzt einen "Ersteller"
 -------------------------------------------------------------------------------------
 Zweiter Baustein für den Issue Collector. In der Detailansicht einer Aufgabe steht
