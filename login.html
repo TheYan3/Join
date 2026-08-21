@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join</title>
+
+    <link
+         rel="icon"
+         href="./assets/icons/desktop/logoFavicon.svg"
+         type="image/svg+xml"
+         media="(prefers-color-scheme: light)" />
+      <link
+         rel="icon"
+         href="./assets/icons/desktop/logo.svg"
+         type="image/svg+xml"
+         media="(prefers-color-scheme: dark)" />
+
+    <script src="./scripts/template.js"></script>
+    <script src="./scripts/auth/login.js"></script>
+    <script src="./scripts/auth/index.js"></script>
+    <script src="./scripts/auth/signup.js"></script>
+    <script src="./scripts/auth/signup-ui-write.js"></script>
+    <script src="./scripts/legalInformation.js"></script>
+    <script src="./script.js"></script>
+    
+    <link rel="stylesheet" href="./styles/standard.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/login/layout.css">
+    <link rel="stylesheet" href="./styles/login/forms.css">
+    <link rel="stylesheet" href="./styles/login/buttons.css">
+    <link rel="stylesheet" href="./styles/login/responsive.css">
+</head>
+<body>
+    <div class="rotate-lock">Please rotate your device to portrait mode.</div>
+    <div class="splash__logo">
+        <img src="./assets/icons/desktop/Dark_Logo.svg" alt="Join Logo" class="splash__logo--image">
+    </div>
+    <div id="main-content" class="main-content">
+        <header>
+            <div class="header__flex-instructions">
+                <div class="login__signup">
+                    <p class="login__signup--question">Not a Join User?</p>
+                    <button id="signup-button" class="login__button button">Sign Up</button>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="login__window">
+                <div class="login__headline">
+                    <h1 class="login__header">Log in</h1>
+                    <img src="./assets/icons/desktop/login__dividingLine.svg" alt="Dividing Line" class="login__headline--line">
+                </div>
+                <form action="#" class="login__formular">
+                    <div class="login__input-field">
+                        <input type="email" class="login__input login__input--email" autocomplete="off" placeholder="Email">
+                        <img src="./assets/icons/desktop/mail.svg" alt="" class="login__email-icon" />
+                    </div>
+                    <div class="login__inputFieldError">
+                        <div class="login__input-field">
+                            <input type="password" class="login__input login__input--password" autocomplete="off" placeholder="Password">
+                            <img id="password-icon" src="./assets/icons/desktop/lock.svg" alt="" class="login__lock-icon" />
+                        </div>
+                        <span class="login__input--required">
+                            Check your email and password. Please try again.
+                        </span>
+                    </div>
+                </form>
+                <div class="login__buttonArea">
+                    <button id="login-button" class="login__button--login login__button button">Log in</button>
+                    <button id="guest-login-button" class="login__button--login login__button--guest button">Guest Log in</button>
+                </div>
+            </div>
+        </main>
+        <footer class="login__legalInformation--area">
+            <a href="./templates/privacy-Policy.html?from=login" class="login__legalInformation" id="index-privacy-policy">
+                Privacy Policy
+            </a>
+            <a href="./templates/legalnotice.html?from=login" class="login__legalInformation" id="index-legal-notice">Legal Notice</a>
+        </footer>
+    </div>
+</body>
+</html>

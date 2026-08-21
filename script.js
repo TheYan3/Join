@@ -330,7 +330,7 @@ function withAuthUserQuery(path) {
  * @returns {string} The login entry path.
  */
 function getLoginEntryPath() {
-   return IS_IN_TEMPLATES ? "../index.html" : "./index.html";
+   return IS_IN_TEMPLATES ? "../login.html" : "./login.html";
 }
 
 

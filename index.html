@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join</title>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Join Issue Collector – Send an e-mail, get a ticket</title>
+      <meta
+         name="description"
+         content="Submit feature requests and bug reports to the Join kanban board by e-mail. An AI reads your message and creates a ticket automatically." />
 
-    <link
+      <link
          rel="icon"
          href="./assets/icons/desktop/logoFavicon.svg"
          type="image/svg+xml"
@@ -16,68 +19,149 @@
          type="image/svg+xml"
          media="(prefers-color-scheme: dark)" />
 
-    <script src="./scripts/template.js"></script>
-    <script src="./scripts/auth/login.js"></script>
-    <script src="./scripts/auth/index.js"></script>
-    <script src="./scripts/auth/signup.js"></script>
-    <script src="./scripts/auth/signup-ui-write.js"></script>
-    <script src="./scripts/legalInformation.js"></script>
-    <script src="./script.js"></script>
-    
-    <link rel="stylesheet" href="./styles/standard.css">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./styles/login/layout.css">
-    <link rel="stylesheet" href="./styles/login/forms.css">
-    <link rel="stylesheet" href="./styles/login/buttons.css">
-    <link rel="stylesheet" href="./styles/login/responsive.css">
-</head>
-<body>
-    <div class="rotate-lock">Please rotate your device to portrait mode.</div>
-    <div class="splash__logo">
-        <img src="./assets/icons/desktop/Dark_Logo.svg" alt="Join Logo" class="splash__logo--image">
-    </div>
-    <div id="main-content" class="main-content">
-        <header>
-            <div class="header__flex-instructions">
-                <div class="login__signup">
-                    <p class="login__signup--question">Not a Join User?</p>
-                    <button id="signup-button" class="login__button button">Sign Up</button>
-                </div>
+      <link rel="stylesheet" href="./style.css" />
+      <link rel="stylesheet" href="./styles/landing.css" />
+   </head>
+
+   <body class="landing">
+      <a class="landing__skip" href="#main">Skip to main content</a>
+
+      <header class="landing__header">
+         <img
+            class="landing__logo"
+            src="./assets/icons/desktop/Dark_Logo.svg"
+            alt="Join" />
+         <nav aria-label="Primary">
+            <a class="landing__nav-link" href="./login.html">Log in</a>
+         </nav>
+      </header>
+
+      <main id="main">
+         <section class="landing__hero" aria-labelledby="hero-title">
+            <p class="landing__eyebrow">Kanban board · AI issue collector</p>
+            <h1 id="hero-title" class="landing__title">
+               Send an e-mail.<br />Get a ticket.
+            </h1>
+            <p class="landing__lead">
+               Write to us in plain language. An AI reads your message, works out
+               what kind of request it is, how urgent it is and when it is due —
+               then files it on our kanban board. You get a confirmation as soon
+               as your ticket exists.
+            </p>
+
+            <div class="landing__actions">
+               <a
+                  class="landing__button landing__button--primary"
+                  href="mailto:join-issues@gmx.de?subject=Feature%20request&amp;body=Please%20describe%20your%20request%20in%20a%20few%20sentences.%0A%0AIf%20you%20have%20a%20deadline%2C%20just%20mention%20the%20date%20in%20the%20text.">
+                  Submit a feature request
+               </a>
+               <a class="landing__button landing__button--ghost" href="./login.html">
+                  Explore the board
+               </a>
             </div>
-        </header>
-        <main>
-            <div class="login__window">
-                <div class="login__headline">
-                    <h1 class="login__header">Log in</h1>
-                    <img src="./assets/icons/desktop/login__dividingLine.svg" alt="Dividing Line" class="login__headline--line">
-                </div>
-                <form action="#" class="login__formular">
-                    <div class="login__input-field">
-                        <input type="email" class="login__input login__input--email" autocomplete="off" placeholder="Email">
-                        <img src="./assets/icons/desktop/mail.svg" alt="" class="login__email-icon" />
-                    </div>
-                    <div class="login__inputFieldError">
-                        <div class="login__input-field">
-                            <input type="password" class="login__input login__input--password" autocomplete="off" placeholder="Password">
-                            <img id="password-icon" src="./assets/icons/desktop/lock.svg" alt="" class="login__lock-icon" />
-                        </div>
-                        <span class="login__input--required">
-                            Check your email and password. Please try again.
-                        </span>
-                    </div>
-                </form>
-                <div class="login__buttonArea">
-                    <button id="login-button" class="login__button--login login__button button">Log in</button>
-                    <button id="guest-login-button" class="login__button--login login__button--guest button">Guest Log in</button>
-                </div>
-            </div>
-        </main>
-        <footer class="login__legalInformation--area">
-            <a href="./templates/privacy-Policy.html?from=login" class="login__legalInformation" id="index-privacy-policy">
-                Privacy Policy
+
+            <p class="landing__address">
+               Or write to
+               <a href="mailto:join-issues@gmx.de">join-issues@gmx.de</a>
+               from your own mail program.
+            </p>
+         </section>
+
+         <section class="landing__section" aria-labelledby="how-title">
+            <h2 id="how-title" class="landing__section-title">How it works</h2>
+            <ol class="landing__steps">
+               <li class="landing__step">
+                  <span class="landing__step-number" aria-hidden="true">1</span>
+                  <h3 class="landing__step-title">You write an e-mail</h3>
+                  <p class="landing__step-text">
+                     Describe your request in normal sentences — no form, no
+                     account, no special format. Mention a date if you need it by
+                     a certain day.
+                  </p>
+               </li>
+               <li class="landing__step">
+                  <span class="landing__step-number" aria-hidden="true">2</span>
+                  <h3 class="landing__step-title">The AI reads it</h3>
+                  <p class="landing__step-text">
+                     It writes a short title, decides whether this is a technical
+                     task or a user story, sets a priority from the wording, and
+                     picks up any deadline you mentioned.
+                  </p>
+               </li>
+               <li class="landing__step">
+                  <span class="landing__step-number" aria-hidden="true">3</span>
+                  <h3 class="landing__step-title">A ticket appears</h3>
+                  <p class="landing__step-text">
+                     Your request lands in the <strong>Triage</strong> column of
+                     the board, with you recorded as its author. You get a
+                     confirmation e-mail, and another one when the ticket moves.
+                  </p>
+               </li>
+            </ol>
+         </section>
+
+         <section class="landing__section landing__section--notes" aria-labelledby="notes-title">
+            <h2 id="notes-title" class="landing__section-title">Good to know</h2>
+            <ul class="landing__notes">
+               <li class="landing__note">
+                  <h3 class="landing__note-title">Ten requests per day</h3>
+                  <p class="landing__note-text">
+                     To keep AI costs predictable, the collector accepts
+                     <strong>10 requests per day</strong> in total. If the limit
+                     is reached, you still get a reply telling you so — your
+                     message is not silently dropped.
+                  </p>
+               </li>
+               <li class="landing__note">
+                  <h3 class="landing__note-title">Your text goes to Google</h3>
+                  <p class="landing__note-text">
+                     Messages are analysed with Google Gemini on its free tier.
+                     Google states that content sent through the free tier is
+                     used to improve its products. Please do not send anything
+                     confidential.
+                  </p>
+               </li>
+               <li class="landing__note">
+                  <h3 class="landing__note-title">This is a demo</h3>
+                  <p class="landing__note-text">
+                     Join is a student project from the Developer Akademie, not a
+                     production service. Tickets on the board are publicly
+                     visible. Use made-up data when you try it out.
+                  </p>
+               </li>
+            </ul>
+         </section>
+
+         <section class="landing__section landing__try" aria-labelledby="try-title">
+            <h2 id="try-title" class="landing__section-title">Try it yourself</h2>
+            <p class="landing__try-text">
+               Send a short mail to
+               <a class="landing__try-address" href="mailto:join-issues@gmx.de"
+                  >join-issues@gmx.de</a
+               >
+               — for example: <em>“The contact list should be sortable by
+               company. Not urgent.”</em> Then open the board and watch it show up
+               in Triage.
+            </p>
+            <a class="landing__button landing__button--ghost" href="./login.html">
+               Open the board
             </a>
-            <a href="./templates/legalnotice.html?from=login" class="login__legalInformation" id="index-legal-notice">Legal Notice</a>
-        </footer>
-    </div>
-</body>
+         </section>
+      </main>
+
+      <footer class="landing__footer">
+         <nav aria-label="Legal">
+            <a class="landing__footer-link" href="./templates/privacy-Policy.html?from=login">
+               Privacy Policy
+            </a>
+            <a class="landing__footer-link" href="./templates/legalnotice.html?from=login">
+               Legal Notice
+            </a>
+         </nav>
+         <p class="landing__fineprint">
+            Join — Kanban Project Management Tool. A learning project; availability
+            and accuracy are not guaranteed.
+         </p>
+      </footer>
+   </body>
 </html>

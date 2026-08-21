@@ -151,7 +151,7 @@ function isReloadNavigation() {
  * @returns {boolean} Whether the from login is page.
  */
 function isFromLoginPage() {
-    return document.referrer.includes("index.html");
+    return document.referrer.includes("login.html");
 }
 
 

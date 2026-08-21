@@ -5,6 +5,37 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-21] Startseite ist jetzt eine Landing Page, Login zieht um
+-------------------------------------------------------------------------------------
+Wer join.yannicjundt.de aufruft, landete bisher direkt im Login-Formular. Jetzt
+kommt zuerst eine Seite, die erklärt worum es geht, und zwei Wege anbietet:
+"Submit a feature request" (öffnet eine E-Mail an join-issues@gmx.de) oder
+"Explore the board" (führt zum Login).
+
+Der Login ist deshalb umgezogen: index.html heißt jetzt login.html. Die neue
+index.html ist die Landing Page. Alle Stellen im Code, die auf die alte Adresse
+zeigten, wurden angepasst (Abmelden, die automatische Weiterleitung wenn man ohne
+Anmeldung aufs Board will, und der Zurück-Knopf auf Impressum/Datenschutz).
+
+Inhalte der Landing Page:
+- Erklärung in drei Schritten, wie aus einer E-Mail ein Ticket wird
+- Die E-Mail-Adresse zum Ausprobieren, mit Beispieltext
+- Hinweis auf das Tageslimit von 10 Anfragen
+- Offener Hinweis, dass die Texte von Google Gemini verarbeitet werden und Google
+  Inhalte des kostenlosen Tarifs zur Produktverbesserung nutzt
+- Hinweis, dass es ein Demo-Projekt ist und Tickets öffentlich sichtbar sind
+
+Geprüft (nicht nur angeschaut): Alle neun Navigationswege getestet — Startseite,
+Login, automatische Weiterleitung ohne Anmeldung, Abmelden, beide Wege der Weiche,
+Zurück von den Rechtsseiten. Schriftgrößen nachgemessen: kleinster Fließtext 16px,
+Kleingedrucktes 14px, nichts darunter. Struktur nutzt echte HTML5-Bereiche
+(header, nav, main, section, footer).
+
+Neue Dateien: index.html (Landing Page), styles/landing.css
+Umbenannt: index.html -> login.html
+Angepasst: script.js, scripts/legalInformation.js, scripts/summary.js
+
+
 [2026-08-21] Veraltete Skripte im Browser abgestellt
 -------------------------------------------------------------------------------------
 Beim Testen des Ersteller-Feldes stand bei neuen Aufgaben kein Name und kein

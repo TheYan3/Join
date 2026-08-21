@@ -16,8 +16,8 @@
             const previousPage = isFromSignup
                 ? "./signup.html"
                 : isInTemplates
-                    ? "../index.html"
-                    : "./index.html";
+                    ? "../login.html"
+                    : "./login.html";
             const buttonText = isFromSignup ? "Sign up" : "Log in";
             replaceNavMenuWithBackButton(buttonText, previousPage);
             hideHeaderElements();
