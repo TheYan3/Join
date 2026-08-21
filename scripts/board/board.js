@@ -124,10 +124,11 @@ function clearAddTaskDialogForm() {
 /**
  * Opens the dialog.
  *
- * @param {string} [status="todo"] - The target status.
+ * @param {string} [status="triage"] - The target status. Defaults to the triage
+ * backlog for the generic Add task button; column buttons pass their own status.
  * @returns {void} Nothing.
  */
-function openDialog(status = "todo") {
+function openDialog(status = "triage") {
    const dialog = getAddTaskDialog();
    if (!dialog) return;
    clearAddTaskDialogForm();

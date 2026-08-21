@@ -1,8 +1,9 @@
 "use strict";
 
 {
-   const BOARD_STATUS_SEQUENCE = ["todo", "in-progress", "await-feedback", "done"];
+   const BOARD_STATUS_SEQUENCE = ["triage", "todo", "in-progress", "await-feedback", "done"];
    const BOARD_STATUS_LABELS = {
+      triage: "Triage",
       todo: "To do",
       "in-progress": "In progress",
       "await-feedback": "Await feedback",
@@ -515,7 +516,7 @@
    function renderBoardFromTasks(tasks) {
       const columns = window.BoardCards.getBoardColumns();
       clearBoardTaskCards();
-      tasks.forEach((taskData) => addTaskToColumn({ ...taskData, status: taskData.status || "todo" }, columns));
+      tasks.forEach((taskData) => addTaskToColumn({ ...taskData, status: taskData.status || "triage" }, columns));
       updatePlaceholders();
    }
 

@@ -5,6 +5,34 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-21] Neue Board-Spalte "Triage" als Eingangskorb
+-------------------------------------------------------------------------------------
+Erster Baustein für den Issue Collector: Das Board hat jetzt eine fünfte Spalte
+"Triage" ganz links. Dort landen künftig alle neuen Aufgaben, damit man sie erst
+sichten und einsortieren kann, bevor sie in "To do" wandern.
+
+Was sich für dich ändert:
+- Über "Add Task" (die Seite und der große "Add task"-Knopf auf dem Board) angelegte
+  Aufgaben landen jetzt in "Triage" statt in "To do".
+- Die kleinen "+"-Knöpfe über den einzelnen Spalten funktionieren unverändert: Wer
+  auf das "+" über "In progress" klickt, bekommt die Aufgabe weiterhin genau dort.
+- Bestehende Aufgaben bleiben unangetastet, es wurde nichts verschoben.
+- Aufgaben, denen (aus welchem Grund auch immer) ein Status fehlt, landen jetzt in
+  Triage statt in "To do" — dort fallen sie auf und können einsortiert werden.
+
+Angefasste Dateien: templates/board.html (neue Spalte), templates/help.html (Text
+sprach noch von vier Spalten), scripts/board/board-cards-render.js,
+scripts/board/board-cards.js, scripts/board/board-data.js, scripts/board/board.js,
+scripts/board/board-task-detail-form.js, scripts/tasks/saveTask.js.
+
+Das Verschieben per Maus (Drag & Drop) musste nicht angepasst werden — das erkennt
+Spalten von selbst.
+
+Noch offen und bewusst so gelassen: Auf der Summary-Seite gibt es keine eigene
+Kachel für Triage. Solche Aufgaben zählen in "Tasks on Board" mit, tauchen aber in
+keiner der Einzelkacheln auf.
+
+
 [2026-08-20] Live-Server repariert + sensible Pfade gesperrt
 -------------------------------------------------------------------------------------
 Vorbereitung für das Issue-Collector-Projekt. Zwei Probleme auf dem Server gefunden

@@ -292,7 +292,7 @@
     * @returns {void} Nothing.
     */
    function prepareEditTaskDialogData(dialog, taskId, taskData, taskKey = "") {
-      dialog.dataset.taskStatus = taskData.status || "todo";
+      dialog.dataset.taskStatus = taskData.status || "triage";
       dialog.dataset.editTaskId = String(taskId);
       if (taskKey) dialog.dataset.editTaskKey = taskKey;
    }

@@ -94,11 +94,15 @@ function getSubtasksList() {
 
 /**
  * Returns the dialog status.
+ *
+ * Falls back to "triage" so tasks created on the standalone Add Task page
+ * (which has no board dialog) land in the triage backlog. The board column
+ * buttons still set their own status via the dialog dataset.
  * @returns {string} The dialog status.
  */
 function getDialogStatus() {
    const dialog = document.getElementById("addTaskDialog");
-   return dialog?.dataset.taskStatus || "todo";
+   return dialog?.dataset.taskStatus || "triage";
 }
 
 

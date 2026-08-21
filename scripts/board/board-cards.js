@@ -247,6 +247,7 @@
     */
    function getBoardColumns() {
       return {
+         triage: document.getElementById("TriageTask"),
          todo: document.getElementById("TodoTask"),
          "in-progress": document.getElementById("InProgressTask"),
          "await-feedback": document.getElementById("AwaitTask"),

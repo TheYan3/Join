@@ -5,6 +5,7 @@
    const taskKeyById = {};
    const tasksById = {};
    const STATUS_BY_DIRECTORY_ID = {
+      TriageTask: "triage",
       TodoTask: "todo",
       InProgressTask: "in-progress",
       AwaitTask: "await-feedback",
