@@ -16,7 +16,7 @@
       "type": "n8n-nodes-base.emailReadImap",
       "typeVersion": 2,
       "position": [
-        -180,
+        -260,
         300
       ],
       "credentials": {
@@ -29,52 +29,62 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "// Absender, Betreff und Text aus der Mail holen und die Anfrage an\n// Gemini vorbereiten. Der Prompt wurde vorab gegen echte Beispielmails\n// getestet (Bug, Feature-Wunsch, Spam, Autoresponder, Werbung).\n\nconst mail = $json;\n\n// Die IMAP-Node liefert \"from\" als Objekt: { value: [{address, name}], text, html }.\n// Aeltere Formate liefern einen reinen String - beides wird unterstuetzt.\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n\nconst systemPrompt = [\n  'Du bist der Issue-Collector eines Kanban-Boards. Analysiere die E-Mail eines',\n  'Stakeholders und extrahiere daraus genau ein Ticket.',\n  '',\n  'Regeln:',\n  '- istEchteAnfrage: true, wenn die Mail ein konkretes Anliegen zum Produkt enthält',\n  '  (Fehlermeldung, Feature-Wunsch, technische Aufgabe). false bei Spam, Werbung,',\n  '  Autorespondern (\"bin im Urlaub\"), reinen Grußnachrichten oder Mails ohne',\n  '  erkennbares inhaltliches Anliegen (z.B. nur \"Bitte um Rückruf\").',\n  '  Im Zweifel true – lieber ein Ticket zu viel als ein verlorenes Anliegen.',\n  '- category: \"technical\" für technische Aufgaben UND Bug-Meldungen, \"user-story\"',\n  '  für Feature-Wünsche und fachliche Anforderungen.',\n  '- title: prägnant, max 60 Zeichen, keine Anrede, kein \"Bitte\".',\n  '- priority: \"urgent\" bei Wörtern wie dringend, sofort, kritisch, Ausfall,',\n  '  Produktion, blockiert. \"low\" bei irgendwann, Kleinigkeit, nice to have,',\n  '  kein Stress. Sonst \"medium\".',\n  '- deadline: Datum aus dem Text streng im ISO-Format JJJJ-MM-TT',\n  '  (Beispiel: 2026-09-05). Wenn keins genannt wird: null.',\n  '- description: 1-3 Sätze, sachlich zusammengefasst, ohne Grußformeln.',\n  '',\n  'Schreibe durchgängig korrektes Deutsch MIT Umlauten (ä, ö, ü, ß) – niemals',\n  'Umschreibungen wie \"ae\", \"oe\", \"ue\" oder \"ss\".',\n  'Antworte ausschließlich im vorgegebenen JSON-Schema.'\n].join('\\n');\n\nconst schema = {\n  type: 'object',\n  properties: {\n    istEchteAnfrage: { type: 'boolean' },\n    category: { type: 'string', enum: ['technical', 'user-story'] },\n    title: { type: 'string' },\n    priority: { type: 'string', enum: ['urgent', 'medium', 'low'] },\n    deadline: { type: 'string', nullable: true },\n    description: { type: 'string' }\n  },\n  required: ['istEchteAnfrage', 'category', 'title', 'priority', 'deadline', 'description']\n};\n\nconst geminiBody = {\n  systemInstruction: { parts: [{ text: systemPrompt }] },\n  contents: [{\n    role: 'user',\n    parts: [{ text: `Von: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}` }]\n  }],\n  generationConfig: {\n    responseMimeType: 'application/json',\n    responseSchema: schema,\n    temperature: 0\n  }\n};\n\nreturn {\n  json: {\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    text,\n    geminiBody\n  }\n};"
+        "jsCode": "// Absender, Betreff und Text aus der Mail holen.\n// Die IMAP-Node liefert \"from\" als Objekt: { value: [{address, name}], text, html }.\n// Aeltere Formate liefern einen reinen String - beides wird unterstuetzt.\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst mail = $json;\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n\nreturn {\n  json: {\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    mailText: `Von: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}`\n  }\n};"
       },
       "id": "a1000000-0000-4000-8000-000000000002",
       "name": "Mail aufbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        40,
+        -40,
         300
       ]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.geminiBody) }}",
+        "text": "={{ $json.mailText }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"istEchteAnfrage\": {\n      \"type\": \"boolean\",\n      \"description\": \"Ob die Mail ein echtes Anliegen enthält\"\n    },\n    \"category\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"technical\",\n        \"user-story\"\n      ]\n    },\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"Kurzer Titel, max 60 Zeichen\"\n    },\n    \"priority\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"urgent\",\n        \"medium\",\n        \"low\"\n      ]\n    },\n    \"deadline\": {\n      \"type\": \"string\",\n      \"description\": \"Fälligkeitsdatum als JJJJ-MM-TT oder leer\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"1-3 Sätze Zusammenfassung\"\n    }\n  },\n  \"required\": [\n    \"istEchteAnfrage\",\n    \"category\",\n    \"title\",\n    \"priority\",\n    \"deadline\",\n    \"description\"\n  ]\n}",
         "options": {
-          "timeout": 60000
+          "systemPromptTemplate": "Du bist der Issue-Collector eines Kanban-Boards. Analysiere die E-Mail eines Stakeholders und extrahiere daraus genau ein Ticket.\n\nRegeln:\n- istEchteAnfrage: true, wenn die Mail ein konkretes Anliegen zum Produkt enthält (Fehlermeldung, Feature-Wunsch, technische Aufgabe). false bei Spam, Werbung, Autorespondern (\"bin im Urlaub\"), reinen Grußnachrichten oder Mails ohne erkennbares inhaltliches Anliegen (z.B. nur \"Bitte um Rückruf\"). Im Zweifel true – lieber ein Ticket zu viel als ein verlorenes Anliegen.\n- category: \"technical\" für technische Aufgaben UND Bug-Meldungen, \"user-story\" für Feature-Wünsche und fachliche Anforderungen.\n- title: prägnant, max 60 Zeichen, keine Anrede, kein \"Bitte\".\n- priority: \"urgent\" bei Wörtern wie dringend, sofort, kritisch, Ausfall, Produktion, blockiert. \"low\" bei irgendwann, Kleinigkeit, nice to have, kein Stress. Sonst \"medium\".\n- deadline: Datum aus dem Text streng im ISO-Format JJJJ-MM-TT (Beispiel: 2026-09-05). Wenn keins genannt wird: leer lassen.\n- description: 1-3 Sätze, sachlich zusammengefasst, ohne Grußformeln.\n\nSchreibe durchgängig korrektes Deutsch MIT Umlauten (ä, ö, ü, ß) – niemals Umschreibungen wie \"ae\", \"oe\", \"ue\" oder \"ss\"."
         }
       },
       "id": "a1000000-0000-4000-8000-000000000003",
-      "name": "Gemini analysiert",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "name": "KI analysiert Mail",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
       "position": [
-        260,
+        200,
         300
       ],
       "retryOnFail": true,
       "maxTries": 2,
-      "waitBetweenTries": 5000,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        520
+      ],
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "dSqEjj6BpPDXJN82",
-          "name": "Header Auth account"
+        "googlePalmApi": {
+          "id": "m2VeNkO7joThSvVf",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "// Gemini-Antwort auswerten und daraus ein Join-Ticket bauen.\n// Gibt bewusst NICHTS zurück, wenn die Mail keine echte Anfrage war –\n// dann entsteht kein Ticket und das Tageskontingent bleibt unberührt.\n\nconst antwort = $json;\nconst quelle = $('Mail aufbereiten').item.json;\n\nlet analyse;\ntry {\n  const rohtext = antwort.candidates[0].content.parts[0].text;\n  analyse = JSON.parse(rohtext);\n} catch (fehler) {\n  throw new Error('Gemini-Antwort nicht lesbar: ' + fehler.message);\n}\n\nif (analyse.istEchteAnfrage !== true) {\n  return null;\n}\n\n// Gemini liefert ISO (JJJJ-MM-TT); Join erwartet TT/MM/JJJJ.\n// Umwandlung im Code statt im Prompt, weil das Modell beim Format schwankte.\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst hinweis = 'Dieses Ticket wurde KI-generiert.';\n\nconst ticket = {\n  id: Date.now(),\n  title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n  description: `${String(analyse.description || '').trim()}\\n\\n${hinweis}`,\n  date: alsJoinDatum(analyse.deadline),\n  priority: analyse.priority || 'medium',\n  category: analyse.category || 'user-story',\n  status: 'triage',\n  assigned: [],\n  subtasks: [],\n  creator: {\n    email: quelle.absenderMail,\n    name: quelle.absenderName || quelle.absenderMail,\n    type: 'extern'\n  }\n};\n\nreturn { json: { ticket, absenderMail: quelle.absenderMail, betreff: quelle.betreff } };"
+        "jsCode": "// Ergebnis des Information Extractors auswerten und ein Join-Ticket bauen.\n// Gibt bewusst NICHTS zurueck, wenn die Mail keine echte Anfrage war -\n// dann entsteht kein Ticket und das Tageskontingent bleibt unberuehrt.\n\n// Der Extractor liefert das Ergebnis je nach Version unter \"output\" oder direkt.\nconst analyse = $json.output ?? $json;\nconst quelle = $('Mail aufbereiten').item.json;\n\nif (analyse.istEchteAnfrage !== true) {\n  return null;\n}\n\n// Das Modell liefert ISO (JJJJ-MM-TT); Join erwartet TT/MM/JJJJ.\n// Umwandlung im Code statt im Prompt, weil das Format sonst schwankt.\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ticket = {\n  id: Date.now(),\n  title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n  description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n  date: alsJoinDatum(analyse.deadline),\n  priority: analyse.priority || 'medium',\n  category: analyse.category || 'user-story',\n  status: 'triage',\n  assigned: [],\n  subtasks: [],\n  creator: {\n    email: quelle.absenderMail,\n    name: quelle.absenderName || quelle.absenderMail,\n    type: 'extern'\n  }\n};\n\nreturn { json: { ticket, absenderMail: quelle.absenderMail, betreff: quelle.betreff } };"
       },
       "id": "a1000000-0000-4000-8000-000000000004",
       "name": "Ticket bauen",
@@ -125,14 +135,25 @@
       "main": [
         [
           {
-            "node": "Gemini analysiert",
+            "node": "KI analysiert Mail",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Gemini analysiert": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "KI analysiert Mail",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KI analysiert Mail": {
       "main": [
         [
           {
