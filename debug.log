@@ -5,6 +5,46 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-23] Verarbeitete Mails wandern automatisch in Ordner
+-------------------------------------------------------------------------------------
+Der Posteingang räumt sich jetzt selbst auf:
+- Mail wurde zu einem Ticket        -> Ordner "erledigt"
+- Mail war Spam/ohne Anliegen       -> Ordner "erledigt" (korrekt verarbeitet)
+- Bei der Verarbeitung ging etwas schief -> Ordner "zu bearbeiten"
+
+Das war aufwendiger als gedacht, weil n8n dafür gar keinen Baustein mitbringt. Der
+Workflow spricht deshalb selbst das Mail-Protokoll (IMAP), um die Nachricht zu
+verschieben.
+
+Damit das möglich ist, wurde die n8n-Instanz angepasst (in Dockge, von Yannic):
+Code-Bausteine dürfen jetzt Netzwerkverbindungen aufbauen. Bewusst NICHT
+freigeschaltet wurde der Dateizugriff. Das ist wichtig, denn die Datei mit dem
+Verschlüsselungsschlüssel von n8n bleibt damit unlesbar — die gespeicherten
+Zugangsdaten aller anderen Automatisierungen sind weiterhin geschützt.
+
+Nachgeprüft mit einem eigenen Test-Workflow (danach gelöscht):
+  Netzwerk erlaubt · Dateizugriff blockiert · Schlüsseldatei nicht lesbar ·
+  Befehle ausführen blockiert
+Die Mail-Zugangsdaten liegen in einer separaten Datei auf dem Server mit Rechten
+"nur Besitzer" — nicht im Repo, nicht in der Workflow-Datei.
+
+Fehler, die beim Bauen auffielen und behoben wurden:
+1. Bei einer nicht vorhandenen Nachricht meldete mein Code "erfolgreich
+   verschoben", obwohl nichts passierte — der Mailserver bestätigt auch dann mit
+   OK. Jetzt wird zusätzlich geprüft, ob der Server den Umzug tatsächlich meldet.
+2. Kommen mehrere Mails gleichzeitig an, ging die Zuordnung "welches Ergebnis
+   gehört zu welcher Mail" verloren. Die Kennung der Nachricht wird jetzt
+   ausdrücklich durch alle Schritte mitgeführt.
+3. Umgebungsvariablen heißen in n8n-Code anders als in normalem JavaScript. Fiel
+   erst im Test auf.
+
+Getestet wurde: erfolgreiche Verarbeitung, Spam-Erkennung, Ordner mit Leerzeichen
+im Namen, falsches Passwort, nicht existierender Ordner, nicht existierende
+Nachricht — und der Fehlerfall, indem die Datenbankadresse absichtlich unbrauchbar
+gemacht wurde. Ergebnis: Die Mail landete korrekt in "zu bearbeiten", der
+Erfolgs-Zweig blieb aus. Danach wurde die richtige Adresse wiederhergestellt.
+
+
 [2026-08-21] E-Mails werden automatisch zu Tickets (n8n-Workflow)
 -------------------------------------------------------------------------------------
 Das Herzstück steht: Eine Mail an join-issues@gmx.de wird automatisch abgeholt, von

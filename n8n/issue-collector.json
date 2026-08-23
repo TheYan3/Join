@@ -29,7 +29,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "// Absender, Betreff und Text aus der Mail holen.\n// Die IMAP-Node liefert \"from\" als Objekt: { value: [{address, name}], text, html }.\n// Aeltere Formate liefern einen reinen String - beides wird unterstuetzt.\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst mail = $json;\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n\nreturn {\n  json: {\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    mailText: `Von: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}`\n  }\n};"
+        "jsCode": "// Absender, Betreff und Text aus der Mail holen.\n// Die IMAP-Node liefert \"from\" als Objekt: { value: [{address, name}], text, html }.\n// Aeltere Formate liefern einen reinen String - beides wird unterstuetzt.\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst mail = $json;\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\n// UID der Nachricht im Postfach - wird zum Verschieben in Ordner gebraucht\nconst uid = mail?.attributes?.uid ?? null;\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n\nreturn {\n  json: {\n    uid,\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    mailText: `Von: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}`\n  }\n};"
       },
       "id": "a1000000-0000-4000-8000-000000000002",
       "name": "Mail aufbereiten",
@@ -59,7 +59,8 @@
       ],
       "retryOnFail": true,
       "maxTries": 2,
-      "waitBetweenTries": 5000
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -83,8 +84,8 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "// Ergebnis des Information Extractors auswerten und ein Join-Ticket bauen.\n// Gibt bewusst NICHTS zurueck, wenn die Mail keine echte Anfrage war -\n// dann entsteht kein Ticket und das Tageskontingent bleibt unberuehrt.\n\n// Der Extractor liefert das Ergebnis je nach Version unter \"output\" oder direkt.\nconst analyse = $json.output ?? $json;\nconst quelle = $('Mail aufbereiten').item.json;\n\nif (analyse.istEchteAnfrage !== true) {\n  return null;\n}\n\n// Das Modell liefert ISO (JJJJ-MM-TT); Join erwartet TT/MM/JJJJ.\n// Umwandlung im Code statt im Prompt, weil das Format sonst schwankt.\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ticket = {\n  id: Date.now(),\n  title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n  description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n  date: alsJoinDatum(analyse.deadline),\n  priority: analyse.priority || 'medium',\n  category: analyse.category || 'user-story',\n  status: 'triage',\n  assigned: [],\n  subtasks: [],\n  creator: {\n    email: quelle.absenderMail,\n    name: quelle.absenderName || quelle.absenderMail,\n    type: 'extern'\n  }\n};\n\nreturn { json: { ticket, absenderMail: quelle.absenderMail, betreff: quelle.betreff } };"
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Ergebnisse des Information Extractors in Join-Tickets umwandeln.\n// Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt:\n// Der Extractor liefert genau ein Ergebnis je eingehender Mail.\nconst quellen = $('Mail aufbereiten').all();\n\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
       },
       "id": "a1000000-0000-4000-8000-000000000004",
       "name": "Ticket bauen",
@@ -116,7 +117,64 @@
       ],
       "retryOnFail": true,
       "maxTries": 3,
-      "waitBetweenTries": 3000
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Zweiter Zweig: Mails, die KEINE echte Anfrage waren (Spam, Autoresponder,\n// inhaltslose Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket -\n// und gelten deshalb als erledigt.\nconst quellen = $('Mail aufbereiten').all();\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000007",
+      "name": "Kein Ticket noetig",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = ($('Ticket bauen').all()[i] || {}).json?.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000008",
+      "name": "Mail nach erledigt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = items[i].json.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'zu bearbeiten', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'zu bearbeiten' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000009",
+      "name": "Mail nach zu bearbeiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = items[i].json.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000010",
+      "name": "Mail erledigt (kein Ticket)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        480
+      ]
     }
   ],
   "connections": {
@@ -160,6 +218,18 @@
             "node": "Ticket bauen",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Kein Ticket noetig",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mail nach zu bearbeiten",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -169,6 +239,35 @@
         [
           {
             "node": "Ticket in Triage anlegen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ticket in Triage anlegen": {
+      "main": [
+        [
+          {
+            "node": "Mail nach erledigt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mail nach zu bearbeiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kein Ticket noetig": {
+      "main": [
+        [
+          {
+            "node": "Mail erledigt (kein Ticket)",
             "type": "main",
             "index": 0
           }
