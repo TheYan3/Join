@@ -5,6 +5,38 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-23] Tageslimit: höchstens 10 Anfragen pro Tag
+-------------------------------------------------------------------------------------
+Pro Tag werden höchstens 10 Tickets automatisch aus E-Mails erzeugt. Das schützt
+vor unerwartet hohen Kosten, falls jemand das Postfach mit Anfragen flutet.
+
+Ist das Limit erreicht:
+- Es entsteht kein weiteres Ticket
+- Der Absender bekommt eine Mail mit dem Hinweis auf das Tageslimit
+- Die Mail wandert nach "erledigt" (sie wurde ja korrekt behandelt)
+
+Zwei Entscheidungen, die die Sache einfacher und verlässlicher machen:
+
+1. Kein separater Zähler. Gezählt werden die Tickets selbst — jedes per Mail
+   erzeugte Ticket ist als "extern" markiert und trägt seinen Anlegezeitpunkt.
+   Ein eigener Zähler könnte auseinanderlaufen (etwa wenn ein Durchlauf abbricht,
+   nachdem er hochgezählt hat); die Tickets können das nicht.
+
+2. Die Prüfung passiert VOR der KI-Analyse statt danach. Eine abgewiesene Mail
+   kostet dadurch gar kein KI-Kontingent — nachgewiesen: Im Limit-Test wurde die
+   KI-Komponente nachweislich übersprungen.
+
+Dabei fiel ein Folgefehler auf und wurde behoben: Durch die neue Filterstufe
+stimmte die Zuordnung "welches Ergebnis gehört zu welcher Mail" in den späteren
+Schritten nicht mehr, weil sie sich noch auf die ungefilterte Liste bezog. Genau
+derselbe Fehlertyp wie beim Verschieben der Mails zwei Schritte zuvor.
+
+Getestet: Limit vorübergehend auf den aktuellen Tagesstand gesetzt, dann eine Mail
+geschickt — kein Ticket, Hinweis verschickt, Mail einsortiert, KI übersprungen.
+Danach Limit auf 10 zurückgesetzt und mit einer weiteren Mail geprüft, dass der
+normale Weg unverändert funktioniert.
+
+
 [2026-08-23] Absender bekommen jetzt eine Antwort
 -------------------------------------------------------------------------------------
 Wer eine Anfrage schickt, hört nicht mehr nur Funkstille:

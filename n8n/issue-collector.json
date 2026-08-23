@@ -85,7 +85,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// Ergebnisse des Information Extractors in Join-Tickets umwandeln.\n// Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt:\n// Der Extractor liefert genau ein Ergebnis je eingehender Mail.\nconst quellen = $('Mail aufbereiten').all();\n\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "// Ergebnisse des Information Extractors in Join-Tickets umwandeln.\n// Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt:\n// Der Extractor liefert genau ein Ergebnis je eingehender Mail.\n// Nach der Limitpruefung erreichen nur die durchgelassenen Mails die KI,\n// deshalb ist DIESER Node die Bezugsgroesse fuer die Positionszuordnung.\nconst quellen = $('Innerhalb Tageslimit').all();\n\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
       },
       "id": "a1000000-0000-4000-8000-000000000004",
       "name": "Ticket bauen",
@@ -123,7 +123,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// Zweiter Zweig: Mails, die KEINE echte Anfrage waren (Spam, Autoresponder,\n// inhaltslose Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket -\n// und gelten deshalb als erledigt.\nconst quellen = $('Mail aufbereiten').all();\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "// Zweiter Zweig: Mails, die KEINE echte Anfrage waren (Spam, Autoresponder,\n// inhaltslose Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket -\n// und gelten deshalb als erledigt.\n// Nach der Limitpruefung erreichen nur die durchgelassenen Mails die KI,\n// deshalb ist DIESER Node die Bezugsgroesse fuer die Positionszuordnung.\nconst quellen = $('Innerhalb Tageslimit').all();\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
       },
       "id": "a1000000-0000-4000-8000-000000000007",
       "name": "Kein Ticket noetig",
@@ -257,6 +257,109 @@
           "name": "SMTP account"
         }
       }
+    },
+    {
+      "parameters": {
+        "url": "https://join-4bce1-default-rtdb.europe-west1.firebasedatabase.app/tasks.json",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000015",
+      "name": "Tickets abrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        140,
+        300
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Wie viele KI-Tickets wurden heute schon angelegt?\n// Gezaehlt werden die Tickets selbst - kein separater Zaehler, der\n// auseinanderlaufen koennte. Erkennbar sind sie an creator.type \"extern\",\n// das Anlegedatum steckt als Zeitstempel in der id.\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Jede wartende Mail belegt einen Platz. Position i bekommt Platz\n// heuteSchon + i - dadurch greift das Limit auch bei mehreren Mails\n// im selben Durchlauf korrekt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i >= TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, platzNr: heuteSchon + i + 1 } });\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000016",
+      "name": "Innerhalb Tageslimit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        340,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Wie viele KI-Tickets wurden heute schon angelegt?\n// Gezaehlt werden die Tickets selbst - kein separater Zaehler, der\n// auseinanderlaufen koennte. Erkennbar sind sie an creator.type \"extern\",\n// das Anlegedatum steckt als Zeitstempel in der id.\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Gegenstueck: alles, was ueber dem Tageslimit liegt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i < TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, heuteSchon, limit: TAGESLIMIT } });\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000017",
+      "name": "Ueber Tageslimit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        340,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Hinweis auf das erreichte Tageslimit.\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\nconst ergebnisse = [];\nfor (const item of items) {\n  const an = String(item.json.absenderMail || '').toLowerCase();\n  if (!an || an === eigenesPostfach) continue;   // Schutz vor Endlosschleife\n  ergebnisse.push({ json: {\n    an,\n    betreff: 'Tageslimit erreicht - Ihre Anfrage kam an',\n    text: [\n      'Hallo,',\n      '',\n      `fuer heute ist das Limit von ${item.json.limit} automatisch erstellten`,\n      'Anfragen erreicht. Ihre Nachricht ist bei uns angekommen, es wurde aber',\n      'noch kein Ticket daraus erzeugt.',\n      '',\n      'Das Limit schuetzt vor unerwartet hohen Kosten der KI-Auswertung.',\n      'Bitte schicken Sie Ihre Anfrage morgen noch einmal - oder warten Sie',\n      'kurz ab, jemand aus dem Team sieht die Nachricht ohnehin.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000018",
+      "name": "Limit-Hinweis vorbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.JOIN_MAIL_USER }}",
+        "toEmail": "={{ $json.an }}",
+        "subject": "={{ $json.betreff }}",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000019",
+      "name": "Limit-Hinweis senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        900
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "smtp": {
+          "id": "Hap4YDNAMBaOKZAK",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Ueber dem Limit abgewiesene Mails sind korrekt behandelt (Absender wurde\n// informiert), deshalb gelten sie als erledigt.\nconst ergebnisse = [];\nfor (const item of items) {\n  const uid = item.json.uid;\n  if (!uid) { ergebnisse.push({ json: { verschoben: false, grund: 'keine UID' } }); continue; }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt', grund: 'Tageslimit' } });\n  } catch (f) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(f.message) } });\n  }\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000020",
+      "name": "Mail erledigt (Limit)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        1060
+      ]
     }
   ],
   "connections": {
@@ -275,7 +378,7 @@
       "main": [
         [
           {
-            "node": "KI analysiert Mail",
+            "node": "Tickets abrufen",
             "type": "main",
             "index": 0
           }
@@ -387,6 +490,60 @@
         [
           {
             "node": "Fehlerhinweis senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tickets abrufen": {
+      "main": [
+        [
+          {
+            "node": "Innerhalb Tageslimit",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Ueber Tageslimit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Innerhalb Tageslimit": {
+      "main": [
+        [
+          {
+            "node": "KI analysiert Mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ueber Tageslimit": {
+      "main": [
+        [
+          {
+            "node": "Limit-Hinweis vorbereiten",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mail erledigt (Limit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit-Hinweis vorbereiten": {
+      "main": [
+        [
+          {
+            "node": "Limit-Hinweis senden",
             "type": "main",
             "index": 0
           }
