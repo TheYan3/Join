@@ -5,6 +5,39 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-23] Ersteller werden benachrichtigt, wenn ihr Ticket wandert
+-------------------------------------------------------------------------------------
+Zieht jemand ein Ticket in eine andere Spalte, bekommt der Ersteller eine Mail:
+welches Ticket, von welcher Spalte in welche, und bei "Done" zusätzlich ein Dank.
+
+Das ist ein eigener, zweiter Workflow ("Join Statusbenachrichtigung"), weil er
+anders ausgelöst wird: nicht durch eine Mail, sondern durch einen Zeitplan alle
+fünf Minuten.
+
+Warum nachfragen statt sofort melden? Die Automatisierungs-Instanz ist bewusst nur
+im Heimnetz erreichbar. Das Board läuft aber im Browser der Stakeholder irgendwo im
+Internet und könnte sie deshalb gar nicht erreichen. Statt einen Zugang von außen
+zu öffnen — was sich bei dieser Instanz schon einmal gerächt hat — fragt sie selbst
+regelmäßig nach. Preis: bis zu fünf Minuten Verzögerung, für eine Demo unsichtbar.
+
+Zwei Vorkehrungen, die sonst zu Mail-Fluten geführt hätten:
+1. Der allererste Lauf verschickt nichts, sondern merkt sich nur den Ausgangsstand.
+   Ohne das hätte JEDER Ersteller sofort eine Mail bekommen für Tickets, die sich
+   nie bewegt haben. Getestet: erster Lauf = 0 Meldungen.
+2. Nach dem Versenden wird der neue Stand gemerkt, damit dieselbe Änderung nicht
+   alle fünf Minuten erneut gemeldet wird.
+
+Getestet, indem ein Ticket von "Triage" nach "In progress" verschoben wurde:
+Der Workflow erkannte "Login funktioniert nicht mehr: Triage -> In progress" und
+verschickte die Mail. Danach wurde geprüft, dass beim nächsten Lauf keine weitere
+Mail entsteht.
+
+Anmerkung zur Reichweite: Benachrichtigt wird jeder Ersteller mit hinterlegter
+Mailadresse — also auch Teammitglieder, die ihr eigenes Ticket verschieben. Die
+Checkliste macht da keinen Unterschied ("der Ersteller wird benachrichtigt"). Falls
+das im Alltag stört, lässt es sich leicht auf externe Ersteller beschränken.
+
+
 [2026-08-23] Tageslimit: höchstens 10 Anfragen pro Tag
 -------------------------------------------------------------------------------------
 Pro Tag werden höchstens 10 Tickets automatisch aus E-Mails erzeugt. Das schützt

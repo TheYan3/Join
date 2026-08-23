@@ -1,0 +1,148 @@
+{
+  "name": "Join Statusbenachrichtigung",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "c1000000-0000-4000-8000-000000000001",
+      "name": "Alle 5 Minuten",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://join-4bce1-default-rtdb.europe-west1.firebasedatabase.app/tasks.json",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "c1000000-0000-4000-8000-000000000002",
+      "name": "Tickets abrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Statusaenderungen erkennen, indem der aktuelle Stand mit dem letzten\n// verglichen wird. Der letzte Stand liegt in n8n's eigenem Speicher, der\n// zwischen Durchlaeufen erhalten bleibt.\nconst statisch = $getWorkflowStaticData('global');\nstatisch.letzterStand = statisch.letzterStand || {};\nconst ersterLauf = Object.keys(statisch.letzterStand).length === 0;\n\nconst roh = $json.data ?? $json;\nconst tickets = (roh && typeof roh === 'object') ? roh : {};\n\nconst SPALTEN = {\n  triage: 'Triage',\n  todo: 'To do',\n  'in-progress': 'In progress',\n  'await-feedback': 'Await feedback',\n  done: 'Done',\n};\n\nconst aenderungen = [];\nfor (const [schluessel, t] of Object.entries(tickets)) {\n  if (!t || typeof t !== 'object') continue;\n  const vorher = statisch.letzterStand[schluessel];\n  const jetzt = String(t.status || '');\n\n  // Beim allerersten Lauf gibt es keinen Vergleichswert. Dann nur den Stand\n  // merken und NICHTS verschicken - sonst bekaeme jeder Ersteller sofort eine\n  // Mail fuer ein Ticket, das sich gar nicht bewegt hat.\n  if (!ersterLauf && vorher && vorher !== jetzt) {\n    const ersteller = t.creator || {};\n    if (ersteller.email) {\n      aenderungen.push({ json: {\n        an: ersteller.email,\n        titel: t.title || 'Ticket ohne Titel',\n        vonSpalte: SPALTEN[vorher] || vorher,\n        nachSpalte: SPALTEN[jetzt] || jetzt,\n        istExtern: ersteller.type === 'extern',\n      }});\n    }\n  }\n  statisch.letzterStand[schluessel] = jetzt;\n}\n\n// Geloeschte Tickets aus dem gemerkten Stand entfernen, damit er nicht waechst\nfor (const schluessel of Object.keys(statisch.letzterStand)) {\n  if (!(schluessel in tickets)) delete statisch.letzterStand[schluessel];\n}\n\nreturn aenderungen;"
+      },
+      "id": "c1000000-0000-4000-8000-000000000003",
+      "name": "Statusaenderungen finden",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Benachrichtigungstext bauen.\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\nconst ergebnisse = [];\nfor (const item of items) {\n  const j = item.json;\n  const an = String(j.an || '').toLowerCase();\n  // Schutz vor Endlosschleife: nie an das eigene Postfach schreiben\n  if (!an || an === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an,\n    betreff: `Ihr Ticket wurde verschoben: ${j.titel}`,\n    text: [\n      'Hallo,',\n      '',\n      'es gibt Bewegung bei Ihrem Ticket:',\n      '',\n      `  ${j.titel}`,\n      `  ${j.vonSpalte}  ->  ${j.nachSpalte}`,\n      '',\n      j.nachSpalte === 'Done'\n        ? 'Das Ticket ist damit abgeschlossen. Vielen Dank fuer Ihre Anfrage!'\n        : 'Wir halten Sie auf dem Laufenden.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
+      },
+      "id": "c1000000-0000-4000-8000-000000000004",
+      "name": "Benachrichtigung vorbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.JOIN_MAIL_USER }}",
+        "toEmail": "={{ $json.an }}",
+        "subject": "={{ $json.betreff }}",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c1000000-0000-4000-8000-000000000005",
+      "name": "Benachrichtigung senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        300
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "smtp": {
+          "id": "Hap4YDNAMBaOKZAK",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Alle 5 Minuten": {
+      "main": [
+        [
+          {
+            "node": "Tickets abrufen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tickets abrufen": {
+      "main": [
+        [
+          {
+            "node": "Statusaenderungen finden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Statusaenderungen finden": {
+      "main": [
+        [
+          {
+            "node": "Benachrichtigung vorbereiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Benachrichtigung vorbereiten": {
+      "main": [
+        [
+          {
+            "node": "Benachrichtigung senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

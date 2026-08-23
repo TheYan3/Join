@@ -36,3 +36,41 @@ abgeht.
 
 Zusätzlich filtert GMX offensichtlichen Spam bereits vor dem Postfach heraus
 (Ordner "Spamverdacht"), sodass solche Mails gar kein Kontingent verbrauchen.
+
+
+## statusbenachrichtigung.json
+
+Schaut alle 5 Minuten nach, ob ein Ticket die Spalte gewechselt hat, und
+benachrichtigt den Ersteller per Mail.
+
+| Node | Aufgabe |
+|---|---|
+| Alle 5 Minuten | Zeitplan-Auslöser |
+| Tickets abrufen | holt den aktuellen Stand aller Tickets |
+| Statusänderungen finden | vergleicht mit dem zuletzt gesehenen Stand |
+| Benachrichtigung vorbereiten | baut den Mailtext, schützt vor Endlosschleifen |
+| Benachrichtigung senden | verschickt über SMTP |
+
+### Warum Abfragen statt sofortiger Meldung
+
+Die n8n-Instanz ist bewusst nur im Heimnetz erreichbar. Das Board läuft aber im
+Browser der Stakeholder irgendwo im Internet und könnte n8n deshalb gar nicht
+direkt ansprechen. Statt einen Zugang von außen zu öffnen, fragt n8n selbst
+regelmäßig nach. Preis dafür: bis zu 5 Minuten Verzögerung.
+
+### Der gemerkte Stand
+
+Der zuletzt gesehene Status jedes Tickets liegt im internen Speicher des
+Workflows und überlebt einzelne Durchläufe. Zwei Eigenschaften sind wichtig:
+
+- **Der allererste Lauf verschickt nichts.** Er merkt sich nur den Ausgangsstand.
+  Sonst bekäme jeder Ersteller sofort eine Mail für ein Ticket, das sich nie
+  bewegt hat.
+- **Gelöschte Tickets werden aus dem Gedächtnis entfernt**, damit es nicht
+  unbegrenzt wächst.
+
+### Schutz vor Endlosschleifen
+
+Alle Mail-versendenden Stellen prüfen, ob der Empfänger das eigene Postfach ist,
+und brechen dann ab. Ohne das würde eine Antwort im eigenen Posteingang landen,
+den Sammel-Workflow erneut auslösen und die nächste Mail erzeugen.
