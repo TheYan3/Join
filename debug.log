@@ -5,6 +5,39 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-23] Absender bekommen jetzt eine Antwort
+-------------------------------------------------------------------------------------
+Wer eine Anfrage schickt, hört nicht mehr nur Funkstille:
+
+- Ticket wurde angelegt -> Bestätigungsmail mit Titel, Einstufung, Priorität und
+  Fälligkeitsdatum, plus dem Hinweis, dass die Angaben aus einer KI-Analyse stammen.
+- Verarbeitung ging schief -> Hinweis, dass die Nachricht angekommen ist, sich das
+  Team persönlich kümmert und nichts verloren geht.
+
+Wichtiger Schutz, der von Anfang an eingebaut wurde: Der Workflow antwortet
+NIEMALS an das eigene Postfach. Ohne diese Sperre würde die Bestätigung im eigenen
+Posteingang landen, den Workflow erneut auslösen, wieder eine Bestätigung
+erzeugen — eine Endlosschleife, die Mailkonto und KI-Kontingent leerläuft. Der
+Schutz wurde ausdrücklich getestet: Bei einer Mail an sich selbst entsteht das
+Ticket, aber es geht keine Antwort raus.
+
+Getestet wurde jeder Zweig einzeln:
+- Bestätigung: verschickt, vom Mailserver angenommen
+- Fehlerhinweis: erzwungen durch absichtliches Unbrauchbarmachen der
+  Datenbankadresse — Hinweis ging raus, Mail landete in "zu bearbeiten",
+  die Bestätigung blieb korrekt aus
+- Schleifenschutz: greift in beiden Zweigen
+
+Nebenbei entdeckt: GMX erlaubt beim Versand nur die eigene Adresse als Absender.
+Fremde Absenderadressen werden abgelehnt. Für die Tests musste der Empfänger
+deshalb kurzzeitig fest eingetragen werden; danach wurde die richtige Fassung
+wiederhergestellt und geprüft, dass keine Testadresse zurückblieb.
+
+Sprachwahl: Die Antwortmails sind auf Deutsch, weil Anfragen und die daraus
+erzeugten Tickets ebenfalls deutsch sind. Die Landing Page ist englisch, weil die
+gesamte Oberfläche englisch ist.
+
+
 [2026-08-23] Verarbeitete Mails wandern automatisch in Ordner
 -------------------------------------------------------------------------------------
 Der Posteingang räumt sich jetzt selbst auf:

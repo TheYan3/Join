@@ -175,6 +175,88 @@
         720,
         480
       ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Bestaetigung an den Absender vorbereiten.\n// Zuordnung ueber die Position: Der HTTP-Node liefert genau ein Ergebnis\n// je angelegtem Ticket, passend zur Reihenfolge aus \"Ticket bauen\".\nconst quellen = $('Ticket bauen').all();\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const quelle = quellen[i] ? quellen[i].json : null;\n  if (!quelle) continue;\n\n  // SCHUTZ VOR ENDLOSSCHLEIFE: Niemals an das eigene Postfach antworten.\n  // Sonst loest die Antwort den Workflow erneut aus - endlos.\n  if (String(quelle.absenderMail || '').toLowerCase() === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an: quelle.absenderMail,\n    betreff: `Ihre Anfrage ist angekommen: ${quelle.ticket.title}`,\n    text: [\n      'Hallo,',\n      '',\n      'vielen Dank fuer Ihre Nachricht. Wir haben daraus ein Ticket erstellt:',\n      '',\n      `  Titel:       ${quelle.ticket.title}`,\n      `  Einstufung:  ${quelle.ticket.category === 'technical' ? 'Technische Aufgabe' : 'Feature-Wunsch'}`,\n      `  Prioritaet:  ${quelle.ticket.priority}`,\n      quelle.ticket.date ? `  Faellig bis: ${quelle.ticket.date}` : '  Faellig bis: nicht angegeben',\n      '',\n      'Das Ticket liegt jetzt in unserer Triage-Spalte und wird dort gesichtet.',\n      'Sobald es sich bewegt, melden wir uns erneut.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n      'Titel und Einstufung stammen aus einer KI-Analyse Ihrer Mail.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000011",
+      "name": "Bestaetigung vorbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.JOIN_MAIL_USER }}",
+        "toEmail": "={{ $json.an }}",
+        "subject": "={{ $json.betreff }}",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000012",
+      "name": "Bestaetigung senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1180,
+        100
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "smtp": {
+          "id": "Hap4YDNAMBaOKZAK",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Hinweis an den Absender, wenn die automatische Verarbeitung scheiterte.\n// Die Items der Fehlerausgaenge fuehren die Absenderadresse mit.\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\n\nconst ergebnisse = [];\nfor (const item of items) {\n  const an = String(item.json.absenderMail || '').toLowerCase();\n  if (!an) continue;\n  // Schutz vor Endlosschleife (siehe Bestaetigungs-Node)\n  if (an === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an,\n    betreff: 'Ihre Nachricht ist angekommen',\n    text: [\n      'Hallo,',\n      '',\n      'wir haben Ihre Nachricht erhalten. Die automatische Verarbeitung hat',\n      'diesmal nicht funktioniert, deshalb schaut sich jemand aus dem Team',\n      'Ihre Anfrage persoenlich an und meldet sich zeitnah bei Ihnen.',\n      '',\n      'Es geht nichts verloren - Ihre Mail ist bei uns gespeichert.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000013",
+      "name": "Fehlerhinweis vorbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.JOIN_MAIL_USER }}",
+        "toEmail": "={{ $json.an }}",
+        "subject": "={{ $json.betreff }}",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000014",
+      "name": "Fehlerhinweis senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1180,
+        820
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "smtp": {
+          "id": "Hap4YDNAMBaOKZAK",
+          "name": "SMTP account"
+        }
+      }
     }
   ],
   "connections": {
@@ -230,6 +312,11 @@
             "node": "Mail nach zu bearbeiten",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Fehlerhinweis vorbereiten",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -252,11 +339,21 @@
             "node": "Mail nach erledigt",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Bestaetigung vorbereiten",
+            "type": "main",
+            "index": 0
           }
         ],
         [
           {
             "node": "Mail nach zu bearbeiten",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fehlerhinweis vorbereiten",
             "type": "main",
             "index": 0
           }
@@ -268,6 +365,28 @@
         [
           {
             "node": "Mail erledigt (kein Ticket)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bestaetigung vorbereiten": {
+      "main": [
+        [
+          {
+            "node": "Bestaetigung senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fehlerhinweis vorbereiten": {
+      "main": [
+        [
+          {
+            "node": "Fehlerhinweis senden",
             "type": "main",
             "index": 0
           }
