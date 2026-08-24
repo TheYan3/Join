@@ -5,6 +5,36 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Kommentare in den n8n-Bausteinen auf JSDoc umgestellt
+-------------------------------------------------------------------------------------
+Die Projekt-Checkliste verlangt JSDoc-Kommentare für die komplexeren
+n8n-Bausteine. JSDoc ist ein festes Kommentarformat, das Editoren auswerten
+können: Beim Draufzeigen auf eine Funktion zeigen sie an, was sie tut und
+welche Werte sie erwartet.
+
+Bisher hatten nur die vier Bausteine, die Mails in Ordner verschieben, so einen
+Kommentarkopf. Die übrigen zehn Code-Bausteine hatten normale Notizen.
+
+Jetzt hat jeder Code-Baustein einen einheitlichen Kopf mit drei Angaben: was er
+macht, warum er es so macht, und was am Ende herauskommt. Zwei Hilfsfunktionen
+(Absender aus einer Mail auslesen, Datum ins Join-Format umrechnen) haben
+zusätzlich die Beschreibung ihrer Eingabe- und Ausgabewerte bekommen.
+
+Wichtig: Geändert wurde ausschließlich Text in Kommentaren - keine einzige
+Zeile ausführbarer Code. Das wurde nicht nur behauptet, sondern zweifach
+geprüft:
+1. Jeder Baustein wurde auf Schreibfehler im Programmcode geprüft - alle sauber.
+2. Ein Vergleich "vorher gegen nachher", bei dem alle Kommentare weggelassen
+   wurden, ergab: völlig identisch. Ebenso die Verbindungen zwischen den
+   Bausteinen und alle sonstigen Einstellungen.
+
+Hinweis: Die laufende Automatisierung auf dem Server merkt davon nichts, dort
+stehen noch die alten Kommentare. Angleichen ließe sich das durch erneutes
+Einspielen der beiden Dateien - nötig ist es nicht, das Verhalten ist gleich.
+
+Betroffene Dateien: n8n/issue-collector.json, n8n/statusbenachrichtigung.json
+
+
 [2026-08-24] README erklärt jetzt das Projekt und wie man die Demo ausprobiert
 -------------------------------------------------------------------------------------
 In der README (der Startseite des Projekts auf GitHub) stand noch der alte Text
