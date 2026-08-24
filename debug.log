@@ -5,6 +5,37 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] README erklärt jetzt das Projekt und wie man die Demo ausprobiert
+-------------------------------------------------------------------------------------
+In der README (der Startseite des Projekts auf GitHub) stand noch der alte Text
+aus dem Bootcamp: Sie beschrieb nur das Kanban-Board und erwähnte den
+E-Mail-Sammler mit keinem Wort. Die Checkliste verlangt aber eine
+aussagekräftige Projektbeschreibung samt Anleitung zur Demo-Nutzung.
+
+Neu drin:
+- Was Join ist und was der KI-Sammler dazu beiträgt, dazu die Live-Adresse
+- Eine Demo-Anleitung in vier Schritten: Landing Page anschauen, Mail an das
+  Postfach schicken (mit Beispieltext), Ticket in der Triage-Spalte finden
+  (Gast-Login, kein Konto nötig), Ticket verschieben und die Benachrichtigung
+  abwarten. Dazu Vorschläge, was man sonst noch ausprobieren kann: Spam
+  schicken, eine Aufgabe von Hand anlegen, das Tageslimit ausreizen.
+- Eine Übersicht beider Automatisierungen als Tabelle, Schritt für Schritt
+- Die eingebauten Schutzmechanismen (Tageslimit, kein Antworten an das eigene
+  Postfach, stiller erster Lauf, Zählen der Tickets statt eines Zählers)
+- Welcher Ordner im Projekt was enthält
+- Eine Anleitung, wie man das Ganze selbst aufsetzt (Board als statische Seite,
+  Workflows einspielen, Zugänge und Umgebungsvariablen, Mailordner anlegen)
+- Die Kurzanleitung zum Board, gekürzt und um die Triage-Spalte ergänzt, die
+  bislang in der Spaltenliste fehlte
+
+Nebenbei behoben: Am Ende stand noch der Platzhalter "[Your Contact Email]"
+statt einer echten Kontaktmöglichkeit.
+
+Sprache bleibt Englisch, weil die Oberfläche und die Landing Page englisch sind.
+
+Betroffene Datei: README.md
+
+
 [2026-08-23] Ersteller werden benachrichtigt, wenn ihr Ticket wandert
 -------------------------------------------------------------------------------------
 Zieht jemand ein Ticket in eine andere Spalte, bekommt der Ersteller eine Mail:
