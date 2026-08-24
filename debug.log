@@ -5,6 +5,45 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Korrektur: Ticket-Zuordnung jetzt wirklich sicher, nicht nur scheinbar
+-------------------------------------------------------------------------------------
+Beim letzten Eintrag zum E-Mail-Sammler ("Fünf Lücken...") wurde Punkt 2
+(falsche Zuordnung bei mehreren gleichzeitigen Mails) mit einer Lösung
+behoben, die sich bei genauerem Hinsehen auf eine falsche Annahme über n8n
+gestützt hat: Ich dachte, ein Baustein könnte selbst eine Internet-Verbindung
+aufbauen, um die Datenbank zu beschreiben. Das ist auf dem Server aber
+technisch gesperrt - ich hatte es nur lokal nachgestellt, nicht am echten
+Server geprüft. Wäre die Datei so eingespielt worden, hätte kein einziges
+Ticket mehr angelegt werden können.
+
+Jetzt richtig gelöst, und diesmal direkt an den Baustein-Beschreibungen auf
+dem echten Server nachgeprüft statt nur angenommen:
+
+- Der Baustein, der das Ticket in die Datenbank schreibt ("Ticket in Triage
+  anlegen"), ist wieder der ursprüngliche, unveränderte Baustein-Typ. Nur
+  eine Einstellung wurde umgestellt: Bei einem Fehler wird das betroffene
+  Ticket jetzt nicht mehr aus der Liste herausgenommen, sondern bleibt an
+  seinem Platz und bekommt stattdessen einen Fehler-Vermerk. Dadurch bleibt
+  die Reihenfolge der Tickets immer exakt dieselbe wie beim Absenden - genau
+  das war die eigentliche Ursache der falschen Zuordnung.
+- Ein neuer Baustein ("Ticket-Ergebnis anreichern") fügt direkt danach die
+  Absenderdaten wieder zu jedem Ticket hinzu, an der einen Stelle im Ablauf,
+  an der die Reihenfolge garantiert stimmt.
+- Ein neuer Weiche-Baustein ("Ticket erfolgreich geschrieben?") prüft danach
+  für jedes Ticket einzeln: hat das Schreiben geklappt oder nicht - und
+  schickt es auf den passenden der beiden bestehenden Wege (Bestätigung
+  raus / Fehlerhinweis raus).
+- Die Anzahl der Wiederholversuche beim Schreiben bleibt bei 1 (das war
+  schon vorher korrekt und wurde nicht zurückgenommen).
+
+Ergebnis mit einem nachgestellten Testlauf (zwei Mails gleichzeitig, eine
+davon absichtlich zum Scheitern gebracht): Die richtige Mail landet im
+richtigen Ordner, die richtige Person bekommt die richtige Nachricht - auch
+wenn eine der beiden Mails fehlschlägt.
+
+Betroffene Dateien: n8n/issue-collector.json
+
+
 [2026-08-24] Beispieldaten-Datei aus dem GitHub-Repository genommen
 ------------------------------------------------------------------------
 - Die Datei .vscode/db.json enthält Beispiel-Daten (Kontakte, Beispiel-
