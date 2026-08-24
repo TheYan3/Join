@@ -5,6 +5,22 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Datenschutzerklärung um die E-Mail-Ticket-Funktion ergänzt, alte Kontaktadresse ersetzt
+-------------------------------------------------------------------------------------------------------
+- Die Datenschutzerklärung (Privacy Policy) erklärte bisher nicht, dass
+  man Anfragen auch per E-Mail an join-issues@gmx.de stellen kann. Ein
+  neuer Absatz beschreibt jetzt: die komplette Mail wird zur Auswertung
+  an Google Gemini geschickt (ein amerikanischer Anbieter), die
+  Absenderadresse wird als Ersteller des daraus entstehenden Tickets
+  gespeichert, und alle Tickets auf dem Board - auch die per Mail
+  erzeugten - sind für jeden Besucher öffentlich sichtbar.
+- Impressum und Datenschutzerklärung nannten als Kontaktadresse noch die
+  E-Mail-Adresse aus dem ursprünglichen Bootcamp-Team
+  (m.arnoldy@outlook.de). Sie wurde an allen drei Fundstellen durch die
+  aktuelle Adresse (yannic-jundt@gmx.de) ersetzt.
+
+Betroffene Dateien: templates/privacy-Policy.html, templates/legalnotice.html
+
 [2026-08-24] Rückweg von den Rechtsseiten und vom Login repariert
 ------------------------------------------------------------------------
 - Wer von der Startseite (index.html) auf "Privacy Policy" oder "Legal
