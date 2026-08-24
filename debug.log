@@ -5,6 +5,23 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Beispieldaten-Datei aus dem GitHub-Repository genommen
+------------------------------------------------------------------------
+- Die Datei .vscode/db.json enthält Beispiel-Daten (Kontakte, Beispiel-
+  Aufgaben) für die lokale Entwicklung. Eigentlich sollte sie laut der
+  Ausschlussliste (.gitignore) nie im Repository landen, war aber trotzdem
+  drin - weil sie schon eingecheckt war, bevor die Ausschlussregel
+  eingetragen wurde, und solche Regeln nur für neue Dateien greifen.
+  Die Datei wurde jetzt aus dem Repository entfernt (bleibt aber auf dem
+  eigenen Rechner unverändert liegen, damit die lokale Entwicklung
+  weiterläuft). Ein Passwortfeld darin war leer, es ist also nichts
+  Vertrauliches durchgesickert - trotzdem gehört so eine Datei nicht mit
+  auf GitHub. Geprüft wurde außerdem, ob noch weitere Dateien betroffen
+  sind: das war nicht der Fall.
+
+Betroffene Dateien: .vscode/db.json (nur aus der Versionsverwaltung
+entfernt, lokal weiterhin vorhanden)
+
 [2026-08-24] Datenschutzerklärung um die E-Mail-Ticket-Funktion ergänzt, alte Kontaktadresse ersetzt
 -------------------------------------------------------------------------------------------------------
 - Die Datenschutzerklärung (Privacy Policy) erklärte bisher nicht, dass
