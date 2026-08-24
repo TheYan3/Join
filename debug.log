@@ -5,6 +5,62 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Fünf Lücken aus der Abnahme-Prüfung im E-Mail-Sammler geschlossen
+-------------------------------------------------------------------------------------
+Eine gründliche Prüfung des Projekts hat mehrere kleinere Lücken in der
+Mail-Automatisierung gefunden, die zwar keinen Prüfungspunkt verletzen, aber
+in seltenen Fällen zu Problemen führen könnten. Fünf davon wurden jetzt
+behoben - alle nur in den beiden n8n-Workflow-Dateien, das Kanban-Board selbst
+wurde nicht angefasst.
+
+1. Fehlender Fehlerpfad beim Tickets-Abrufen: Der Baustein, der zur
+   Prüfung des Tageslimits die vorhandenen Tickets aus der Datenbank liest,
+   hatte keinen Ausweg für den Fall, dass die Datenbank gerade nicht
+   antwortet. Vorher wäre eine solche Mail einfach spurlos im Postfach
+   liegen geblieben, ohne dass der Absender etwas davon merkt. Jetzt landet
+   sie wie bei den anderen Fehlerfällen im Ordner "zu bearbeiten", und der
+   Absender bekommt eine Nachricht, dass sich das Team meldet.
+
+2. Falsche Zuordnung bei mehreren gleichzeitigen Mails möglich: Zwei
+   Bausteine (die Erledigt-Mail-Verschiebung und die Bestätigungsmail)
+   fanden ihre Daten bisher über die Position in einer Liste heraus statt
+   direkt aus der eigenen Mail. Kommen zwei Anfragen gleichzeitig an und
+   nur eine schlägt beim Speichern fehl, konnte das zur Folge haben, dass
+   die falsche Mail verschoben oder die Bestätigung an die falsche Person
+   geschickt wird. Damit das nicht mehr passieren kann, gibt der Baustein,
+   der das Ticket in die Datenbank schreibt, jetzt seine eigenen
+   Ausgangsdaten (wer hat geschrieben, worum ging es) zusammen mit dem
+   Ergebnis weiter, statt sie zu verwerfen.
+
+3. Die KI kannte das heutige Datum nicht: Schreibt jemand "bis nächsten
+   Freitag" statt eines festen Datums, konnte die KI das nicht in ein
+   korrektes Fälligkeitsdatum umrechnen. Jetzt bekommt sie das aktuelle
+   Datum mit der Mail mitgeschickt und die Anweisung, relative Angaben
+   danach auszurechnen.
+
+4. Wiederholversuch konnte doppelte Tickets erzeugen: Schrieb die
+   Datenbank ein Ticket zwar erfolgreich, meldete sich aber zu langsam
+   zurück, hätte n8n den Schreibvorgang wiederholt und so ein zweites,
+   überflüssiges Ticket angelegt. Der Baustein versucht das Schreiben jetzt
+   nur noch einmal statt bis zu dreimal - lieber landet eine Mail im
+   Fehler-Ordner (dort ist sie sicher aufgehoben) als dass unbemerkt ein
+   doppeltes Ticket entsteht.
+
+5. Rote Fehlermeldungen im Protokoll durch den Gast-Zugang: Wird ein
+   Ticket verschoben, das vom Gast-Zugang angelegt wurde, versuchte die
+   Automatisierung bisher eine Mail an eine erfundene Adresse
+   (guest@join.local) zu schicken - das ging jedes Mal schief und
+   hinterließ eine Fehlermeldung im Protokoll. Solche Adressen werden jetzt
+   von vornherein übersprungen.
+
+Wichtig: Diese Änderungen liegen nur in den Dateien, die auf dem Server
+importiert werden. Damit die laufende Automatisierung sie tatsächlich nutzt,
+müssen beide Workflow-Dateien einmal neu in die n8n-Instanz eingespielt
+werden - das geschieht nicht von selbst.
+
+Betroffene Dateien: n8n/issue-collector.json, n8n/statusbenachrichtigung.json
+
+
 [2026-08-24] Kommentare in den n8n-Bausteinen auf JSDoc umgestellt
 -------------------------------------------------------------------------------------
 Die Projekt-Checkliste verlangt JSDoc-Kommentare für die komplexeren
