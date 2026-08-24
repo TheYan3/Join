@@ -5,6 +5,21 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-24] Rückweg von den Rechtsseiten und vom Login repariert
+------------------------------------------------------------------------
+- Wer von der Startseite (index.html) auf "Privacy Policy" oder "Legal
+  Notice" geklickt hat, landete beim Zurückgehen bisher versehentlich im
+  Anmeldeformular statt wieder auf der Startseite. Der Zurück-Knopf zeigt
+  jetzt "Back" und führt wirklich zur Startseite zurück.
+- Der bestehende Weg vom Login-Formular zu den Rechtsseiten und zurück
+  funktioniert weiterhin unverändert (Knopf "Log in").
+- Auf der Anmeldeseite (login.html) ist das Join-Logo oben links jetzt
+  anklickbar und führt zurück zur Startseite - vorher gab es dort keinen
+  Weg zurück außer dem Browser-Zurück-Knopf. Das Logo sieht optisch genau
+  gleich aus wie vorher, nur der Mauszeiger ändert sich beim Draufzeigen.
+
+Betroffene Dateien: index.html, login.html, scripts/legalInformation.js
+
 [2026-08-24] Fünf Lücken aus der Abnahme-Prüfung im E-Mail-Sammler geschlossen
 -------------------------------------------------------------------------------------
 Eine gründliche Prüfung des Projekts hat mehrere kleinere Lücken in der
