@@ -5,6 +5,46 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-25] Rote Fehlermeldungen in der Konsole nach dem Gast-Login behoben
+-------------------------------------------------------------------------------------
+Wer sich als Gast einloggt und dann zügig auf "Board" klickt, sah in der
+Browser-Konsole zwei rote Fehler ("Failed to fetch"). Nach einem Neuladen
+der Seite waren sie wieder weg - genau dieses "kommt und geht wieder" habe
+ich mit einem echten Browser-Test (nicht nur Vermutung) nachgestellt und
+die Ursache gefunden.
+
+Was wirklich passiert: Jede Seite (Übersicht, Board, Add Task) lädt beim
+Öffnen im Hintergrund Daten nach (z.B. die Anzahl der Aufgaben für die
+Übersicht, die Kontaktliste für die Aufgaben-Zuweisung). Klickt man schnell
+weiter zur nächsten Seite, bevor diese Hintergrund-Anfrage fertig ist,
+bricht der Browser sie automatisch ab - das ist normales Verhalten. Bisher
+wurde dieser Abbruch aber wie ein echter Netzwerkfehler behandelt und laut
+in der Konsole gemeldet, obwohl der Nutzer die Seite ja schon verlassen
+hatte und die Daten gar nicht mehr brauchte.
+
+Die Korrektur: Jede Seite merkt sich jetzt "ich werde gerade verlassen" und
+bricht ihre eigenen Hintergrund-Anfragen selbst sauber ab, statt es dem
+Browser unkontrolliert zu überlassen. Ein sauber abgebrochener Abbruch wird
+nicht mehr als Fehler gemeldet, weil es schlicht keiner ist.
+
+Betroffene Dateien:
+- script.js: neue kleine Funktion, die diesen "Seite wird verlassen"-Zustand
+  bereitstellt (für alle Seiten nutzbar); die Kopfzeilen-Initialen-Abfrage
+  nutzt sie bereits.
+- scripts/summary.js: die beiden Hintergrund-Abfragen der Übersichtsseite
+  (Begrüßungsname, Aufgaben-Anzahl) nutzen sie jetzt auch.
+- scripts/board/board-data.js: das Nachladen der Board-Aufgaben nutzt sie.
+- scripts/tasks/dropdownAssigned.js: das Nachladen der Kontaktliste für die
+  Zuweisung nutzt sie.
+
+Geprüft mit über 70 automatisierten Testdurchläufen (schnelles Durchklicken
+Login -> Übersicht -> Board, auch mit absichtlich sehr knapper Zeit
+zwischen den Klicks, testweise mit den gleichen Bedingungen wie die
+gemeldeten Original-Fehler): keine Konsolenfehler mehr. Normaler Login
+(nicht Gast) und das Board selbst (Aufgaben anzeigen, Aufgabe anlegen,
+Kontakte zuweisen) funktionieren unverändert weiter.
+
+
 [2026-08-24] Korrektur: Ticket-Zuordnung jetzt wirklich sicher, nicht nur scheinbar
 -------------------------------------------------------------------------------------
 Beim letzten Eintrag zum E-Mail-Sammler ("Fünf Lücken...") wurde Punkt 2

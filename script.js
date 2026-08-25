@@ -11,6 +11,24 @@ document.documentElement.classList.add("app-loading");
 window.JOIN_CONFIG = window.JOIN_CONFIG || {};
 window.JOIN_CONFIG.BASE_URL = window.JOIN_CONFIG.BASE_URL || DEFAULT_BASE_URL;
 
+/**
+ * Creates a fresh page-abort signal and stores it on JOIN_CONFIG, then
+ * cancels it once this page is left. Background fetches (header initials,
+ * summary stats, board tasks, assigned contacts) pass this signal so a
+ * request in flight when the user navigates away is cancelled cleanly
+ * instead of rejecting with a "Failed to fetch" console error.
+ * @returns {void} Nothing.
+ */
+function setupPageAbortSignal() {
+   const controller = new AbortController();
+   window.JOIN_CONFIG.pageAbortSignal = controller.signal;
+   window.addEventListener("pagehide", () => controller.abort(), { once: true });
+}
+setupPageAbortSignal();
+window.addEventListener("pageshow", (event) => {
+   if (event.persisted) setupPageAbortSignal();
+});
+
 const UI_IDS = {
    navSummary: "nav-summary",
    navAddTask: "nav-add-task",
@@ -378,7 +396,8 @@ function bindLogoutButton(logoutButton) {
  */
 async function fetchAuthUserFromDatabase(userId) {
    const response = await fetch(
-      `${window.JOIN_CONFIG.BASE_URL}users/${encodeURIComponent(userId)}.json`
+      `${window.JOIN_CONFIG.BASE_URL}users/${encodeURIComponent(userId)}.json`,
+      { signal: window.JOIN_CONFIG.pageAbortSignal }
    );
    if (!response.ok) throw new Error(`Failed loading user: HTTP ${response.status}`);
    return await response.json();
@@ -436,6 +455,7 @@ async function applyHeaderInitials() {
       const initial = resolveHeaderInitial(authUser);
       if (initial) initialsElement.textContent = initial;
    } catch (error) {
+      if (error.name === "AbortError") return;
       console.error("Loading header initials failed:", error);
    }
 }

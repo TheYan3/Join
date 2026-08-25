@@ -35,7 +35,9 @@ function getSummaryAuthUserId() {
  * @returns {Promise<object>} A promise that resolves to the summary user object.
  */
 async function fetchSummaryUser(userId) {
-    const response = await fetch(`${SUMMARY_BASE_URL}users/${encodeURIComponent(userId)}.json`);
+    const response = await fetch(`${SUMMARY_BASE_URL}users/${encodeURIComponent(userId)}.json`, {
+        signal: window.JOIN_CONFIG.pageAbortSignal,
+    });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.json();
 }
@@ -94,6 +96,7 @@ async function loadGreetingUserName() {
         if (summaryIsGuestUser) return hideGreetingUserName();
         setGreetingUserName(user?.name);
     } catch (error) {
+        if (error.name === "AbortError") return;
         console.error("Summary user loading failed:", error);
     }
 }
@@ -230,7 +233,9 @@ async function loadSummaryData() {
  */
 async function loadTasksFromFirebase() {
     try {
-        const response = await fetch(`${SUMMARY_BASE_URL}tasks.json`);
+        const response = await fetch(`${SUMMARY_BASE_URL}tasks.json`, {
+            signal: window.JOIN_CONFIG.pageAbortSignal,
+        });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         if (!data) return [];
@@ -239,6 +244,7 @@ async function loadTasksFromFirebase() {
         }
         return Object.values(data).filter((task) => task && typeof task === "object");
     } catch (error) {
+        if (error.name === "AbortError") return [];
         console.error("Summary task loading failed:", error);
         return [];
     }

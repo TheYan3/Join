@@ -76,7 +76,7 @@
     * @returns {Promise<*>} A promise that resolves to the task data.
     */
    async function requestTaskData() {
-      const response = await fetch(getTaskCollectionUrl());
+      const response = await fetch(getTaskCollectionUrl(), { signal: window.JOIN_CONFIG.pageAbortSignal });
       return response.ok ? response.json() : null;
    }
 
@@ -245,6 +245,7 @@
       try {
          return normalizeFirebaseTasks(await requestTaskData());
       } catch (error) {
+         if (error.name === "AbortError") return [];
          console.error("Task loading failed:", error);
          return [];
       }

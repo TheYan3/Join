@@ -111,7 +111,9 @@ function normalizeAssignedContacts(data) {
  * @returns {Promise<Array<object>>} A promise that resolves to the assigned contacts from Firebase list.
  */
 async function loadAssignedContactsFromFirebase() {
-   const response = await fetch(`${ASSIGNED_CONTACTS_BASE_URL}contacts.json`);
+   const response = await fetch(`${ASSIGNED_CONTACTS_BASE_URL}contacts.json`, {
+      signal: window.JOIN_CONFIG.pageAbortSignal,
+   });
    if (!response.ok) {
       throw new Error(`Assigned contacts load failed: HTTP ${response.status}`);
    }
@@ -379,6 +381,7 @@ async function loadAssignedContacts(elements) {
    try {
       renderAssignedContacts(elements.menu, await loadAssignedContactsFromFirebase());
    } catch (error) {
+      if (error.name === "AbortError") return;
       console.error("Assigned contacts loading failed:", error);
       clearAssignedMenu(elements.menu);
    }
