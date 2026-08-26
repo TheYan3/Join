@@ -104,6 +104,26 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Welcome-Seite: echte Rollen-Symbole eingesetzt
+-------------------------------------------------------------------------------------
+Auf der Rollenwahl standen bisher zwei geliehene Symbole aus dem uebrigen
+Projekt als Platzhalter. Die richtigen aus der Design-Vorlage liegen jetzt vor
+und sind eingesetzt: eine Aktentasche neben "Are you a stakeholder?" und zwei
+Personen neben "Are you a team member?".
+
+Nebenbei behoben: Die beiden Symbole sind unterschiedlich geformt (eines
+quadratisch, eines breiter als hoch). Die alte Regel zwang beide in ein
+Quadrat, wodurch das breitere gestaucht wurde. Jetzt gibt nur die Hoehe den
+Ton an, die Breite ergibt sich von selbst.
+
+Betroffene Dateien: welcome.html, styles/welcome/layout.css,
+assets/icons/Guide/work.svg, assets/icons/Guide/group.svg (neu)
+
+Geprueft mit einem echten Browser bei 1440 und 620 Pixeln: Beide Symbole werden
+geladen, das breitere erscheint jetzt mit 32 statt 24 Pixeln Breite und damit
+unverzerrt. Keine fehlenden Dateien, keine Fehler in der Konsole.
+
+
 [2026-08-26] Welcome-Seite: Beschriftung, Haekchen und Feinlayout nach Vorlage
 -------------------------------------------------------------------------------------
 Weitere Angleichung an die Design-Vorlage, nachdem der Zugriff auf die

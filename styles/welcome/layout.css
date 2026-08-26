@@ -96,9 +96,13 @@ body.welcome.welcome--step2 {
     gap: 12px;
 }
 
+/* Die beiden Symbole aus der Vorlage haben unterschiedliche Seitenverhaeltnisse
+   (24x24 und 25x19). Feste Hoehe, freie Breite - sonst wird das breitere
+   gequetscht. */
 .welcome__role-icon {
-    width: 24px;
+    width: auto;
     height: 24px;
+    flex-shrink: 0;
 }
 
 .welcome__role .login__button--login {
