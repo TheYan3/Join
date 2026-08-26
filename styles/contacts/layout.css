@@ -27,6 +27,19 @@
    }
 }
 
+/* Der Kopfbereich ist fest positioniert und liegt ueber den obersten 96 Pixeln
+   der Seite. Die optisch versteckte Ueberschrift davor war nur 73 Pixel hoch -
+   die restlichen 23 Pixel des oberen Randabstands verschwanden dadurch hinter
+   dem Kopfbereich, oben blieb sichtbar nur 1 Pixel Luft statt 24. Die
+   Ueberschrift reserviert jetzt genau die Hoehe des Kopfbereichs. Unterhalb von
+   1080px ist dieser nur 80px hoch und das mobile Layout regelt seine Abstaende
+   selbst - deshalb gilt die Regel nur darueber. */
+@media (min-width: 1081px) {
+   .headline {
+      min-height: 96px;
+   }
+}
+
 .main {
    overflow: hidden;
 }

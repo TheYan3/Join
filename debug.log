@@ -48,6 +48,30 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Abstand ueber der Kontaktliste war fast unsichtbar
+-------------------------------------------------------------------------------------
+Die Kontaktliste hatte oben und unten denselben Randabstand eingestellt (je 24
+Pixel), sichtbar war oben aber nur 1 Pixel. Die Karte klebte also praktisch am
+Kopfbereich, waehrend sie unten sauber Luft hatte.
+
+Grund: Der Kopfbereich der Seite ist fest positioniert und liegt wie eine
+Folie ueber den obersten 96 Pixeln. Direkt vor der Liste steht eine optisch
+versteckte Ueberschrift, die aber nur 73 Pixel hoch war. Die fehlenden 23
+Pixel Abstand lagen damit hinter dem Kopfbereich und waren nicht zu sehen.
+
+Geaendert: Diese versteckte Ueberschrift reserviert jetzt genau die Hoehe des
+Kopfbereichs. Der eingestellte Abstand wird dadurch oben genauso sichtbar wie
+unten. Die Regel gilt nur ab 1081 Pixeln Fensterbreite - darunter ist der
+Kopfbereich niedriger und das mobile Layout bringt eigene Abstaende mit.
+
+Betroffene Datei: styles/contacts/layout.css
+
+Geprueft mit einem echten Browser bei 2560, 1920, 1440 und 1200 Pixeln: oben
+und unten jeweils exakt 24 Pixel. Die Karte laeuft nirgends unten aus dem
+Fenster, das Scrollen innerhalb der Liste funktioniert weiterhin, kein
+waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Kontaktliste sieht jetzt aus wie eine eigene Karte
 -------------------------------------------------------------------------------------
 Die Kontaktliste war bisher eine weisse Spalte mit eckigen Kanten, die oben und
