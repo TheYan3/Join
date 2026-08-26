@@ -55,7 +55,8 @@
    align-items: center;
    gap: 10px;
    border-radius: 8px;
-   background: #1fd7c1;
+   /* Grundfarbe = User Story. Technische Aufgaben ueberschreiben sie unten. */
+   background: #7b3acf;
 }
 
 .task-card__label--teal {

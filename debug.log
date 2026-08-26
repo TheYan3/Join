@@ -67,6 +67,24 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] User-Story-Tickets bekommen die violette Kennzeichnung
+-------------------------------------------------------------------------------------
+Laut Design-Vorlage sind die beiden Ticketarten farblich zu unterscheiden:
+Technische Aufgaben tuerkis, User Stories violett. Bisher waren auf dem Board
+beide tuerkis, in der Detailansicht war die User Story sogar blau - drei
+Farben fuer zwei Arten.
+
+Geaendert: Die Grundfarbe der Kennzeichnung ist jetzt violett (#7B3ACF), sowohl
+auf der Karte als auch in der Detailansicht. Technische Aufgaben ueberschreiben
+sie weiterhin mit Tuerkis, dort aendert sich nichts.
+
+Betroffene Dateien: styles/board/cards.css, styles/board/task-detail.css
+
+Geprueft mit einem echten Browser: Alle Karten mit "User Story" zeigen den Wert
+123/58/207, was genau #7B3ACF entspricht, alle mit "Technical Task" unveraendert
+31/215/193. Die geoeffnete Detailansicht zeigt denselben violetten Wert.
+
+
 [2026-08-26] Breitbild-Layout auf die Vorgabe der Akademie umgestellt
 -------------------------------------------------------------------------------------
 Rueckbau samt Neuausrichtung. Heute war die App zunaechst so umgebaut worden,
