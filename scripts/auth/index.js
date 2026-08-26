@@ -4,6 +4,9 @@ const INDEX_IS_IN_TEMPLATES = window.location.pathname.includes("/templates/");
 const ASSET_BASE_PATH = INDEX_IS_IN_TEMPLATES ? "../assets/" : "./assets/";
 const INDEX_PAGE_BASE_PATH = INDEX_IS_IN_TEMPLATES ? "./" : "./templates/";
 const AUTH_USER_QUERY_KEY = "uid";
+// Shared with scripts/welcome.js: once the splash has played on either page,
+// the flag stops it from playing again for the rest of this browser tab.
+const SPLASH_SESSION_KEY = "joinSplashPlayed";
 
 /**
  * Returns the asset path.
@@ -202,10 +205,22 @@ function setMobileSplashBackground() {
 
 /**
  * Sets the main opacity.
+ *
+ * Plays the splash animation and the delayed fade-in only once per browser
+ * session (see SPLASH_SESSION_KEY). On repeat visits within the same session
+ * (e.g. coming back from welcome.html) the logo appears directly at its
+ * final position and the page content is visible without delay.
  * @returns {void} Nothing.
  */
 function setMainOpacity() {
     const mainContent = document.getElementById("main-content");
+    const splashLogo = document.querySelector(".splash__logo");
+    if (sessionStorage.getItem(SPLASH_SESSION_KEY) === "true") {
+        splashLogo?.classList.add("splash__logo--skip");
+        mainContent?.classList.add("main-content--opacity");
+        return;
+    }
+    sessionStorage.setItem(SPLASH_SESSION_KEY, "true");
     if (!mainContent) return;
     setTimeout(() => {
         mainContent.classList.add("main-content--opacity");

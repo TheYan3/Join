@@ -5,6 +5,43 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Neue Zwischenseite "Welcome" erklärt das System, bevor es losgeht
+-------------------------------------------------------------------------------------
+- Bisher wurde ein Besucher der Startseite sofort entweder ins Mailprogramm
+  oder zum Login geschickt, ohne zu erfahren, wie Join funktioniert oder dass
+  es ein Tageslimit gibt. Jetzt landet man erst auf einer neuen Zwischenseite
+  "Welcome": neue Datei welcome.html.
+- Die Seite hat zwei Schritte in einem Dokument: zuerst "Bist du Stakeholder
+  oder Team-Mitglied?" (dunkler Hintergrund), dann bei "Create request" eine
+  kurze Erklärung, wie das Anfrage-per-Mail-System funktioniert, mit einem
+  Live-Zähler ("X von 10 Anfragen heute genutzt") und einem Button, der die
+  vorbereitete Mail öffnet. Ist das Tageslimit erreicht, zeigt die Seite
+  automatisch einen roten Hinweis statt der normalen Erklärung.
+- Der Zähler fragt dieselben Ticket-Daten ab wie die E-Mail-Automatisierung
+  (n8n) und zählt nach exakt derselben Regel, damit die Seite nie mehr
+  verspricht, als die Automatisierung tatsächlich zulässt. Klappt die Abfrage
+  nicht, zeigt die Seite "– von 10" statt eines falschen Wertes.
+- Die beiden Knöpfe auf der Startseite ("Submit a feature request" und
+  "Explore the board") führen jetzt zur neuen Seite statt direkt zum
+  Mailprogramm bzw. zum Login. Datei: index.html.
+- Die Einblend-Animation vom Join-Logo lief bisher bei jedem Aufruf der
+  Login-Seite neu ab. Jetzt merkt sich der Browser für die laufende Sitzung,
+  dass die Animation schon einmal lief (auf der Welcome-Seite oder der
+  Login-Seite) und überspringt sie beim nächsten Aufruf — das Logo erscheint
+  dann sofort an seiner Endposition. Ruft man die Login-Seite direkt auf
+  (Lesezeichen, neuer Tab), läuft die Animation weiterhin normal.
+  Dateien: scripts/auth/index.js, styles/login/layout.css.
+- Die "Zurück"-Knöpfe auf den Rechtstexten (Datenschutz, Impressum) führen
+  jetzt auch von der neuen Welcome-Seite aus wieder zurück zu ihr.
+  Datei: scripts/legalInformation.js.
+- Neue Dateien: welcome.html, scripts/welcome.js, styles/welcome/layout.css,
+  styles/welcome/responsive.css.
+- Hinweis: Zwei kleine Symbole (Aktentasche für Stakeholder, zwei Personen
+  für Team-Mitglied) gibt es im Projekt noch nicht. Es werden vorübergehend
+  die vorhandenen Symbole "person" und "contacts" verwendet, bis die
+  endgültigen Symbole aus Figma nachgeliefert werden.
+
+
 [2026-08-26] Zwei vergessene Stellen bei der Bildschirm-Zentrierung nachgezogen
 -------------------------------------------------------------------------------------
 Bei der letzten Umstellung auf grosse, zentrierte Bildschirme wurden zwei

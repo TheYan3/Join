@@ -13,6 +13,14 @@ body {
     transform: translate(-50%, -50%);
 }
 
+/* Skips the intro animation: the logo jumps straight to the same end
+   position (0-length animation, so the "forwards" fill-mode still applies
+   it immediately), used once the splash has already played this session. */
+.splash__logo--skip {
+    animation-duration: 0s;
+    animation-delay: 0s;
+}
+
 .splash__logo--image {
     width: 100%;
 }

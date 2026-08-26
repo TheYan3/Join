@@ -18,6 +18,13 @@
             centerHeaderContent();
             return;
         }
+        if (from === "welcome") {
+            const previousPage = isInTemplates ? "../welcome.html" : "./welcome.html";
+            replaceNavMenuWithBackButton("Back", previousPage);
+            hideHeaderElements();
+            centerHeaderContent();
+            return;
+        }
         if (from === "login" || from === "signup") {
             const isFromSignup = from === "signup";
             const previousPage = isFromSignup

@@ -1,0 +1,278 @@
+/* Welcome page: the stop between the landing page and login/mail.
+   Step 1 (role choice) and step 2 (e-mail guide) live in the same document
+   and are switched by scripts/welcome.js toggling classes on <body>:
+   - ".welcome--step2"  shows step 2 instead of step 1
+   - ".welcome--limit"  switches step 2 into its "limit reached" state
+   Colours are limited to the project palette: #2a3647 (dark), #29abe2
+   (accent), #f6f7f8 (light), #ff8190 (existing error colour, reused for the
+   limit banner). */
+
+body.welcome {
+    background-color: #2a3647;
+}
+
+body.welcome.welcome--step2 {
+    background-color: #f6f7f8;
+}
+
+.welcome__step2 {
+    display: none;
+}
+
+.welcome--step2 .welcome__step1 {
+    display: none;
+}
+
+.welcome--step2 .welcome__step2 {
+    display: block;
+}
+
+/* The splash logo settles into step 1's header corner (see .login__signup
+   below) and has no place once step 2's own header is showing. */
+.welcome--step2 .splash__logo {
+    display: none;
+}
+
+
+/* ---------- Step 1: role choice ---------- */
+
+.welcome__step1-main {
+    padding: 48px 0;
+}
+
+/* .login__signup is reused as-is (structure + JS wiring via #signup-button
+   in script.js), only its button colours are inverted here: the default
+   dark-filled .login__button would blend into this page's dark background. */
+.welcome__step1 .login__signup .login__button {
+    color: #2a3647;
+    background-color: #fff;
+}
+
+.welcome__step1 .login__signup .login__button:hover {
+    background-color: #f6f7f8;
+}
+
+.welcome__card {
+    width: 100%;
+    max-width: 650px;
+    box-sizing: border-box;
+    padding: 48px 80px;
+    gap: 32px;
+}
+
+.welcome__intro {
+    font-size: 20px;
+    line-height: 1.4;
+    color: #2a3647;
+    text-align: center;
+}
+
+.welcome__roles {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.welcome__role {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.welcome__role-question {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a3647;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.welcome__role-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.welcome__role .login__button--login {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+
+/* ---------- Step 2: e-mail guide ---------- */
+
+.welcome__step2-header {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 80px 77px 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.welcome__step2-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.welcome__step2-logo {
+    width: 100px;
+    height: auto;
+}
+
+.welcome__back {
+    padding: 4px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: all 100ms ease-in-out;
+}
+
+.welcome__back img {
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+.welcome__back:hover {
+    background-color: #d1d1d1;
+}
+
+/* The inline arrow next to the "Welcome" headline is only used on narrow
+   screens (see responsive.css), where the brand-block arrow is hidden. */
+.welcome__back--inline {
+    display: none;
+}
+
+.welcome__counter {
+    font-size: 20px;
+    color: #2a3647;
+}
+
+.welcome--limit .welcome__counter {
+    color: #ff8190;
+}
+
+/* Two copies of the counter exist: one next to the logo (desktop/tablet) and
+   one under the "Welcome" headline (mobile, see responsive.css). Only one is
+   visible at a time; scripts/welcome.js updates both via a shared class. */
+.welcome__counter--inline {
+    display: none;
+    margin: 0 0 32px;
+}
+
+/* Overrides "#main-content main" from styles/login/layout.css (flex-centred,
+   height: 100vh — built for login's single centred card), which would
+   otherwise also apply here and flex-centre step 2's content as a row
+   instead of stacking it normally. Needs id-level specificity to win. */
+#main-content .welcome__step2-main {
+    display: block;
+    height: auto;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 48px 77px 96px;
+    box-sizing: border-box;
+}
+
+.welcome__step2-title {
+    font-size: 61px;
+    color: #2a3647;
+    margin: 0 0 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.welcome__guide {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "title      illustration"
+        "normal     illustration"
+        "limit      illustration"
+        "button     illustration";
+    column-gap: 64px;
+    row-gap: 24px;
+    align-items: start;
+}
+
+.welcome__guide-title {
+    grid-area: title;
+    font-size: 27px;
+    color: #2a3647;
+    margin: 0;
+}
+
+.welcome__illustration {
+    grid-area: illustration;
+    align-self: center;
+    width: 100%;
+    max-width: 416px;
+    height: auto;
+}
+
+.welcome__illustration--limit {
+    display: none;
+}
+
+.welcome--limit .welcome__illustration--normal {
+    display: none;
+}
+
+.welcome--limit .welcome__illustration--limit {
+    display: block;
+}
+
+.welcome__guide-normal,
+.welcome__guide-limit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #2a3647;
+}
+
+.welcome__guide-normal {
+    grid-area: normal;
+}
+
+.welcome__guide-limit {
+    grid-area: limit;
+    display: none;
+}
+
+.welcome--limit .welcome__guide-normal {
+    display: none;
+}
+
+.welcome--limit .welcome__guide-limit {
+    display: flex;
+}
+
+.welcome__limit-banner {
+    margin: 0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #ff8190;
+    background-color: rgba(255, 129, 144, 0.15);
+}
+
+.welcome__mailto {
+    grid-area: button;
+    width: fit-content;
+    text-decoration: none;
+    display: inline-block;
+}

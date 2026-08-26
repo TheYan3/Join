@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome – Join</title>
+    <meta
+        name="description"
+        content="Find out how Join works before you create a feature request by e-mail or log in as a team member." />
+
+    <link
+         rel="icon"
+         href="./assets/icons/desktop/logoFavicon.svg"
+         type="image/svg+xml"
+         media="(prefers-color-scheme: light)" />
+      <link
+         rel="icon"
+         href="./assets/icons/desktop/logo.svg"
+         type="image/svg+xml"
+         media="(prefers-color-scheme: dark)" />
+
+    <script src="./script.js"></script>
+    <script src="./scripts/welcome.js"></script>
+
+    <link rel="stylesheet" href="./styles/standard.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/login/layout.css">
+    <link rel="stylesheet" href="./styles/login/buttons.css">
+    <link rel="stylesheet" href="./styles/welcome/layout.css">
+    <link rel="stylesheet" href="./styles/welcome/responsive.css">
+</head>
+<body class="welcome">
+    <div class="rotate-lock">Please rotate your device to portrait mode.</div>
+
+    <div class="splash__logo">
+        <a href="./index.html" aria-label="Back to homepage">
+            <img src="./assets/icons/desktop/logo.svg" alt="Join Logo" class="splash__logo--image">
+        </a>
+    </div>
+
+    <div id="main-content" class="main-content">
+
+        <!-- Step 1: pick a role -->
+        <section class="welcome__step1">
+            <header class="header__flex-instructions">
+                <div class="login__signup">
+                    <p class="login__signup--question">Not a Join user?</p>
+                    <button id="signup-button" class="login__button button">Sign up</button>
+                </div>
+            </header>
+            <main class="welcome__step1-main">
+                <div class="login__window welcome__card">
+                    <div class="login__headline">
+                        <h1 class="login__header">Welcome</h1>
+                        <img src="./assets/icons/desktop/login__dividingLine.svg" alt="" class="login__headline--line">
+                    </div>
+                    <p class="welcome__intro">
+                        Pick the option that suits your role: create a request as a
+                        stakeholder or log in if you're part of the team.
+                    </p>
+                    <div class="welcome__roles">
+                        <div class="welcome__role">
+                            <p class="welcome__role-question">
+                                <img src="./assets/icons/desktop/person.svg" alt="" class="welcome__role-icon">
+                                Are you a stakeholder?
+                            </p>
+                            <button type="button" id="welcome-create-request" class="login__button--login login__button">
+                                Create request
+                            </button>
+                        </div>
+                        <div class="welcome__role">
+                            <p class="welcome__role-question">
+                                <img src="./assets/icons/desktop/contacts.svg" alt="" class="welcome__role-icon">
+                                Are you a team member?
+                            </p>
+                            <a href="./login.html" class="login__button--login login__button--guest">
+                                Member log in
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="login__legalInformation--area">
+                <a href="./templates/privacy-Policy.html?from=welcome" class="login__legalInformation">
+                    Privacy Policy
+                </a>
+                <a href="./templates/legalnotice.html?from=welcome" class="login__legalInformation">
+                    Legal Notice
+                </a>
+            </footer>
+        </section>
+
+        <!-- Step 2: e-mail guide -->
+        <section class="welcome__step2">
+            <header class="welcome__step2-header">
+                <div class="welcome__step2-brand">
+                    <img src="./assets/icons/desktop/Dark_Logo.svg" alt="Join" class="welcome__step2-logo">
+                    <button type="button" class="welcome__back welcome__back--brand" aria-label="Back to role selection">
+                        <img src="./assets/icons/desktop/arrowBack.svg" alt="">
+                    </button>
+                </div>
+                <p class="welcome__counter welcome__counter--brand">
+                    <strong class="welcome__counter-used">0</strong> of <strong>10</strong> requests used today
+                </p>
+            </header>
+            <main class="welcome__step2-main">
+                <h1 class="welcome__step2-title">
+                    Welcome
+                    <button type="button" class="welcome__back welcome__back--inline" aria-label="Back to role selection">
+                        <img src="./assets/icons/desktop/arrowBack.svg" alt="">
+                    </button>
+                </h1>
+                <p class="welcome__counter welcome__counter--inline">
+                    <strong class="welcome__counter-used">0</strong> of <strong>10</strong> requests used today
+                </p>
+                <div class="welcome__guide">
+                    <h2 class="welcome__guide-title">
+                        Easily create a ticket by sending an email — no extra steps needed.
+                    </h2>
+                    <img src="./assets/icons/Guide/Artboard 60 3.svg" alt="" class="welcome__illustration welcome__illustration--normal">
+                    <img src="./assets/icons/Guide/Rectangle 11.svg" alt="" class="welcome__illustration welcome__illustration--limit">
+                    <div class="welcome__guide-normal">
+                        <p>
+                            On this platform, you can submit your feature requests via
+                            email. Our AI system will automatically generate a ticket
+                            with a deadline and priority level.
+                        </p>
+                        <p>
+                            A total of 10 requests can be created per day. After this
+                            limit, emails can still be sent, but they will be manually
+                            reviewed by our team instead of generating AI tickets.
+                        </p>
+                    </div>
+                    <div class="welcome__guide-limit">
+                        <p class="welcome__limit-banner">
+                            The daily 10-request limit has been reached!
+                        </p>
+                        <p>
+                            Need more? No worries — you can still send emails, but our
+                            team will review them manually instead of using AI to
+                            create tickets.
+                        </p>
+                    </div>
+                    <a href="#" class="login__button--login login__button welcome__mailto" id="welcome-create-request-mail">
+                        Create request
+                    </a>
+                </div>
+            </main>
+            <footer class="login__legalInformation--area">
+                <a href="./templates/privacy-Policy.html?from=welcome" class="login__legalInformation">
+                    Privacy Policy
+                </a>
+                <a href="./templates/legalnotice.html?from=welcome" class="login__legalInformation">
+                    Legal Notice
+                </a>
+            </footer>
+        </section>
+
+    </div>
+</body>
+</html>
