@@ -46,6 +46,46 @@ der Zuordnung: Wird der Baustein später verschoben oder der Fehlerweg wieder au
 einen eigenen Ausgang umgestellt, verrutscht die Zuordnung bei mehreren Mails in
 einem Durchlauf, und Bestätigungen gingen an die falsche Adresse.
 
+### Das Mailpasswort steht an zwei Stellen — beide müssen stimmen
+
+Das ist die unangenehmste Falle des ganzen Aufbaus. Der Zugang zum Postfach wird
+an **zwei voneinander unabhängigen Stellen** gebraucht:
+
+| Stelle | Wofür | Wo |
+|---|---|---|
+| n8n-Credentials **IMAP** und **SMTP** | Mails abholen, Mails versenden | in der n8n-Oberfläche |
+| Umgebungsvariable `JOIN_MAIL_PASSWORD` | Mails zwischen den Ordnern verschieben | `.env` im Docker-Stack |
+
+Die Verschiebe-Bausteine (`Mail nach erledigt`, `Mail nach zu bearbeiten`,
+`Mail erledigt (kein Ticket)`, `Mail erledigt (Limit)`) sprechen IMAP selbst über
+`tls` an und lesen ihre Zugangsdaten aus `$env.JOIN_MAIL_HOST/PORT/USER/PASSWORD`
+— **nicht** aus den n8n-Credentials.
+
+**Folge beim Passwortwechsel:** Ändert man nur die n8n-Credentials, funktioniert
+alles Sichtbare weiter — Mails kommen an, Tickets entstehen, Bestätigungen gehen
+raus. Nur das Verschieben scheitert still mit `IMAP a1: NO authentication failed`,
+und der Fehler steht ausschließlich im Lauf-Detail des jeweiligen Bausteins
+(Feld `verschoben: false`), nicht als roter Fehler am Workflow. Der Lauf gilt
+weiterhin als „success".
+
+Nach dem Ändern von `.env` muss der Container **neu gestartet** werden
+(`docker compose up -d` im Stack-Ordner) — Umgebungsvariablen werden nur beim
+Start gelesen.
+
+### Gescheiterte Mails bleiben liegen und kommen nicht wieder
+
+Der IMAP-Trigger markiert jede Mail **sofort beim Abholen als gelesen**, bevor
+irgendein weiterer Baustein läuft. Er holt aber nur **ungelesene** Mails.
+
+Daraus folgt: Bricht die Verarbeitung später ab — oder scheitert wie oben nur das
+Verschieben — bleibt die Mail als gelesen im Posteingang liegen und wird
+**nie erneut verarbeitet**. Ein erneuter Lauf holt sie nicht nach.
+
+Wer solche Mails nachträglich verarbeiten lassen will, muss sie im Postfach von
+Hand wieder auf **ungelesen** setzen. Wer sie nur loswerden will, verschiebt oder
+löscht sie von Hand. Vor einer Vorführung lohnt ein Blick in den Posteingang: Was
+dort liegt, hat das System entweder nicht geschafft oder gar nicht erst gesehen.
+
 ### Benötigte Zugangsdaten (in n8n anzulegen, nicht in dieser Datei)
 
 - **IMAP** – `imap.gmx.net:993`, SSL an

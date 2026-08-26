@@ -5,6 +5,36 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Zwei Mail-Stolperfallen in der Anleitung vermerkt
+-------------------------------------------------------------------------------------
+Heute ist beim Testen ein Fehler aufgetreten, der schwer zu finden war. Damit
+das kein zweites Mal passiert, steht er jetzt in der Anleitung.
+
+Was passiert war: Nach einem Wechsel des Mailpassworts kamen Mails weiterhin
+an, Tickets entstanden, Bestaetigungen gingen raus - nur das Einsortieren der
+Mail in den Ordner "erledigt" funktionierte nicht mehr. Grund: Das Passwort
+wird an ZWEI Stellen gebraucht. Einmal in n8n selbst (fuer Empfangen und
+Senden) und einmal als Umgebungsvariable in der .env-Datei des Servers (fuer
+das Verschieben zwischen den Ordnern). Nur die erste war aktualisiert worden.
+
+Besonders tueckisch: Der Lauf gilt trotzdem als erfolgreich. Der Fehler steht
+nur im Detail des einzelnen Bausteins, nicht als rote Warnung am Workflow.
+
+Zweiter Punkt, der jetzt ebenfalls dokumentiert ist: Eine eingehende Mail wird
+sofort beim Abholen als gelesen markiert - bevor die eigentliche Verarbeitung
+laeuft. Der Abholer nimmt aber nur ungelesene Mails. Geht danach etwas schief,
+bleibt die Mail im Posteingang liegen und wird nie erneut angefasst. Wer sie
+doch noch verarbeiten lassen will, muss sie von Hand wieder auf ungelesen
+setzen.
+
+Betroffene Datei: n8n/README.md (nur Dokumentation, kein Verhalten geaendert)
+
+Geprueft: Nach dem Nachtragen des Passworts lief eine echte Testmail komplett
+durch - Ticket in der Triage-Spalte, Faelligkeitsdatum aus "bis naechsten
+Freitag" korrekt auf den 04.09.2026 berechnet, Bestaetigungsmail zugestellt,
+und die Mail wurde diesmal auch nach "erledigt" verschoben.
+
+
 [2026-08-26] Notizzettel aus n8n gesichert und Import-Anleitung ergaenzt
 -------------------------------------------------------------------------------------
 Zwei Ergaenzungen rund um die n8n-Workflows, kein Verhalten geaendert.
