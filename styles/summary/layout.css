@@ -16,7 +16,7 @@
 }
 
 .headline_summary {
-   padding: 206px 64px 48px 108px;
+   padding: 206px 64px 48px 64px;
    display: flex;
    align-items: center;
    gap: 30px;

@@ -18,7 +18,7 @@
 }
 
 .headline_tasks {
-   padding: 206px 64px 48px 108px;
+   padding: 206px 64px 48px 64px;
    display: flex;
    justify-content: space-between;
    align-items: center;

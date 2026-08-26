@@ -13,7 +13,7 @@ body.board-dialog-open {
 
 .headline_board {
    width: 100%;
-   padding: 206px 64px 48px 108px;
+   padding: 206px 64px 48px 64px;
    display: flex;
    align-items: center;
    flex-direction: column;
@@ -22,8 +22,8 @@ body.board-dialog-open {
 
 .board-task-grid {
    width: 100%;
-   max-width: calc(1440px - 232px);
-   padding: 16px 64px 16px 108px;
+   max-width: calc(1920px - 232px);
+   padding: 16px 64px 16px 64px;
    display: flex;
    justify-content: space-between;
    align-items: flex-start;

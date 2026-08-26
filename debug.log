@@ -5,6 +5,49 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Inhalt auf grossen Bildschirmen zentriert statt links geklebt
+-------------------------------------------------------------------------------------
+Auf grossen Monitoren (ab ca. 2000 Pixel Breite) klebte die App bisher links
+und rechts blieb eine grosse leere Flaeche. Das ist jetzt behoben: Der Inhalt
+ist bis zu einer Gesamtbreite von 1920 Pixeln erlaubt zu wachsen (vorher bei
+1440 gedeckelt) und wird in der Flaeche rechts neben der Seitenleiste sauber
+zentriert, statt links kleben zu bleiben.
+
+Der weisse Kopfbalken (mit Titel links, Fragezeichen und rundem Profilbild
+rechts) liegt jetzt exakt in der gleichen Flucht wie der Inhalt darunter -
+Titel und erste Board-Spalte fangen an derselben Stelle an, Profilbild und
+letzte Board-Spalte hoeren an derselben Stelle auf. Dafuer wurde der
+Seitenleisten-Versatz vom Kopfbalken-Innenabstand in den Kopfbalken selbst
+verschoben, und das Aufklapp-Menu unter dem Profilbild (Hilfe/Log out) wurde
+neu berechnet, damit es weiterhin genau unter dem Profilbild aufklappt.
+
+Zusaetzlich wurden ungleiche Innenabstaende (links 108 Pixel, rechts 64
+Pixel) bei den Seitenkoepfen von Board, Summary und Add Task auf beidseitig
+64 Pixel vereinheitlicht - bewusste Entscheidung, nicht nur ein Nebeneffekt.
+
+Kleine Bildschirme (Tablet/Handy, 1080 Pixel und schmaler) sind unveraendert,
+ebenso Landingpage, Hilfe- und Rechtsseiten - die bleiben bewusst schmal.
+
+Betroffene Dateien:
+- styles/components/app-shell.css (Deckelung 1920 statt 1440, Zentrierung)
+- styles/components/header.css (Kopfbalken-Umbau fuer die Flucht)
+- styles/components/app-shell-responsive.css (Kopfbalken-Umbau nur fuer kleine
+  Schirme wieder zurueckgesetzt, damit sich dort nichts aendert)
+- styles/components/dropdown.css (Aufklapp-Menu-Position neu berechnet)
+- styles/board/layout.css, styles/summary/layout.css,
+  styles/add-task/layout.css (Innenabstaende vereinheitlicht, Deckelung
+  Board-Spalten auf 1920 mitgezogen)
+
+Geprueft: Mit echten Ticket- und Kontaktdaten (per curl von der Firebase-
+Datenbank geholt) automatisiert im Browser (Playwright) bei 2560, 1920, 1440,
+1080 und 620 Pixel Breite nachgemessen - Titel-Kante trifft Spalten-Kante,
+Profilbild-Kante trifft Spalten-Kante, Abstand links = Abstand rechts, kein
+waagerechtes Verschieben/Scrollen noetig, keine Fehler in der Browser-Konsole.
+Screenshots liegen unter Documents/layout-2560.png, layout-1920.png,
+layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
+stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
+
+
 [2026-08-26] Zwei Mail-Stolperfallen in der Anleitung vermerkt
 -------------------------------------------------------------------------------------
 Heute ist beim Testen ein Fehler aufgetreten, der schwer zu finden war. Damit

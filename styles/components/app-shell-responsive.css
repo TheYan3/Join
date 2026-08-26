@@ -1,6 +1,7 @@
 @media (max-width: 1080px) {
    .header {
       height: 80px;
+      padding-left: 0;
    }
 
    .header__dropdown {

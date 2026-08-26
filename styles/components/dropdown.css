@@ -2,7 +2,7 @@
    color: #cdcdcd;
    position: fixed;
    top: 96px;
-   right: max(calc(100vw - 1440px + 40px), 40px);
+   right: max(calc((100vw - 1910px) / 2 + 64px), 64px);
    z-index: 10;
    display: none;
    border-radius: 20px 0 20px 20px;
