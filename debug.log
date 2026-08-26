@@ -48,6 +48,29 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Kontaktliste klebt wieder an der Navigation
+-------------------------------------------------------------------------------------
+Nach der Umstellung auf grosse Bildschirme rutschte auf der Contacts-Seite die
+weisse Kontaktliste mit in die Bildschirmmitte. Links davon klaffte dadurch
+eine leere Flaeche, und die Liste sah aus, als wuerde sie in der Luft haengen.
+
+Grund: Die Liste ist ein fester 450-Pixel-Block, der optisch an der dunklen
+Navigationsleiste haengen soll. Die neue Zentrierung hat aber die ganze Seite
+mittig geschoben - inklusive dieser Liste.
+
+Geaendert: Auf der Contacts-Seite wird der Inhalt nicht mehr zentriert, sondern
+bleibt linksbuendig an der Navigation. Die Begrenzung auf 1920 Pixel bleibt wie
+auf den anderen Seiten, der gewonnene Platz geht komplett an den Detailbereich
+rechts. Der Titel in der Kopfzeile zieht mit nach links, damit er wieder in
+derselben Flucht wie die Liste steht.
+
+Betroffene Datei: styles/contacts/layout.css
+
+Geprueft mit einem echten Browser bei 2560, 1920, 1440, 1080 und 620 Pixeln
+Breite: Der Abstand zwischen Navigation und Liste betraegt jetzt 1 Pixel statt
+mehrerer hundert. Kein waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Zwei Mail-Stolperfallen in der Anleitung vermerkt
 -------------------------------------------------------------------------------------
 Heute ist beim Testen ein Fehler aufgetreten, der schwer zu finden war. Damit

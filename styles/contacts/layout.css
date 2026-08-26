@@ -3,11 +3,20 @@
    --primary: #2a3647;
 }
 
+/* Die Kontaktliste ist ein fester weisser Block, der optisch an der Navigation
+   haengt. Deshalb wird der Inhalt hier nicht zentriert wie auf den anderen
+   Seiten, sondern bleibt linksbuendig - und der Header zieht mit, damit Titel
+   und Liste in derselben Flucht liegen. */
 .main_flex-instructions {
    height: calc(100vh - 96px);
    display: flex;
    flex-direction: column;
    overflow: hidden;
+   margin-inline: 0;
+}
+
+.header_flex-instructions {
+   margin-inline: 0;
 }
 
 .main {
