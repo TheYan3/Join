@@ -104,6 +104,31 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Welcome-Seite: Beschriftung, Haekchen und Feinlayout nach Vorlage
+-------------------------------------------------------------------------------------
+Weitere Angleichung an die Design-Vorlage, nachdem der Zugriff auf die
+Figma-Datei stand.
+
+- Die Schaltflaeche heisst jetzt "Create Email Request" und im Limit-Fall
+  "Send an email" - vorher stand ueberall dasselbe kurze "Create request".
+  Beide Beschriftungen stehen im Code, sichtbar ist immer nur die passende.
+- Die Schaltflaeche hat ein Haekchen bekommen. Es ist direkt im Code
+  gezeichnet statt als Bilddatei, weil die vorhandenen Haekchen-Symbole dunkel
+  sind und auf dem blauen Knopf nicht zu sehen waeren. So nimmt es automatisch
+  die Farbe der Schrift an.
+- Der Zurueck-Pfeil stand unter dem Logo, laut Vorlage gehoert er daneben.
+  Verschoben.
+- Die beiden Erklaerabsaetze stehen jetzt im Blocksatz, also mit buendigem
+  rechten Rand, wie in der Vorlage.
+
+Betroffene Dateien: welcome.html, styles/welcome/layout.css
+
+Geprueft mit einem echten Browser bei 1440 und 620 Pixeln in beiden Zustaenden:
+Die Beschriftung wechselt korrekt, das Haekchen ist sichtbar, der Knopf traegt
+die Vorlagenfarbe, der Mail-Link enthaelt weiterhin Betreff und Textvorschlag.
+Kein waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Welcome-Seite: Farben aus der Figma-Vorlage uebernommen
 -------------------------------------------------------------------------------------
 Die Welcome-Seite war zunaechst mit Farben aus dem uebrigen Projekt gebaut
