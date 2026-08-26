@@ -104,6 +104,30 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Welcome-Seite: Farben aus der Figma-Vorlage uebernommen
+-------------------------------------------------------------------------------------
+Die Welcome-Seite war zunaechst mit Farben aus dem uebrigen Projekt gebaut
+worden, weil der Zugriff auf die Design-Datei noch nicht stand. Jetzt liegen die
+echten Werte vor - gemessen direkt an den Figma-Frames, nicht geschaetzt.
+
+Drei Farben waren falsch:
+
+- Die grossen Buttons ("Create request") waren dunkel graublau wie auf der
+  Login-Seite. In der Vorlage sind sie blau. Geaendert auf #177DA8, und zwar nur
+  auf dieser Seite - die Login-Seite behaelt ihre dunklen Buttons.
+- Der Text im Limit-Fall und der Zaehler "10 of 10" waren rosa. In der Vorlage
+  sind sie kraeftig rot. Geaendert auf #FF3D00. Diese Farbe wird im Projekt
+  bereits fuer dringende Aufgaben verwendet, ist also nicht neu.
+- Der rosa Hintergrund des Limit-Hinweises war eine selbst gemischte Toenung.
+  Ersetzt durch den echten Wert #FBE4E5.
+
+Betroffene Datei: styles/welcome/layout.css
+
+Geprueft, indem die fertige Seite fotografiert und Bildpunkt fuer Bildpunkt mit
+den Figma-Vorlagen verglichen wurde: Die alte rosa Farbe kommt jetzt null Mal
+mehr vor, die drei neuen Werte sind vorhanden.
+
+
 [2026-08-26] Welcome-Seite: Bilder getauscht, Ueberschrift im Limit-Fall entfernt
 -------------------------------------------------------------------------------------
 Zwei Abweichungen von der Design-Vorlage auf der neuen Welcome-Seite behoben.

@@ -3,12 +3,19 @@
    and are switched by scripts/welcome.js toggling classes on <body>:
    - ".welcome--step2"  shows step 2 instead of step 1
    - ".welcome--limit"  switches step 2 into its "limit reached" state
-   Colours are limited to the project palette: #2a3647 (dark), #29abe2
-   (accent), #f6f7f8 (light), #ff8190 (existing error colour, reused for the
-   limit banner). */
+   Farben stammen aus der Figma-Vorlage (per Pixelmessung an den Referenz-Frames
+   bestimmt): #2a3647 (dunkler Grund), #f6f7f8 (heller Grund), #177da8
+   (Primaerbutton), #ff3d00 (Limit-Rot, im Projekt bereits als Urgent-Farbe in
+   Gebrauch), #fbe4e5 (Hintergrund des Limit-Hinweises), #29abe2 (Akzent). */
 
 body.welcome {
     background-color: #2a3647;
+}
+
+/* Der Primaerbutton ist in der Vorlage blau, nicht im Navy der Login-Seite.
+   Nur hier ueberschrieben, damit login.html unveraendert bleibt. */
+.welcome .login__button {
+    background-color: #177da8;
 }
 
 body.welcome.welcome--step2 {
@@ -158,7 +165,7 @@ body.welcome.welcome--step2 {
 }
 
 .welcome--limit .welcome__counter {
-    color: #ff8190;
+    color: #ff3d00;
 }
 
 /* Two copies of the counter exist: one next to the logo (desktop/tablet) and
@@ -272,8 +279,8 @@ body.welcome.welcome--step2 {
     padding: 16px 20px;
     border-radius: 8px;
     font-weight: 700;
-    color: #ff8190;
-    background-color: rgba(255, 129, 144, 0.15);
+    color: #ff3d00;
+    background-color: #fbe4e5;
 }
 
 .welcome__mailto {
