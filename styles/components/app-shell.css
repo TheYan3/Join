@@ -18,14 +18,13 @@
 
 .main_flex-instructions {
    width: 100%;
-   max-width: calc(1920px - 232px);
+   max-width: calc(1440px - 232px);
    min-height: 100vh;
-   margin-inline: auto;
 }
 
 .headline {
    width: 100%;
-   max-width: calc(1920px - 232px);
+   max-width: calc(1440px - 232px);
    display: flex;
    align-items: center;
 }

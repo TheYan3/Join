@@ -10,36 +10,6 @@
    overflow: hidden;
 }
 
-/* Bis 1439px haengt die Kontaktliste direkt an der Navigation - dort ist der
-   Platz knapp, und der Block wuerde sonst wirkungslos "zentriert" an der
-   Navigation kleben. Ab 1440px greift wieder die Zentrierung aus app-shell.css,
-   sodass Liste und Detail als eigener Block mittig stehen. Sichtbar wird das
-   erst ab rund 1910px Fensterbreite (222px Navigation + 1688px Inhalt) - vorher
-   fuellt der Inhalt die Breite ohnehin komplett aus. Der Header zieht jeweils
-   mit, damit Titel und Liste in derselben Flucht bleiben. */
-@media (max-width: 1439px) {
-   .main_flex-instructions {
-      margin-inline: 0;
-   }
-
-   .header_flex-instructions {
-      margin-inline: 0;
-   }
-}
-
-/* Der Kopfbereich ist fest positioniert und liegt ueber den obersten 96 Pixeln
-   der Seite. Die optisch versteckte Ueberschrift davor war nur 73 Pixel hoch -
-   die restlichen 23 Pixel des oberen Randabstands verschwanden dadurch hinter
-   dem Kopfbereich, oben blieb sichtbar nur 1 Pixel Luft statt 24. Die
-   Ueberschrift reserviert jetzt genau die Hoehe des Kopfbereichs. Unterhalb von
-   1080px ist dieser nur 80px hoch und das mobile Layout regelt seine Abstaende
-   selbst - deshalb gilt die Regel nur darueber. */
-@media (min-width: 1081px) {
-   .headline {
-      min-height: 96px;
-   }
-}
-
 .main {
    overflow: hidden;
 }
@@ -51,12 +21,9 @@
    display: flex;
 }
 
-/* Bis 1920px fuellt die Liste die Hoehe buendig aus, wie vor der Umstellung.
-   Die Hoehe kommt dabei vom Flex-Container (align-items: stretch) statt aus
-   height: 100% - nur so vertraegt sie sich mit den Randabstaenden, die oberhalb
-   von 1920px dazukommen. */
 .contacts-list {
    width: 450px;
+   height: 100%;
    min-height: 0;
    display: flex;
    flex: 0 0 450px;
@@ -64,16 +31,6 @@
    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
    background: #ffffff;
    overflow: hidden;
-}
-
-/* Erst oberhalb von 1920px loest sich die Liste von der Navigation und steht
-   mittig. Dort - und nur dort - wird sie zur eigenstaendigen Karte mit runden
-   Ecken und Luft nach oben und unten. */
-@media (min-width: 1921px) {
-   .contacts-list {
-      margin: 24px 0;
-      border-radius: 20px;
-   }
 }
 
 .contacts-list__header {

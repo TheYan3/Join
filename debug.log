@@ -67,6 +67,37 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Breitbild-Layout auf die Vorgabe der Akademie umgestellt
+-------------------------------------------------------------------------------------
+Rueckbau samt Neuausrichtung. Heute war die App zunaechst so umgebaut worden,
+dass der gesamte Inhalt auf grossen Bildschirmen mittig steht und breiter wird.
+Ein Feedback samt Design-Vorlage hat gezeigt, dass genau das nicht gewuenscht
+ist. Die Vorgabe lautet: Der Inhalt bleibt unveraendert linksbuendig in seiner
+urspruenglichen Breite, nur der Kopfbereich nutzt die volle Bildschirmbreite.
+Dazu kam die ausdrueckliche Vorgabe, einen Breakpoint bei 1440 Pixeln zu setzen.
+
+Zurueckgenommen wurden damit alle heutigen Layout-Aenderungen: die Zentrierung
+des Inhalts, die Verbreiterung von 1440 auf 1920, die breiteren Board-Spalten,
+die Karten-Optik der Kontaktliste und die vereinheitlichten Innenabstaende.
+Alle acht betroffenen Stylesheets stehen wieder auf dem Stand von vorher.
+
+Neu hinzugekommen ist eine einzige Regel: Ab 1440 Pixeln Fensterbreite faellt
+die Begrenzung des Kopfbereich-Inhalts weg. Das Hilfe-Symbol und der
+Benutzerkreis stehen dadurch am rechten Bildschirmrand statt bei 1440 Pixeln zu
+enden. Der Seiteninhalt bleibt davon unberuehrt.
+
+Betroffene Dateien: styles/components/header.css (neue Regel) sowie
+styles/components/app-shell.css, app-shell-responsive.css, dropdown.css,
+styles/board/layout.css, styles/summary/layout.css, styles/add-task/layout.css,
+styles/contacts/layout.css (jeweils zurueckgesetzt)
+
+Geprueft mit einem echten Browser bei 2560, 1920, 1440, 1439, 1080 und 620
+Pixeln: Hilfe-Symbol und Benutzerkreis stehen ueberall 40 Pixel vom rechten
+Rand entfernt, der Seitentitel bleibt bei 348 Pixeln, das Board endet wie
+frueher bei 1430 Pixeln und die Spalten sind wieder 186 Pixel breit. Kein
+waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Karten-Optik der Kontaktliste erst ab 1921 Pixeln
 -------------------------------------------------------------------------------------
 Nachtrag zu den beiden Eintraegen darunter. Die Kontaktliste hatte auf allen

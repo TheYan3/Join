@@ -4,22 +4,29 @@
    z-index: 6;
    width: 100%;
    height: 96px;
-   padding-left: 222px;
    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
    background-color: #fff;
 }
 
 .header_flex-instructions {
-   width: 100%;
-   max-width: calc(1920px - 232px);
-   margin-inline: auto;
+   max-width: 1440px;
    display: flex;
    justify-content: space-between;
    align-items: center;
 }
 
+/* Breitbild-Layout ab 1440px (Vorgabe der Developer Akademie): Der Kopfbereich
+   nutzt die volle Bildschirmbreite, damit Hilfe-Symbol und Benutzerkreis am
+   rechten Bildschirmrand stehen statt bei 1440px zu enden. Der Seiteninhalt
+   bleibt davon unberuehrt und weiterhin linksbuendig. */
+@media (min-width: 1440px) {
+   .header_flex-instructions {
+      max-width: none;
+   }
+}
+
 .topBar {
-   padding: 20px 64px;
+   padding: 20px 40px 20px 348px;
 }
 
 .topBar__name {

@@ -18,7 +18,7 @@
 }
 
 .headline_tasks {
-   padding: 206px 64px 48px 64px;
+   padding: 206px 64px 48px 108px;
    display: flex;
    justify-content: space-between;
    align-items: center;
@@ -70,8 +70,9 @@
 .add-task__footer {
    position: fixed;
    bottom: 64px;
-   left: max(calc((100vw - 1910px) / 2 + 330px), 330px);
-   right: max(calc((100vw - 1910px) / 2 + 136px), 136px);
+   left: calc(222px + 108px);
+   width: calc(100vw - 222px - 108px - 136px);
+   max-width: 964px;
    margin-top: auto;
    z-index: 10;
    box-sizing: border-box;
