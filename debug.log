@@ -48,6 +48,28 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Kontaktliste sieht jetzt aus wie eine eigene Karte
+-------------------------------------------------------------------------------------
+Die Kontaktliste war bisher eine weisse Spalte mit eckigen Kanten, die oben und
+unten hart an den Rand stiess. Gewuenscht war die Optik aus der Skizze: eine
+abgesetzte Karte mit runden Ecken.
+
+Geaendert: Die Liste hat jetzt runde Ecken (20 Pixel, dieselbe Rundung wie
+andere Elemente im Projekt) und 24 Pixel Abstand nach oben und unten.
+
+Ein Detail musste dabei mitgeloest werden: Die Liste war bisher auf "volle
+Hoehe" gestellt. Zusammen mit dem neuen Abstand oben und unten waere sie damit
+unten aus dem Fenster gelaufen. Die Hoehe kommt jetzt vom umgebenden Container,
+der sie automatisch passend streckt.
+
+Betroffene Datei: styles/contacts/layout.css
+
+Geprueft mit einem echten Browser bei 2560, 1440, 1080 und 620 Pixeln: Die Karte
+endet ueberall innerhalb des Fensters (bei 1000 Pixeln Fensterhoehe reicht sie
+von 97 bis 976), das Scrollen innerhalb der Liste funktioniert weiterhin, kein
+waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Kontaktliste erst ab 1440 Pixeln mittig
 -------------------------------------------------------------------------------------
 Nachtrag zum Eintrag darunter. Dort war die Kontaktliste dauerhaft an die

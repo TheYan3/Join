@@ -38,13 +38,17 @@
    display: flex;
 }
 
+/* Die Liste ist eine eigenstaendige Karte: abgerundet, mit Abstand nach oben und
+   unten. Die Hoehe kommt vom Flex-Container (align-items: stretch), nicht mehr
+   aus height: 100% - sonst wuerde sie um die Randabstaende ueberlaufen. */
 .contacts-list {
    width: 450px;
-   height: 100%;
    min-height: 0;
+   margin: 24px 0;
    display: flex;
    flex: 0 0 450px;
    flex-direction: column;
+   border-radius: 20px;
    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
    background: #ffffff;
    overflow: hidden;
