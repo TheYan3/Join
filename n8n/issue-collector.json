@@ -408,6 +408,69 @@
         560,
         1060
       ]
+    },
+    {
+      "parameters": {
+        "content": "Trigger und vorbereitung",
+        "height": 2224,
+        "width": 1008
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        256,
+        1648
+      ],
+      "id": "d7495f68-bc56-410f-9705-cad84c57e006",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Ticket KI Vearbeitung",
+        "height": 2224,
+        "width": 736,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        1648
+      ],
+      "id": "ea6bc169-0592-46dd-843e-f56a61acf910",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Ticket Erstellung",
+        "height": 2224,
+        "width": 944,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        1648
+      ],
+      "id": "dc8e1ca3-2255-41a9-a8bc-0c5579d21fff",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Mail Senden",
+        "height": 2224,
+        "width": 736,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2992,
+        1648
+      ],
+      "id": "cd9b7a8c-ad22-4993-b448-5c28ed71b7e9",
+      "name": "Sticky Note3"
     }
   ],
   "connections": {

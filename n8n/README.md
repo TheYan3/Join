@@ -3,6 +3,25 @@
 Exportierte Workflows des Join Issue Collectors. Sie laufen auf der n8n-Instanz
 des Homeservers und werden über die n8n Public API eingespielt.
 
+## Importieren und aktivieren
+
+Beim Einspielen von Hand gibt es zwei Stolpersteine:
+
+1. **In den bestehenden Workflow hinein importieren, nicht daneben.** Diese
+   Dateien enthalten bewusst keine Workflow-ID. Wer sie über „Import from File"
+   aus der Workflow-Übersicht einspielt, bekommt deshalb einen **zweiten**
+   Workflow gleichen Namens — dann laufen zwei Workflows auf dasselbe Postfach,
+   oder der falsche ist aktiv. Richtig ist: den vorhandenen Workflow öffnen und
+   erst **dort** im Drei-Punkte-Menü „Import from File" wählen. Das ersetzt den
+   Inhalt, ID und Aktivierung bleiben erhalten.
+2. **Danach den Active-Schalter prüfen.** Die Dateien enthalten kein
+   `active`-Flag. Ein frisch angelegter Workflow ist deshalb **inaktiv** und
+   verarbeitet nichts, bis er oben rechts eingeschaltet wird. Beide Workflows
+   müssen aktiv sein, sonst funktioniert keine der Automatisierungen.
+
+Die Zugangsdaten müssen nach dem Import nicht neu verbunden werden, solange die
+Credential-IDs auf der Instanz dieselben sind — sie stehen im JSON.
+
 ## issue-collector.json
 
 Holt Mails aus dem Postfach `join-issues@gmx.de`, lässt sie von Google Gemini
@@ -16,6 +35,16 @@ analysieren und legt daraus ein Ticket in der Triage-Spalte des Join-Boards an.
 | Google Gemini Chat Model | das Sprachmodell dahinter (`gemini-3.5-flash-lite`), angedockt am Extractor |
 | Ticket bauen | wertet die Antwort aus, wandelt das Datum um, verwirft Nicht-Anfragen |
 | Ticket in Triage anlegen | schreibt das Ticket per REST in die Firebase-Datenbank |
+| Ticket-Ergebnis anreichern | hängt das Schreibergebnis an die Ticketdaten der jeweiligen Mail |
+| Ticket erfolgreich geschrieben? | trennt danach den Erfolgs- vom Fehlerweg |
+
+Der Schreib-Baustein ist auf „bei Fehler normal weiterleiten" gestellt. Dadurch
+kommt für **jede** eingehende Mail genau ein Ergebnis heraus, in unveränderter
+Reihenfolge — gescheiterte eingeschlossen. Nur deshalb darf `Ticket-Ergebnis
+anreichern` die Daten über die Position zuordnen. Diese eine Stelle ist der Kern
+der Zuordnung: Wird der Baustein später verschoben oder der Fehlerweg wieder auf
+einen eigenen Ausgang umgestellt, verrutscht die Zuordnung bei mehreren Mails in
+einem Durchlauf, und Bestätigungen gingen an die falsche Adresse.
 
 ### Benötigte Zugangsdaten (in n8n anzulegen, nicht in dieser Datei)
 
@@ -74,3 +103,8 @@ Workflows und überlebt einzelne Durchläufe. Zwei Eigenschaften sind wichtig:
 Alle Mail-versendenden Stellen prüfen, ob der Empfänger das eigene Postfach ist,
 und brechen dann ab. Ohne das würde eine Antwort im eigenen Posteingang landen,
 den Sammel-Workflow erneut auslösen und die nächste Mail erzeugen.
+
+Zusätzlich werden Adressen auf `.local` übersprungen. Der Gast-Login des Boards
+legt Tickets unter `guest@join.local` an — eine Domain, die es nicht gibt. Ohne
+diese Prüfung erzeugt jedes Verschieben eines Gast-Tickets einen SMTP-Fehler im
+n8n-Protokoll.

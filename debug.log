@@ -5,6 +5,32 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Notizzettel aus n8n gesichert und Import-Anleitung ergaenzt
+-------------------------------------------------------------------------------------
+Zwei Ergaenzungen rund um die n8n-Workflows, kein Verhalten geaendert.
+
+1. Die vier farbigen Notizzettel, die im laufenden Workflow die Abschnitte
+   beschriften ("Trigger und vorbereitung", "Ticket KI Vearbeitung",
+   "Ticket Erstellung", "Mail Senden"), fehlten in der eingecheckten Datei.
+   Sie sind jetzt mit drin. Vorher waeren sie beim naechsten Einspielen
+   aus dem Repository verloren gegangen.
+
+2. Die Anleitung erklaert jetzt zwei Fallen beim Einspielen von Hand:
+   - Man muss den vorhandenen Workflow oeffnen und ERST DORT importieren.
+     Importiert man aus der Uebersicht, legt n8n einen zweiten Workflow
+     gleichen Namens an - dann laufen zwei auf dasselbe Postfach.
+   - Ein neu angelegter Workflow ist immer ausgeschaltet und muss von Hand
+     aktiviert werden, sonst passiert gar nichts.
+   Dazu neu beschrieben: die beiden Bausteine, die seit der letzten Aenderung
+   dazugekommen sind, und warum die Reihenfolge dort wichtig ist.
+
+Betroffene Dateien: n8n/issue-collector.json, n8n/README.md
+
+Geprueft: Beide Workflow-Dateien sind gueltiges JSON. Der Inhalt wurde
+Baustein fuer Baustein gegen den tatsaechlich laufenden Stand auf dem Server
+verglichen - bis auf Zeilenenden und weggelassene Standardwerte identisch.
+
+
 [2026-08-26] Zu langer Text laeuft nicht mehr aus den Aufgabenkarten heraus
 -------------------------------------------------------------------------------------
 Auf dem Board ist der Beschreibungstext bei manchen Aufgaben ueber den
