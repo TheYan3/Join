@@ -1,7 +1,7 @@
 .overview {
    position: relative;
    width: 100%;
-   padding: 0 0 32px 108px;
+   padding: 0 64px 32px 64px;
    display: flex;
    align-items: center;
    gap: 64px;
@@ -194,6 +194,7 @@
    flex: 1;
    flex-direction: column;
    gap: 3px;
+   align-items: center;
 }
 
 .greetings__timeannouncement {

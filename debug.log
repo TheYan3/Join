@@ -5,6 +5,25 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Zwei vergessene Stellen bei der Bildschirm-Zentrierung nachgezogen
+-------------------------------------------------------------------------------------
+Bei der letzten Umstellung auf grosse, zentrierte Bildschirme wurden zwei
+Stellen übersehen:
+
+- Auf der "Add Task"-Seite standen die Knoepfe "Clear" und "Create Task"
+  sowie der Hinweis "* This field is required" ganz unten links im Fenster,
+  statt direkt unter dem (jetzt zentrierten) Formular. Die Leiste mit den
+  Knoepfen haengt jetzt am Formular und wandert mit ihm mit, wenn das Fenster
+  breiter oder schmaler wird.
+- Auf der "Summary"-Seite (Startseite mit den Zahlen-Kacheln) war der
+  Innenabstand links 108 Pixel und rechts 0 Pixel - unsymmetrisch. Jetzt sind
+  es beidseitig 64 Pixel, passend zu den anderen Seiten. Ausserdem wurde die
+  Begruessung ("Good Afternoon, Name") mittig statt am Rand ausgerichtet.
+
+Betroffene Dateien: styles/add-task/layout.css, styles/summary/layout.css.
+Kleine Bildschirme (1080 Pixel und schmaler) sind unveraendert.
+
+
 [2026-08-26] Inhalt auf grossen Bildschirmen zentriert statt links geklebt
 -------------------------------------------------------------------------------------
 Auf grossen Monitoren (ab ca. 2000 Pixel Breite) klebte die App bisher links
