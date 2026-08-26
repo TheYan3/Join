@@ -5,6 +5,30 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-26] Zu langer Text laeuft nicht mehr aus den Aufgabenkarten heraus
+-------------------------------------------------------------------------------------
+Auf dem Board ist der Beschreibungstext bei manchen Aufgaben ueber den
+unteren Rand der Karte hinausgelaufen und ueber die darunterliegende Karte
+gerutscht. Besonders auffaellig bei den automatisch aus E-Mails erzeugten
+Tickets, weil deren Beschreibungen laenger sind als die von Hand getippten.
+
+Ursache: Der Textbereich der Karte hatte zwar eine feste Hoehe von 38
+Pixeln (also Platz fuer zwei Zeilen), aber es war nirgends festgelegt, was
+mit ueberschuessigem Text passieren soll. Der Browser hat ihn deshalb
+einfach weiter unten angezeigt, ausserhalb der Karte.
+
+Geaendert: Der Textbereich zeigt jetzt hoechstens zwei Zeilen und beendet
+laengeren Text mit drei Punkten (...). Der vollstaendige Text ist
+unveraendert da - er erscheint beim Anklicken der Karte in der
+Detailansicht, die weiterhin keine Begrenzung hat.
+
+Betroffene Datei: styles/board/cards.css
+
+Geprueft mit einem echten Browser: alle sieben Karten haben jetzt exakt 38
+Pixel hohe Textbereiche, bei keiner einzigen ragt Text ueber die Karte
+hinaus.
+
+
 [2026-08-25] Rote Fehlermeldungen in der Konsole nach dem Gast-Login behoben
 -------------------------------------------------------------------------------------
 Wer sich als Gast einloggt und dann zügig auf "Board" klickt, sah in der
