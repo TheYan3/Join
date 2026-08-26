@@ -3,20 +3,28 @@
    --primary: #2a3647;
 }
 
-/* Die Kontaktliste ist ein fester weisser Block, der optisch an der Navigation
-   haengt. Deshalb wird der Inhalt hier nicht zentriert wie auf den anderen
-   Seiten, sondern bleibt linksbuendig - und der Header zieht mit, damit Titel
-   und Liste in derselben Flucht liegen. */
 .main_flex-instructions {
    height: calc(100vh - 96px);
    display: flex;
    flex-direction: column;
    overflow: hidden;
-   margin-inline: 0;
 }
 
-.header_flex-instructions {
-   margin-inline: 0;
+/* Bis 1439px haengt die Kontaktliste direkt an der Navigation - dort ist der
+   Platz knapp, und der Block wuerde sonst wirkungslos "zentriert" an der
+   Navigation kleben. Ab 1440px greift wieder die Zentrierung aus app-shell.css,
+   sodass Liste und Detail als eigener Block mittig stehen. Sichtbar wird das
+   erst ab rund 1910px Fensterbreite (222px Navigation + 1688px Inhalt) - vorher
+   fuellt der Inhalt die Breite ohnehin komplett aus. Der Header zieht jeweils
+   mit, damit Titel und Liste in derselben Flucht bleiben. */
+@media (max-width: 1439px) {
+   .main_flex-instructions {
+      margin-inline: 0;
+   }
+
+   .header_flex-instructions {
+      margin-inline: 0;
+   }
 }
 
 .main {

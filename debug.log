@@ -48,6 +48,30 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Kontaktliste erst ab 1440 Pixeln mittig
+-------------------------------------------------------------------------------------
+Nachtrag zum Eintrag darunter. Dort war die Kontaktliste dauerhaft an die
+Navigation angedockt worden. Gewuenscht ist aber: Auf grossen Bildschirmen soll
+sie sich loesen und als eigener Block mittig stehen, auf kleineren weiter an der
+Navigation kleben.
+
+Geaendert: Das Andocken gilt jetzt nur noch bis 1439 Pixel Fensterbreite.
+Darueber greift wieder die Zentrierung, die auch Board und Summary benutzen.
+
+Wichtig zu wissen: Sichtbar wird der Unterschied erst ab rund 1910 Pixeln.
+Denn der Inhalt ist auf 1688 Pixel begrenzt, plus 222 Pixel Navigation ergibt
+1910 - darunter fuellt er die Breite ohnehin komplett aus, es gibt also gar
+nichts zu zentrieren. Die Schwelle 1440 steht nur dort, wo man sie beim Lesen
+erwartet.
+
+Betroffene Datei: styles/contacts/layout.css
+
+Geprueft mit einem echten Browser bei 2560, 1920, 1910, 1600, 1440 und 1080
+Pixeln: Bei 2560 steht die Liste mit 326 Pixeln Abstand zur Navigation mittig,
+ab 1910 abwaerts klebt sie mit 1 Pixel daran. Kein waagerechtes Scrollen,
+keine Fehler in der Konsole.
+
+
 [2026-08-26] Kontaktliste klebt wieder an der Navigation
 -------------------------------------------------------------------------------------
 Nach der Umstellung auf grosse Bildschirme rutschte auf der Contacts-Seite die
