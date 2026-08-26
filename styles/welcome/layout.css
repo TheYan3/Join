@@ -257,6 +257,12 @@ body.welcome.welcome--step2 {
     display: none;
 }
 
+/* Im Limit-Zustand folgt laut Vorlage direkt der rote Hinweis auf "Welcome" -
+   die Erklaerueberschrift entfaellt dort. */
+.welcome--limit .welcome__guide-title {
+    display: none;
+}
+
 .welcome--limit .welcome__guide-limit {
     display: flex;
 }

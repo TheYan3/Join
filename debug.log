@@ -104,6 +104,28 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Welcome-Seite: Bilder getauscht, Ueberschrift im Limit-Fall entfernt
+-------------------------------------------------------------------------------------
+Zwei Abweichungen von der Design-Vorlage auf der neuen Welcome-Seite behoben.
+
+1. Die beiden Illustrationen waren vertauscht. Im Normalfall stand die Person
+   mit dem Klemmbrett, im Limit-Fall die Person am Board - laut Vorlage ist es
+   genau andersherum. Getauscht.
+
+2. Im Limit-Fall stand ueber dem roten Hinweis weiterhin die Erklaerueberschrift
+   "Easily create a ticket by sending an email". In der Vorlage folgt dort
+   direkt der rote Hinweis auf das Wort "Welcome". Die Ueberschrift wird in
+   diesem Zustand jetzt ausgeblendet.
+
+Betroffene Dateien: welcome.html, styles/welcome/layout.css
+
+Geprueft mit einem echten Browser bei 1440 und 620 Pixeln, jeweils in beiden
+Zustaenden: Im Normalfall erscheint Rectangle 11.svg mit Ueberschrift und ohne
+roten Hinweis, im Limit-Fall Artboard 60 3.svg ohne Ueberschrift und mit rotem
+Hinweis. Ein Ticket von gestern zaehlt weiterhin nicht mit (Zaehler steht auf 0).
+Kein waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] User-Story-Tickets bekommen die violette Kennzeichnung
 -------------------------------------------------------------------------------------
 Laut Design-Vorlage sind die beiden Ticketarten farblich zu unterscheiden:
