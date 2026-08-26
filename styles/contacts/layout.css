@@ -51,20 +51,29 @@
    display: flex;
 }
 
-/* Die Liste ist eine eigenstaendige Karte: abgerundet, mit Abstand nach oben und
-   unten. Die Hoehe kommt vom Flex-Container (align-items: stretch), nicht mehr
-   aus height: 100% - sonst wuerde sie um die Randabstaende ueberlaufen. */
+/* Bis 1920px fuellt die Liste die Hoehe buendig aus, wie vor der Umstellung.
+   Die Hoehe kommt dabei vom Flex-Container (align-items: stretch) statt aus
+   height: 100% - nur so vertraegt sie sich mit den Randabstaenden, die oberhalb
+   von 1920px dazukommen. */
 .contacts-list {
    width: 450px;
    min-height: 0;
-   margin: 24px 0;
    display: flex;
    flex: 0 0 450px;
    flex-direction: column;
-   border-radius: 20px;
    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
    background: #ffffff;
    overflow: hidden;
+}
+
+/* Erst oberhalb von 1920px loest sich die Liste von der Navigation und steht
+   mittig. Dort - und nur dort - wird sie zur eigenstaendigen Karte mit runden
+   Ecken und Luft nach oben und unten. */
+@media (min-width: 1921px) {
+   .contacts-list {
+      margin: 24px 0;
+      border-radius: 20px;
+   }
 }
 
 .contacts-list__header {

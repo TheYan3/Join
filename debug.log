@@ -48,6 +48,29 @@ layout-1440.png, layout-1080.png. Summary-, Add-Task- und Contacts-Seite
 stichprobenartig mitgeprueft, sehen ebenfalls sauber aus.
 
 
+[2026-08-26] Karten-Optik der Kontaktliste erst ab 1921 Pixeln
+-------------------------------------------------------------------------------------
+Nachtrag zu den beiden Eintraegen darunter. Die Kontaktliste hatte auf allen
+Bildschirmgroessen runde Ecken und Abstand nach oben und unten bekommen.
+Gewuenscht ist das aber nur auf grossen Bildschirmen - also genau dann, wenn
+die Liste sich ohnehin von der Navigation loest und mittig steht.
+
+Geaendert: Bis einschliesslich 1920 Pixel Fensterbreite fuellt die Liste die
+Hoehe wieder buendig aus, ohne Abstand und mit eckigen Kanten, so wie vor der
+Umstellung. Erst ab 1921 Pixeln wird sie zur abgesetzten Karte.
+
+Die runden Ecken sind bewusst mit weggefallen: Eine buendige Spalte, die oben
+direkt am Kopfbereich anliegt, aber runde Ecken hat, sieht nach einem Versehen
+aus.
+
+Betroffene Datei: styles/contacts/layout.css
+
+Geprueft mit einem echten Browser bei 2560, 1921, 1920, 1440, 1080 und 620
+Pixeln: Ab 1921 jeweils 24 Pixel Abstand oben und unten mit runden Ecken, bei
+1920 und darunter buendig und eckig. Das Verhalten auf Handy und Tablet ist
+unveraendert. Kein waagerechtes Scrollen, keine Fehler in der Konsole.
+
+
 [2026-08-26] Abstand ueber der Kontaktliste war fast unsichtbar
 -------------------------------------------------------------------------------------
 Die Kontaktliste hatte oben und unten denselben Randabstand eingestellt (je 24
