@@ -81,9 +81,33 @@ body.welcome.welcome--step2 {
     gap: 56px;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): die globale h1-Regel aus style.css
+   (61px) ist fuer diese Karte zu gross - hier gilt Textstil "Version 2/t5"
+   (32px, Zeilenhoehe 120%). Nur im Welcome-Kontext ueberschrieben, damit
+   login.html (nutzt dieselbe h1/.login__header-Klasse) unveraendert bleibt.
+   Ab 620px Breite (siehe responsive.css) gilt der am Mobile-Rahmen
+   kalibrierte Wert von 40px. */
+.welcome__card .login__header {
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+/* Figma-Inspect (Desktop- UND Mobile-Rahmen, Frame 159): 16px Abstand
+   zwischen Ueberschrift und blauer Trennlinie statt der 12px, die
+   styles/login/layout.css als Standard vorgibt - auf beiden Rahmen
+   derselbe Wert, darum ohne eigene Breakpoint-Anpassung. */
+.welcome__card .login__headline {
+    gap: 16px;
+}
+
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): Textstil "Version 2/t5"
+   (23px, Zeilenhoehe 120%) statt der bisherigen 20px/1.4. Ab 620px Breite
+   (siehe responsive.css) gilt der am Mobile-Rahmen kalibrierte Wert von
+   16px/120% - 120% Zeilenhoehe stimmt dort zufaellig mit diesem hier
+   ueberein, darum keine eigene Breakpoint-Zeilenhoehe noetig. */
 .welcome__intro {
-    font-size: 20px;
-    line-height: 1.4;
+    font-size: 23px;
+    line-height: 1.2;
     color: #2a3647;
     text-align: center;
 }
@@ -108,8 +132,12 @@ body.welcome.welcome--step2 {
     gap: 24px;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): Textstil "Version 2/t5"
+   (23px, Zeilenhoehe 120% - erbt hier vom body-Grundwert 1.2, keine eigene
+   Zeile noetig) statt der bisherigen 20px. Ab 620px Breite (siehe
+   responsive.css) gilt der am Mobile-Rahmen kalibrierte Wert von 18px. */
 .welcome__role-question {
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 700;
     color: #2a3647;
     display: flex;

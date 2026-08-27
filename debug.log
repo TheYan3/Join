@@ -5,6 +5,24 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-28] Erste Welcome-Seite: Schriftgrößen der Karte an die Vorlage angepasst
+-------------------------------------------------------------------------------------
+- Auf der Karte "Bist du Stakeholder oder Team-Mitglied?" war die Überschrift
+  "Welcome" viel zu groß (sie hat bisher dieselbe Riesengröße wie die
+  Überschriften auf der Login-Seite benutzt). In der Vorlage ist sie auf dem
+  großen Bildschirm deutlich kleiner. Das ist jetzt korrigiert, und zwar nur
+  für diese Karte - die Login-Seite selbst bleibt wie sie war.
+- Der Einleitungstext und die beiden Rollen-Fragen ("Are you a
+  stakeholder?" / "Are you a team member?") waren am großen Bildschirm etwas
+  zu klein und sind jetzt an die Vorlage angeglichen.
+- Der Abstand zwischen der Überschrift und dem blauen Trennstrich darunter
+  war etwas zu knapp und ist jetzt etwas großzügiger, wie in der Vorlage.
+- Auf dem Handy wurden dabei die passenden eigenen Werte aus der
+  Handy-Vorlage übernommen (Überschrift und Rollen-Fragen), damit die für
+  das Handy schon geprüfte Ansicht dabei nicht verrutscht.
+- Dateien: styles/welcome/layout.css, styles/welcome/responsive.css.
+
+
 [2026-08-27] Erste Welcome-Seite (Desktop): die beiden Rollen stehen jetzt nebeneinander
 -------------------------------------------------------------------------------------
 - Auf der ersten Seite (Bist du Stakeholder oder Team-Mitglied?) standen die

@@ -150,12 +150,25 @@
         padding: 0 16px 16px;
     }
 
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): Open Sans Bold 40px -
+       derselbe Wert wie login.html's mobile Ueberschrift (styles/login/
+       responsive.css), nur hier fuer den Welcome-Kontext gesetzt, damit
+       login.html unveraendert bleibt. Die 32px aus layout.css gelten sonst
+       (auch im 1080/820px-Zwischenbereich, fuer den es keinen eigenen
+       Figma-Rahmen gibt). */
+    .welcome__card .login__header {
+        font-size: 40px;
+    }
+
     .welcome__intro {
         font-size: 16px;
     }
 
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 18px, nicht wie zuvor
+       16px - die Rollenfrage ist auf dem Mobile-Rahmen zwei Punkt groesser
+       als der Intro-Text darueber. */
     .welcome__role-question {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): die Buttons sind auch
