@@ -5,6 +5,30 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-27] Zweite Welcome-Seite (Desktop): Logo, Pfeil und Text sauber ausgerichtet
+-------------------------------------------------------------------------------------
+- Auf der zweiten Seite (E-Mail-Erklärung) lagen Logo, Zurück-Pfeil-Zeile und der
+  eigentliche Erklärtext (Überschrift, Fließtext, Bild, Knopf) bisher alle am
+  selben Rand, weil sie sich denselben Innenabstand teilten. In der Vorlage
+  liegen sie an drei unterschiedlichen Rändern (Logo am weitesten links, die
+  Pfeil-Zeile etwas weiter rechts, der Erklärtext nochmal weiter rechts). Das
+  ist jetzt nachgebaut: Logo, Pfeil-Zeile und Erklärtext haben jetzt jeweils
+  ihren eigenen, aus der Vorlage abgemessenen Randabstand statt eines
+  gemeinsamen.
+- Die Überschrift "Welcome" stand bisher mittig über der ganzen Seite. In der
+  Vorlage steht sie linksbündig über dem Erklärtext, nicht über der ganzen
+  Seitenbreite - das ist jetzt angepasst.
+- Die Abstände zwischen Überschrift, Erklärtext, Bild und Knopf waren nach
+  Schätzung gesetzt und sind jetzt exakt aus der Vorlage übernommen (u.a. der
+  Abstand zwischen Erklär-Überschrift und Fließtext, der bisher zu klein war).
+- Bei sehr breiten Bildschirmen (getestet bis 1618px) bleibt der Inhalt jetzt
+  sauber mittig stehen, statt an einer Seite zu kleben.
+- Handy und Tablet (bis 1080px Breite) sind unverändert geblieben - dort war
+  schon vorher alles richtig eingestellt, das wurde nur nach der Umstellung
+  erneut geprüft, damit nichts kaputt gegangen ist.
+- Dateien: styles/welcome/layout.css, styles/welcome/responsive.css.
+
+
 [2026-08-27] Zurück-Pfeil auf der zweiten Welcome-Seite (Desktop) an die richtige Stelle gesetzt
 -------------------------------------------------------------------------------------
 - Auf der zweiten Seite (E-Mail-Erklärung) saß der Zurück-Pfeil am Desktop-

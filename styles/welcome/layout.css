@@ -124,10 +124,17 @@ body.welcome.welcome--step2 {
 
 /* ---------- Step 2: e-mail guide ---------- */
 
+/* Figma-Inspect (Desktop-Rahmen "Stakeholder"/"Stakeholder _limit reached"):
+   Logo und Zurueck-Pfeil-Zeile liegen NICHT auf derselben Kante - das Logo
+   sitzt bei X=40, die Pfeil-Zeile (Frame 413) bei X=160, beide gemessen vom
+   1440px breiten Rahmen. Einheitliches Padding auf dem Header wuerde beide
+   Kanten gleichsetzen, darum bekommt hier nur noch die vertikale Distanz ein
+   Padding - die horizontale Position regeln Logo und Nav-Zeile einzeln
+   (siehe .welcome__step2-logo und .welcome__step2-nav). */
 .welcome__step2-header {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 80px 77px 0;
+    padding: 80px 0 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -137,19 +144,34 @@ body.welcome.welcome--step2 {
    reached"): der Zurueck-Pfeil sitzt in einer eigenen Zeile direkt unter dem
    Logo (0px Abstand - die Bounding-Boxen beruehren sich) statt daneben, und
    auf gleicher Hoehe wie der Zaehler, der mit ihm die Zeile teilt
-   (space-between, gleiche Breite wie der Content darunter). */
+   (space-between, gleiche Breite wie der Content darunter). Die Zeile
+   (Figma-Frame "Frame 413") ist selbst 1120px breit und im 1440px-Rahmen
+   zentriert (160px Rand auf jeder Seite) statt am Seitenrand zu kleben -
+   das haelt sie auch bei sehr breiten Bildschirmen (getestet: 1618px) an
+   der richtigen Stelle, statt am linken Rand zu kleben.
+   "width: 100%" ist hier Pflicht, nicht nur Kosmetik: Der Header ist ein
+   Flex-Container, und bei Flex-Kindern mit "margin: auto" auf der Querachse
+   gewinnt der Auto-Rand gegen das sonst uebliche automatische Aufziehen auf
+   die volle Breite (align-items: stretch greift dann nicht) - ohne dieses
+   "width: 100%" wuerde die Zeile auf ihre Inhaltsbreite schrumpfen und
+   dadurch mittig statt am 160px-Rand landen. */
 .welcome__step2-nav {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 /* Figma-Inspect (Desktop-Rahmen "Stakeholder" und "Stakeholder _limit
-   reached", Logo-Node "Capa 2"): 45.93 x 56 -> gerundet 46 x 56. Der
-   Mobile-Rahmen zeigt ein groesseres Logo (64px), siehe responsive.css. */
+   reached", Logo-Node "Capa 2"): 45.93 x 56 -> gerundet 46 x 56, an X=40
+   verankert (siehe .welcome__step2-header oben). Der Mobile-Rahmen zeigt ein
+   groesseres Logo (64px), siehe responsive.css. */
 .welcome__step2-logo {
     width: 46px;
     height: auto;
+    margin-left: 40px;
 }
 
 .welcome__back {
@@ -201,27 +223,37 @@ body.welcome.welcome--step2 {
    Top padding is 56px (not the header's own bottom, which stays 0): Figma's
    auto-layout gap between the back-arrow/counter row and this content
    underneath it, measured on the Desktop "Stakeholder" frame. */
+/* Horizontales Padding entfernt: Ueberschrift und Leitfaden sitzen laut
+   Figma nicht an der 1440px-Kante, sondern in einer eigenen, schmaleren
+   Spalte (siehe .welcome__step2-title/.welcome__guide unten) - ein
+   zusaetzliches Padding hier wuerde diese Spalte falsch verschieben. */
 #main-content .welcome__step2-main {
     display: block;
     height: auto;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 56px 77px 96px;
+    padding: 56px 0 96px;
     box-sizing: border-box;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Stakeholder"/"Stakeholder _limit reached",
+   Frame 390): die Ueberschrift und der Leitfaden darunter teilen sich eine
+   964px breite Spalte, die im 1440px-Rahmen zentriert ist (X=238,5 -
+   eigener Rand von der Nav-Zeile aus, nicht deren 160px-Kante). Innerhalb
+   dieser Spalte ist die Ueberschrift linksbuendig, nicht zentriert. */
 .welcome__step2-title {
+    max-width: 964px;
+    margin: 0 auto 48px;
     font-size: 61px;
     color: #2a3647;
-    margin: 0 0 64px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 16px;
 }
 
 .welcome__guide {
-    max-width: 1100px;
+    max-width: 964px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr auto;
@@ -230,14 +262,14 @@ body.welcome.welcome--step2 {
         "normal     illustration"
         "limit      illustration"
         "button     illustration";
-    column-gap: 64px;
-    row-gap: 24px;
+    column-gap: 48px;
+    row-gap: 40px;
     align-items: start;
 }
 
 .welcome__guide-title {
     grid-area: title;
-    font-size: 27px;
+    font-size: 28px;
     color: #2a3647;
     margin: 0;
 }
