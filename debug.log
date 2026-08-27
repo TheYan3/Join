@@ -5,6 +5,24 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-27] Zurück-Pfeil auf der zweiten Welcome-Seite (Desktop) an die richtige Stelle gesetzt
+-------------------------------------------------------------------------------------
+- Auf der zweiten Seite (E-Mail-Erklärung) saß der Zurück-Pfeil am Desktop-
+  Bildschirm bisher rechts neben dem Join-Logo. In der Vorlage steht er aber
+  in einer eigenen Zeile direkt unter dem Logo, ganz links auf Höhe des
+  restlichen Textes. Das ist jetzt angepasst.
+- Der Zähler ("X von 10 Anfragen heute genutzt") stand bisher oben neben dem
+  Logo. In der Vorlage teilt er sich die Zeile mit dem Zurück-Pfeil (Pfeil
+  links, Zähler rechts) - das ist jetzt ebenfalls angepasst.
+- Die Abstände (Logo direkt zum Pfeil, Pfeil-Zeile zum restlichen Inhalt) sind
+  aus der Figma-Vorlage abgemessen statt geschätzt.
+- Auf dem Handy (schmaler Bildschirm) ändert sich nichts: dort steht der Pfeil
+  weiterhin neben der Überschrift "Welcome", wie es die Vorlage dort vorsieht.
+- Eine nicht mehr gebrauchte Code-Stelle (der alte Container, der Logo und
+  Pfeil nebeneinander hielt) wurde entfernt statt stehen gelassen zu werden.
+- Dateien: welcome.html, styles/welcome/layout.css.
+
+
 [2026-08-27] Welcome-Seite auf dem Handy repariert (Logo-Überlappung, Lesbarkeit, Größen)
 -------------------------------------------------------------------------------------
 - Auf kleinen Bildschirmen (Handy-Breite) lag der Text "Not a Join user? /

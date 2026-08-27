@@ -130,17 +130,18 @@ body.welcome.welcome--step2 {
     padding: 80px 77px 0;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
 }
 
-/* Laut Vorlage steht der Zurueck-Pfeil rechts neben dem Logo, nicht darunter,
-   und sitzt dabei auf Hoehe des unteren Logo-Drittels. */
-.welcome__step2-brand {
+/* Figma-Inspect (Desktop-Rahmen "Stakeholder" und "Stakeholder _limit
+   reached"): der Zurueck-Pfeil sitzt in einer eigenen Zeile direkt unter dem
+   Logo (0px Abstand - die Bounding-Boxen beruehren sich) statt daneben, und
+   auf gleicher Hoehe wie der Zaehler, der mit ihm die Zeile teilt
+   (space-between, gleiche Breite wie der Content darunter). */
+.welcome__step2-nav {
     display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 32px;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Figma-Inspect (Desktop-Rahmen "Stakeholder" und "Stakeholder _limit
@@ -196,13 +197,16 @@ body.welcome.welcome--step2 {
 /* Overrides "#main-content main" from styles/login/layout.css (flex-centred,
    height: 100vh — built for login's single centred card), which would
    otherwise also apply here and flex-centre step 2's content as a row
-   instead of stacking it normally. Needs id-level specificity to win. */
+   instead of stacking it normally. Needs id-level specificity to win.
+   Top padding is 56px (not the header's own bottom, which stays 0): Figma's
+   auto-layout gap between the back-arrow/counter row and this content
+   underneath it, measured on the Desktop "Stakeholder" frame. */
 #main-content .welcome__step2-main {
     display: block;
     height: auto;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 48px 77px 96px;
+    padding: 56px 77px 96px;
     box-sizing: border-box;
 }
 
