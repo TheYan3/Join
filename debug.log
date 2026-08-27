@@ -5,6 +5,32 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-28] Zurück-Pfeil steht jetzt genau auf der Kante von "Welcome"
+-------------------------------------------------------------------------------------
+- Auf der zweiten Seite (E-Mail-Erklärung) stand der Zurück-Pfeil links neben
+  der Überschrift "Welcome" statt genau auf deren Anfangskante - und der
+  Abstand war bei jeder Fensterbreite anders, mal ein paar, mal viele Pixel.
+  Grund: Pfeilzeile und Textspalte darunter waren unterschiedlich breit
+  eingestellt (1120 gegen 964 Pixel), wodurch sie beim Zusammenschieben des
+  Fensters unterschiedlich schnell nach innen wanderten.
+- Die Pfeilzeile nutzt jetzt dieselbe Spaltenbreite wie Überschrift und
+  Erklärtext. Dadurch steht der Pfeil auf jeder Bildschirmbreite exakt auf
+  der Kante des "W", und der Zähler rechts ("0 of 10 requests used today")
+  endet bündig mit dem rechten Rand der Illustration.
+- Zusätzlich werden die zwei unsichtbaren Leerräume links vom Pfeil
+  herausgerechnet: der Innenabstand des Knopfes (für seine runde Fläche beim
+  Darüberfahren) und ein Rand, den die Pfeil-Grafik selbst mitbringt. Ohne
+  das stünde das Symbol trotz korrekter Spalte rund zehn Pixel zu weit
+  rechts.
+- Das ist eine bewusste Abweichung von der Figma-Vorlage: dort steht der
+  Pfeil tatsächlich ein Stück links neben dem Text. Auf ausdrücklichen Wunsch
+  gilt hier Bündigkeit.
+- Getestet bei 2897, 1618, 1440, 1200, 1081, 1080, 820, 621, 620, 425 und
+  320 Pixel Fensterbreite: Pfeil und Überschrift beginnen überall auf
+  derselben Kante, nichts läuft seitlich aus dem Bild. Datei:
+  styles/welcome/layout.css.
+
+
 [2026-08-28] Erste Welcome-Seite: Schriftgrößen der Karte an die Vorlage angepasst
 -------------------------------------------------------------------------------------
 - Auf der Karte "Bist du Stakeholder oder Team-Mitglied?" war die Überschrift

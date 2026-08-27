@@ -199,10 +199,17 @@ body.welcome.welcome--step2 {
    gewinnt der Auto-Rand gegen das sonst uebliche automatische Aufziehen auf
    die volle Breite (align-items: stretch greift dann nicht) - ohne dieses
    "width: 100%" wuerde die Zeile auf ihre Inhaltsbreite schrumpfen und
-   dadurch mittig statt am 160px-Rand landen. */
+   dadurch mittig statt am 160px-Rand landen.
+   Abweichung von Figma (bewusst, auf Wunsch): Figma gibt der Zeile 1120px
+   (Pfeil bei X=160) und der Textspalte darunter 964px (X=238,5) - der Pfeil
+   stuende damit 78px links neben dem "W" von "Welcome", und der Versatz
+   waere bei jeder Fensterbreite anders. Die Zeile teilt sich deshalb die
+   964px-Spalte mit Ueberschrift und Leitfaden, dann steht der Pfeil auf
+   jeder Breite exakt auf der Kante des "W" (und der Zaehler rechts auf der
+   Kante der Illustration). */
 .welcome__step2-nav {
     width: 100%;
-    max-width: 1120px;
+    max-width: 964px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -217,6 +224,15 @@ body.welcome.welcome--step2 {
     width: 46px;
     height: auto;
     margin-left: 40px;
+}
+
+/* Damit das Pfeil-Symbol selbst - nicht sein unsichtbarer Rahmen - auf der
+   Kante des "W" von "Welcome" steht, werden die beiden Leerraeume links vom
+   Symbol wieder herausgerechnet: 4px Innenabstand des Buttons (fuer seine
+   runde Hover-Flaeche) plus rund 6px Rand, den die Pfeil-Grafik selbst
+   mitbringt (arrowBack.svg zeichnet erst ab x=6 in einer 32px-Flaeche). */
+.welcome__step2-nav .welcome__back {
+    margin-left: -10px;
 }
 
 .welcome__back {
