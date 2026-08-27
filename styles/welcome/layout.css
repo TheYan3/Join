@@ -59,6 +59,14 @@ body.welcome.welcome--step2 {
     background-color: #f6f7f8;
 }
 
+/* .login__signup--question has no color of its own anywhere else in the
+   project, so it falls back to body's #000 - invisible on this page's dark
+   background. Figma's mobile Welcome frame shows this exact text in white
+   (color style "white"), so it is fixed only here. */
+.welcome__step1 .login__signup--question {
+    color: #fff;
+}
+
 .welcome__card {
     width: 100%;
     max-width: 650px;
@@ -135,8 +143,11 @@ body.welcome.welcome--step2 {
     gap: 32px;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Stakeholder" und "Stakeholder _limit
+   reached", Logo-Node "Capa 2"): 45.93 x 56 -> gerundet 46 x 56. Der
+   Mobile-Rahmen zeigt ein groesseres Logo (64px), siehe responsive.css. */
 .welcome__step2-logo {
-    width: 100px;
+    width: 46px;
     height: auto;
 }
 

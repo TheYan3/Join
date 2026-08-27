@@ -74,11 +74,16 @@
     }
 
     /* Step 1: the sign-up prompt moves out of its floating top-right corner
-       and sits in normal flow above the white card. */
+       and sits in normal flow above the white card. The splash logo above it
+       is "position: fixed" (styles/login/layout.css) and therefore takes up
+       no flow space of its own, so this padding-top has to clear it by hand:
+       logo bottom edge (28px top + 78px height, see the keyframes above) plus
+       the 64px header gap Figma uses consistently for this logo size (same
+       64px gap as the step 2 header, see layout.css). */
     .welcome__step1 .login__signup {
         position: static;
         justify-content: center;
-        padding: 24px 16px 0;
+        padding: 170px 16px 0;
     }
 
     .welcome__step1-main {
@@ -88,6 +93,19 @@
     .welcome__card {
         padding: 32px 16px;
         gap: 24px;
+    }
+
+    /* The footer is "position: absolute; bottom: 64px" by default
+       (styles/login/layout.css), pinned to the viewport bottom regardless of
+       content height. Welcome's card is tall enough on mobile that this
+       overlaps it, unlike on the shorter login/signup cards this rule was
+       written for. Figma's mobile frame simply stacks the footer in normal
+       flow below the card, so it is switched to that here (welcome step 1
+       only - login.html keeps its own behaviour). */
+    .welcome__step1 .login__legalInformation--area {
+        position: static;
+        margin-top: 8px;
+        padding: 0 16px 16px;
     }
 
     .welcome__intro {
@@ -108,6 +126,13 @@
         padding: 16px 16px 48px;
     }
 
+    /* Figma-Inspect (Mobile-Rahmen "Stakeholder"/"Stakeholder limit reached"):
+       Logo-Node "Capa 2" 63.97 x 78 -> gerundet 64 x 78, groesser als das
+       46x56-Desktop-Logo aus layout.css. */
+    .welcome__step2-logo {
+        width: 64px;
+    }
+
     .welcome__back--brand {
         display: none;
     }
@@ -124,7 +149,13 @@
         display: block;
     }
 
+    /* Figma-Inspect (Mobile-Rahmen, Text "Welcome"): Open Sans Bold 40px -
+       same size as login.html's mobile headline. layout.css's 61px desktop
+       size runs the headline off the right edge of narrow viewports and
+       pushes the inline back arrow (which follows it in the same flex row)
+       off-screen with it. */
     .welcome__step2-title {
+        font-size: 40px;
         justify-content: flex-start;
         margin-bottom: 8px;
     }

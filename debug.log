@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-27] Welcome-Seite auf dem Handy repariert (Logo-Überlappung, Lesbarkeit, Größen)
+-------------------------------------------------------------------------------------
+- Auf kleinen Bildschirmen (Handy-Breite) lag der Text "Not a Join user? /
+  Sign up" oben auf dem Join-Logo und war kaum zu lesen. Grund: Das Logo
+  schwebt technisch bedingt fest an einer Position und schiebt den Text nicht
+  automatisch nach unten weg. Der Text bekommt jetzt genug Abstand von oben,
+  damit er sauber unter dem Logo steht.
+- Der Fußbereich ("Privacy Policy / Legal Notice") klebte auf dem Handy direkt
+  an der weißen Karte bzw. wurde von ihr verdeckt, weil er fest am unteren
+  Bildschirmrand "klebte" statt dem Karteninhalt zu folgen. Er steht jetzt
+  normal unter der Karte mit sichtbarem Abstand.
+- Auf der zweiten Seite (E-Mail-Erklärung) lief die Überschrift "Welcome" auf
+  dem Handy rechts aus dem Bildschirm heraus, wodurch der Zurück-Pfeil daneben
+  unsichtbar wurde. Die Schrift ist auf dem Handy jetzt kleiner (wie auf der
+  Login-Seite), dadurch passen Überschrift und Pfeil nebeneinander auf den
+  Bildschirm.
+- Der Fragetext "Not a Join user?" war auf der Welcome-Seite (dunkler
+  Hintergrund) schwarz auf dunkelblau und damit unlesbar - auf Desktop und
+  Handy gleichermaßen. Er ist jetzt weiß, wie in der Vorlage.
+- Das Join-Logo oben auf der zweiten Seite war deutlich größer als in der
+  Vorlage vorgesehen. Es ist jetzt auf allen Bildschirmgrößen kleiner (auf dem
+  Handy etwas größer als auf Desktop/Tablet, so wie in der Vorlage).
+- Alle Werte stammen aus einem erneuten Abgleich mit der Figma-Vorlage
+  (Mobile-Rahmen für die Welcome-Seite). Dateien: styles/welcome/layout.css,
+  styles/welcome/responsive.css.
+
+
 [2026-08-26] Neue Zwischenseite "Welcome" erklärt das System, bevor es losgeht
 -------------------------------------------------------------------------------------
 - Bisher wurde ein Besucher der Startseite sofort entweder ins Mailprogramm
