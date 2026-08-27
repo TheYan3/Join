@@ -96,6 +96,14 @@ body.welcome.welcome--step2 {
    Maximalbreite mit 80/48px Innenabstand gedeckelt zu sein. Ab 1080px
    Breite (siehe responsive.css) gilt weiterhin die alte, an den
    Mobile-Rahmen kalibrierte Fassung - die zaehlt dort unveraendert weiter. */
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): die Fusszeilen-Links stehen dort
+   weiss auf dem dunklen Hintergrund, nicht im projektweiten Grau (#cdcdcd aus
+   styles/login/layout.css). Nur Step 1 - Step 2 hat einen hellen Hintergrund,
+   dort bliebe weisse Schrift unlesbar. login.html behaelt sein Grau. */
+.welcome__step1 .login__legalInformation {
+    color: #fff;
+}
+
 .welcome__card {
     width: 789px;
     max-width: 100%;
@@ -182,9 +190,9 @@ body.welcome.welcome--step2 {
    volle Spaltenbreite gezogen. Unter 1080px Breite (responsive.css) gilt
    weiterhin volle Breite, wie an den Mobile-Rahmen kalibriert. */
 /* Figma-Inspect (Desktop-Rahmen "Welcome"): die Beschriftungen sind normal
-   gesetzt, nicht fett - "Create request" im Textstil "Version 2/t5" (23px),
-   "Member log in" in "Version 2/t6" (19px). Nur im Welcome-Kontext gesetzt,
-   damit die geteilten Button-Klassen auf login.html unveraendert bleiben. */
+   gesetzt, nicht fett - im Textstil "Version 2/t5" (23px). Nur im
+   Welcome-Kontext gesetzt, damit die geteilten Button-Klassen auf login.html
+   unveraendert bleiben. */
 .welcome__role .login__button--login {
     font-size: 23px;
     font-weight: 400;
@@ -196,9 +204,13 @@ body.welcome.welcome--step2 {
     display: inline-block;
 }
 
+/* Figma setzt "Member log in" eine Stufe kleiner (19px) als "Create request"
+   (23px) - das wirkt in der Vorlage unbeabsichtigt, auf Wunsch stehen beide
+   Beschriftungen deshalb einheitlich auf 23px. Der Innenabstand ist hier um
+   je 1px kleiner als beim blauen Knopf, weil dieser Knopf zusaetzlich einen
+   1px-Rahmen hat - so sind beide aussen gleich gross. */
 .welcome__role .login__button--guest {
-    font-size: 19px;
-    padding: 12px 18px;
+    padding: 9px 17px;
 }
 
 

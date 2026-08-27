@@ -5,6 +5,23 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-28] Fußzeile weiß, beide Knöpfe gleich groß
+-------------------------------------------------------------------------------------
+- Die Fußzeilen-Links ("Privacy Policy" / "Legal Notice") standen auf der
+  ersten Welcome-Seite in einem hellen Grau auf dunkelblauem Grund und waren
+  dadurch schlecht zu lesen. Sie sind jetzt weiß, wie in der Vorlage. Nur auf
+  dieser einen Seite: Die zweite Welcome-Seite hat einen hellen Hintergrund,
+  dort wäre weiße Schrift unsichtbar - und die Login-Seite behält ihr Grau.
+- Der Knopf "Member log in" war laut Vorlage mit 19 Pixeln kleiner beschriftet
+  als "Create request" mit 23 Pixeln. Das wirkte unbeabsichtigt, deshalb
+  stehen jetzt beide auf 23 Pixel und sind gleich groß.
+- Damit beide Knöpfe außen wirklich gleich hoch und breit sind, hat der weiße
+  Knopf einen um 1 Pixel kleineren Innenabstand - er hat als einziger einen
+  Rahmen, der sonst zusätzlich Platz brauchen würde.
+- Getestet bei 1440, 1081, 1080, 620 und 320 Pixel Fensterbreite; Login-Seite
+  gegengeprüft und unverändert. Datei: styles/welcome/layout.css.
+
+
 [2026-08-28] Welcome-Seite: Logo verkleinert, Schrift und Knöpfe wie in der Vorlage
 -------------------------------------------------------------------------------------
 - Das Join-Logo auf der ersten Welcome-Seite war mit 100 Pixeln so groß wie
