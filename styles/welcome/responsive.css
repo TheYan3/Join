@@ -17,8 +17,28 @@
         }
     }
 
+    /* Unter 1080px zurueck auf die Fassung, die an den Mobile-Figma-Rahmen
+       kalibriert ist (siehe layout.css): Karte wieder fluessig statt auf
+       789px Hug-Breite fixiert, Rollen wieder untereinander statt
+       nebeneinander, Buttons wieder ueber die volle Spaltenbreite. */
     .welcome__card {
+        width: 100%;
+        max-width: 650px;
         padding: 48px 54px;
+        gap: 32px;
+    }
+
+    .welcome__roles {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .welcome__role {
+        gap: 16px;
+    }
+
+    .welcome__role .login__button--login {
+        width: 100%;
     }
 
     .welcome__step1 .login__signup {
@@ -136,6 +156,28 @@
 
     .welcome__role-question {
         font-size: 16px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): die Buttons sind auch
+       hier nicht ueber die volle Breite gezogen, sondern so breit wie ihr
+       Text plus Padding und mittig unter der jeweiligen Frage zentriert
+       (der 1080px-Zwischenbereich behaelt die volle Breite, dafuer gibt es
+       keinen eigenen Figma-Rahmen). */
+    .welcome__role {
+        align-items: center;
+    }
+
+    .welcome__role .login__button--login {
+        width: auto;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): "Create request" ist
+       dort dunkelblau (die normale Projekt-Buttonfarbe aus
+       styles/login/buttons.css), nicht das Hellblau der Vorlage-Farbe weiter
+       oben in dieser Datei - das Hellblau gilt laut Vorlage nur auf Desktop
+       und in Schritt 2. */
+    .welcome__step1 #welcome-create-request {
+        background-color: #2a3647;
     }
 
     /* Step 2: the back arrow moves from under the logo to next to the

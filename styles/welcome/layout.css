@@ -67,12 +67,18 @@ body.welcome.welcome--step2 {
     color: #fff;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Welcome", Frame 153): die Karte "hugged"
+   ihren Inhalt bei 789px (72px Seiten-, 56px Ober-/Unterabstand, 56px
+   Abstand zwischen Kopfblock und Rollen-Zeile) statt wie vorher auf 650px
+   Maximalbreite mit 80/48px Innenabstand gedeckelt zu sein. Ab 1080px
+   Breite (siehe responsive.css) gilt weiterhin die alte, an den
+   Mobile-Rahmen kalibrierte Fassung - die zaehlt dort unveraendert weiter. */
 .welcome__card {
-    width: 100%;
-    max-width: 650px;
+    width: 789px;
+    max-width: 100%;
     box-sizing: border-box;
-    padding: 48px 80px;
-    gap: 32px;
+    padding: 56px 72px;
+    gap: 56px;
 }
 
 .welcome__intro {
@@ -82,17 +88,24 @@ body.welcome.welcome--step2 {
     text-align: center;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Welcome", Frame 379): die beiden Rollen
+   stehen auf Desktop nebeneinander (64px Abstand), nicht untereinander -
+   jede Spalte ist so breit wie ihr Inhalt (Frage + Button), nicht 50/50
+   aufgeteilt. Unter 1080px Breite (responsive.css) wird das wieder auf die
+   gestapelte, an den Mobile-Rahmen kalibrierte Fassung zurueckgestellt. */
 .welcome__roles {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 32px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 64px;
 }
 
 .welcome__role {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 24px;
 }
 
 .welcome__role-question {
@@ -113,8 +126,12 @@ body.welcome.welcome--step2 {
     flex-shrink: 0;
 }
 
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): die Buttons sind so breit wie ihr
+   Text plus das vorhandene Button-Padding (196px / 165px), nicht ueber die
+   volle Spaltenbreite gezogen. Unter 1080px Breite (responsive.css) gilt
+   weiterhin volle Breite, wie an den Mobile-Rahmen kalibriert. */
 .welcome__role .login__button--login {
-    width: 100%;
+    width: auto;
     box-sizing: border-box;
     text-align: center;
     text-decoration: none;

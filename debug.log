@@ -5,6 +5,28 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-27] Erste Welcome-Seite (Desktop): die beiden Rollen stehen jetzt nebeneinander
+-------------------------------------------------------------------------------------
+- Auf der ersten Seite (Bist du Stakeholder oder Team-Mitglied?) standen die
+  beiden Fragen mit ihren Knöpfen bisher am großen Bildschirm untereinander,
+  und die Knöpfe waren über die ganze Kartenbreite gezogen. In der Vorlage
+  stehen sie am Desktop nebeneinander (links "Stakeholder" mit blauem Knopf,
+  rechts "Team-Mitglied" mit weißem Knopf), und die Knöpfe sind nur so breit
+  wie ihr Text. Das ist jetzt für große Bildschirme (ab 1081px Breite)
+  angepasst.
+- Handy und Tablet (bis 1080px Breite) bleiben untereinander gestapelt, wie
+  bisher - das war schon an der Vorlage geprüft und ändert sich nicht.
+- Beim Nachmessen ist aufgefallen, dass der "Create request"-Knopf auf dem
+  Handy in der Vorlage dunkelblau ist statt hellblau (das Hellblau gilt laut
+  Vorlage nur für den großen Bildschirm und für die zweite Seite) und dass
+  die Knöpfe auf dem Handy ebenfalls nur so breit wie ihr Text sind statt
+  über die volle Breite gezogen. Beides ist jetzt für das Handy angepasst.
+- Die Karte selbst ist auf dem großen Bildschirm jetzt ebenfalls nach der
+  Vorlage bemessen (Breite und Innenabstand), auf Handy/Tablet bleibt sie
+  wie bisher.
+- Dateien: styles/welcome/layout.css, styles/welcome/responsive.css.
+
+
 [2026-08-27] Zweite Welcome-Seite (Desktop): Logo, Pfeil und Text sauber ausgerichtet
 -------------------------------------------------------------------------------------
 - Auf der zweiten Seite (E-Mail-Erklärung) lagen Logo, Zurück-Pfeil-Zeile und der
