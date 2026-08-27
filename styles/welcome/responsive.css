@@ -1,6 +1,9 @@
 /* Same breakpoints as the rest of the project: 1080 / 820 / 620 px. */
 
 @media (max-width: 1080px) {
+    /* Gleiche Groesse wie das Logo auf der zweiten Welcome-Seite, das in
+       diesem Bereich ebenfalls bei 46px bleibt (siehe layout.css). Ab 620px
+       wechseln beide auf 64px, wie der Figma-Mobile-Rahmen es vorgibt. */
     @keyframes splash__logo--animation {
         0% {
             top: 50%;
@@ -12,7 +15,7 @@
         100% {
             top: 48px;
             left: 54px;
-            width: 100px;
+            width: 46px;
             transform: translate(0, 0);
         }
     }
@@ -26,6 +29,15 @@
         max-width: 650px;
         padding: 48px 54px;
         gap: 32px;
+    }
+
+    /* Unter 1080px gilt wieder das Projekt-Button-Padding (15px 24px) statt
+       der Figma-Werte aus dem Desktop-Rahmen - fuer diesen Bereich gibt es
+       keinen eigenen Figma-Rahmen, und die Buttons laufen hier ohnehin ueber
+       die volle Breite. */
+    .welcome__role .login__button--login,
+    .welcome__role .login__button--guest {
+        padding: 15px 24px;
     }
 
     .welcome__roles {
@@ -169,6 +181,14 @@
        als der Intro-Text darueber. */
     .welcome__role-question {
         font-size: 18px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): beide Beschriftungen
+       stehen dort im Stil "Version 2/body" (16px), nicht in den 23/19px vom
+       Desktop-Rahmen. */
+    .welcome__role .login__button--login,
+    .welcome__role .login__button--guest {
+        font-size: 16px;
     }
 
     /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): die Buttons sind auch

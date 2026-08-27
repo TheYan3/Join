@@ -36,6 +36,29 @@ body.welcome.welcome--step2 {
 
 /* The splash logo settles into step 1's header corner (see .login__signup
    below) and has no place once step 2's own header is showing. */
+/* Der Figma-Rahmen "Welcome" enthaelt selbst kein Logo, gibt also keine
+   Groesse vor. Auf Wunsch gilt hier dieselbe Groesse wie auf der zweiten
+   Welcome-Seite (Figma-Rahmen "Stakeholder": 46 x 56) statt der 100px von
+   der Login-Seite. Die Animation setzt die Breite per "forwards"-Fuellmodus,
+   darum muss der Endwert in den Keyframes selbst stehen - eine statische
+   Breite wuerde ueberschrieben. Diese Datei laedt nur welcome.html, login.html
+   behaelt seine eigenen 100px. */
+@keyframes splash__logo--animation {
+    0% {
+        top: 50%;
+        left: 50%;
+        width: 274px;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 80px;
+        left: 77px;
+        width: 46px;
+        transform: translate(0, 0);
+    }
+}
+
 .welcome--step2 .splash__logo {
     display: none;
 }
@@ -138,7 +161,7 @@ body.welcome.welcome--step2 {
    responsive.css) gilt der am Mobile-Rahmen kalibrierte Wert von 18px. */
 .welcome__role-question {
     font-size: 23px;
-    font-weight: 700;
+    font-weight: 400;
     color: #2a3647;
     display: flex;
     align-items: center;
@@ -158,12 +181,24 @@ body.welcome.welcome--step2 {
    Text plus das vorhandene Button-Padding (196px / 165px), nicht ueber die
    volle Spaltenbreite gezogen. Unter 1080px Breite (responsive.css) gilt
    weiterhin volle Breite, wie an den Mobile-Rahmen kalibriert. */
+/* Figma-Inspect (Desktop-Rahmen "Welcome"): die Beschriftungen sind normal
+   gesetzt, nicht fett - "Create request" im Textstil "Version 2/t5" (23px),
+   "Member log in" in "Version 2/t6" (19px). Nur im Welcome-Kontext gesetzt,
+   damit die geteilten Button-Klassen auf login.html unveraendert bleiben. */
 .welcome__role .login__button--login {
+    font-size: 23px;
+    font-weight: 400;
+    padding: 10px 18px;
     width: auto;
     box-sizing: border-box;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+}
+
+.welcome__role .login__button--guest {
+    font-size: 19px;
+    padding: 12px 18px;
 }
 
 

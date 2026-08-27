@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-28] Welcome-Seite: Logo verkleinert, Schrift und Knöpfe wie in der Vorlage
+-------------------------------------------------------------------------------------
+- Das Join-Logo auf der ersten Welcome-Seite war mit 100 Pixeln so groß wie
+  auf der Login-Seite, während es auf der zweiten Welcome-Seite nur 46 Pixel
+  misst - innerhalb derselben Strecke also zwei Größen. Es ist jetzt auf
+  beiden Seiten 46 Pixel breit (auf dem Handy weiterhin 64, so wie es die
+  Vorlage dort vorgibt). Die Login-Seite behält ihre 100 Pixel.
+- Hinweis dazu: Die Figma-Vorlage zeigt auf dieser Seite überhaupt kein Logo,
+  gibt also keine Größe vor. Die 46 Pixel sind eine bewusste Festlegung, damit
+  beide Welcome-Seiten gleich aussehen.
+- Die beiden Fragen ("Are you a stakeholder?" / "Are you a team member?")
+  standen fett und dadurch zu breit - auf schmaleren Bildschirmen brachen sie
+  auf zwei Zeilen um. In der Vorlage sind sie normal gesetzt. Jetzt ebenfalls
+  normal, dadurch passt jede Frage wieder auf eine Zeile.
+- Auch die Knopf-Beschriftungen sind in der Vorlage normal statt fett und
+  unterschiedlich groß: "Create request" 23 Pixel, "Member log in" 19 Pixel.
+  Beide Knöpfe sind außerdem etwas flacher als bisher (Vorlagen-Maße rund
+  196 x 48 bzw. 165 x 48 Pixel). Auf dem Handy bleiben beide bei 16 Pixeln
+  und dem bisherigen Knopf-Innenabstand.
+- Alle Änderungen gelten nur auf der Welcome-Seite; die Login-Seite benutzt
+  dieselben Knopf-Klassen und wurde geprüft - dort ist alles unverändert
+  (Logo 100, Überschrift 61, Knöpfe 21 Pixel fett).
+- Getestet bei 1440, 1200, 1081, 1080, 820, 620, 425 und 320 Pixel
+  Fensterbreite: nichts läuft seitlich aus dem Bild, keine Frage bricht um.
+  Dateien: styles/welcome/layout.css, styles/welcome/responsive.css.
+
+
 [2026-08-28] Zurück-Pfeil steht jetzt genau auf der Kante von "Welcome"
 -------------------------------------------------------------------------------------
 - Auf der zweiten Seite (E-Mail-Erklärung) stand der Zurück-Pfeil links neben
