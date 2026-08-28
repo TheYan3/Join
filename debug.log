@@ -5,6 +5,35 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-28] Handy-Ansicht der ersten Welcome-Seite an die Vorlage angeglichen
+-------------------------------------------------------------------------------------
+- Bisher gab es zwischen der großen Desktop-Ansicht (ab 1080 Pixel) und der
+  schmalen Handy-Ansicht (ab 620 Pixel) einen Zwischenbereich, der keiner der
+  beiden Vorlagen entsprach. Jetzt gilt ab 1080 Pixel Fensterbreite durchgehend
+  bis hinunter zu 320 Pixel dieselbe Handy-Vorlage, ohne Bruch dazwischen.
+- "Nicht Join-Nutzer? Registrieren" stand oben rechts, mit "Sign up" als
+  weißem Knopf. Laut Vorlage steht diese Zeile mittig über der weißen Karte,
+  und "Sign up" ist dort gar kein Knopf, sondern nur größer geschriebener,
+  weißer Text.
+- Die Fragen ("Bist du Stakeholder?" / "Bist du Teammitglied?") und die
+  beiden Knöpfe darunter standen linksbündig, in der Vorlage stehen sie
+  mittig. Der Abstand zwischen den beiden Rollen war außerdem zu klein
+  (jetzt 70 Pixel, wie in der Vorlage).
+- Der Knopf "Create request" war in diesem Zwischenbereich hellblau statt
+  dunkelblau wie in der Vorlage.
+- Die weiße Karte war zu breit (650 statt 396 Pixel) und ihr Innenabstand
+  passte nicht zur Vorlage.
+- Ganz unten (320 Pixel, schmalstes unterstütztes Handy) wäre die Frage
+  "Bist du Teammitglied?" sonst in zwei Zeilen umgebrochen - dafür schrumpft
+  der Innenabstand der Karte bei ganz schmalen Fenstern noch etwas weiter.
+- Geprüft bei 1440, 1081, 1080, 1079, 900, 768, 620, 500, 428, 375, 360 und
+  320 Pixel Fensterbreite: keine abgeschnittenen Inhalte, keine
+  unerwünschten Zeilenumbrüche, beide Knöpfe funktionieren. Die große
+  Desktop-Ansicht und die zweite Welcome-Seite (Mail-Anleitung) wurden dabei
+  nicht verändert, ebenso wenig die Login-Seite. Datei:
+  styles/welcome/responsive.css.
+
+
 [2026-08-28] Fußzeile weiß, beide Knöpfe gleich groß
 -------------------------------------------------------------------------------------
 - Die Fußzeilen-Links ("Privacy Policy" / "Legal Notice") standen auf der

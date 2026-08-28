@@ -20,41 +20,127 @@
         }
     }
 
-    /* Unter 1080px zurueck auf die Fassung, die an den Mobile-Figma-Rahmen
-       kalibriert ist (siehe layout.css): Karte wieder fluessig statt auf
-       789px Hug-Breite fixiert, Rollen wieder untereinander statt
-       nebeneinander, Buttons wieder ueber die volle Spaltenbreite. */
+    /* Unter 1080px folgt Step 1 durchgehend bis 320px der Mobile-Figma-Vorlage
+       (Frame "Screen 1 - logo", 428px breit): Karte auf die dort gemessene
+       Breite gedeckelt statt der vorherigen 789px-Desktop-Breite, Rollen
+       untereinander statt nebeneinander. Figma zeigt fuer die Karte selbst
+       zwar ein Innenabstand-Feld von 80px links/rechts, aber die Ueberschrift
+       und der Intro-Text (Frame 385, 340px breit) sind dort breiter als diese
+       80px-Box und ueberschreiben sie deshalb - tatsaechlich sichtbar sind nur
+       28px Rand (396px Kartenbreite minus 340px Textblock, halbiert). Mit
+       28px Padding hier deckt sich sowohl der Textblock (er bekommt dann exakt
+       340px Platz) als auch der schmalere Rollen-Block (242px), der von
+       welcome__roles automatisch mittig eingerueckt wird - deshalb 28px statt
+       der im Figma-Feld angezeigten 80px. */
     .welcome__card {
         width: 100%;
-        max-width: 650px;
-        padding: 48px 54px;
-        gap: 32px;
+        max-width: 396px;
+        padding: 64px 28px;
+        gap: 56px;
     }
 
-    /* Unter 1080px gilt wieder das Projekt-Button-Padding (15px 24px) statt
-       der Figma-Werte aus dem Desktop-Rahmen - fuer diesen Bereich gibt es
-       keinen eigenen Figma-Rahmen, und die Buttons laufen hier ohnehin ueber
-       die volle Breite. */
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 15px/24px Innenabstand
+       fuer beide Knoepfe - identisch mit dem Projekt-Standardwert aus
+       styles/login/buttons.css, darum hier nur zur Klarheit wiederholt. */
     .welcome__role .login__button--login,
     .welcome__role .login__button--guest {
         padding: 15px 24px;
     }
 
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 379): 70px
+       Abstand zwischen den beiden Rollen-Bloecken, und der ganze
+       Rollen-Container ist horizontal zentriert (242px breit in einer
+       340px breiten Karten-Innenflaeche). */
     .welcome__roles {
         flex-direction: column;
-        gap: 32px;
+        align-items: center;
+        gap: 70px;
     }
 
+    /* "align-items: center" zentriert Frage-Zeile und Knopf zueinander
+       innerhalb eines Rollen-Blocks (siehe Figma-Frames 157/158, dort ist der
+       schmalere Knopf exakt mittig unter der breiteren Frage plaziert). */
     .welcome__role {
+        align-items: center;
         gap: 16px;
     }
 
-    .welcome__role .login__button--login {
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 156): "Not a Join
+       user?" und "Sign up" sitzen zentriert ueber der Karte statt oben rechts,
+       mit 16px Abstand zueinander (nicht das projektweite Standardmass, siehe
+       styles/login/layout.css) und muessen nach unten hin die fixierte
+       Logo-Grafik freihalten (siehe Kommentar bei den 620px-Regeln). */
+    .welcome__step1 .login__signup {
+        position: static;
         width: 100%;
+        justify-content: center;
+        gap: 16px;
+        padding: 168px 16px 0;
     }
 
-    .welcome__step1 .login__signup {
-        padding: 48px 54px;
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Text "Sign up"): kein
+       Knopf wie auf dem Desktop-Rahmen (dort weiss gefuellt, siehe
+       layout.css), sondern nur groesserer, weisser Text (19px/regulaer)
+       neben der 16px-Frage. */
+    .welcome__step1 .login__signup .login__button {
+        background-color: transparent;
+        color: #fff;
+        padding: 0;
+        font-size: 19px;
+        font-weight: 400;
+    }
+
+    .welcome__step1 .login__signup .login__button:hover {
+        background-color: transparent;
+    }
+
+    /* Die Fusszeile ist auf der Login-Seite "position: absolute; bottom: 64px"
+       (styles/login/layout.css), an den Viewport-Rand gepinnt. Welcomes Karte
+       ist hoch genug, dass das ueberlappen wuerde - Figmas Mobile-Rahmen
+       stapelt die Fusszeile stattdessen im normalen Fluss unter der Karte. */
+    .welcome__step1-main {
+        padding: 24px 16px;
+    }
+
+    .welcome__step1 .login__legalInformation--area {
+        position: static;
+        margin-top: 8px;
+        padding: 0 16px 16px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): Open Sans Bold 40px -
+       derselbe Wert wie login.html's mobile Ueberschrift (styles/login/
+       responsive.css). Die 32px aus layout.css gelten nur noch ab 1080px. */
+    .welcome__card .login__header {
+        font-size: 40px;
+    }
+
+    .welcome__intro {
+        font-size: 16px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 18px, nicht wie zuvor
+       16px - die Rollenfrage ist auf dem Mobile-Rahmen zwei Punkt groesser
+       als der Intro-Text darueber. */
+    .welcome__role-question {
+        font-size: 18px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): beide Beschriftungen
+       stehen dort im Stil "Version 2/body" (16px), nicht in den 23/19px vom
+       Desktop-Rahmen. */
+    .welcome__role .login__button--login,
+    .welcome__role .login__button--guest {
+        font-size: 16px;
+    }
+
+    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): "Create request" ist
+       dort dunkelblau (die normale Projekt-Buttonfarbe aus
+       styles/login/buttons.css), nicht das Hellblau der Vorlage-Farbe weiter
+       oben in dieser Datei - das Hellblau gilt laut Vorlage nur auf Desktop
+       und in Schritt 2. */
+    .welcome__step1 #welcome-create-request {
+        background-color: #2a3647;
     }
 
     /* Unter 1080px wieder auf die Fassung zurueck, die an den Mobile-Figma-
@@ -127,90 +213,15 @@
         }
     }
 
-    /* Step 1: the sign-up prompt moves out of its floating top-right corner
-       and sits in normal flow above the white card. The splash logo above it
-       is "position: fixed" (styles/login/layout.css) and therefore takes up
-       no flow space of its own, so this padding-top has to clear it by hand:
-       logo bottom edge (28px top + 78px height, see the keyframes above) plus
-       the 64px header gap Figma uses consistently for this logo size (same
-       64px gap as the step 2 header, see layout.css). */
+    /* Ab hier wird das Logo 64px statt 46px breit (siehe Keyframes oben) und
+       damit 78px statt 56px hoch - die Karte, die Rollen und die Fusszeile
+       folgen ab 1080px bereits durchgehend der Mobile-Vorlage (siehe dort),
+       nur dieser eine Wert haengt an der Logo-Groesse und muss deshalb hier
+       gesondert nachgezogen werden: logo top (28px) + Logo-Hoehe (78px) +
+       64px Abstand, den Figma bei dieser Logo-Groesse konsistent verwendet
+       (derselbe Abstand wie beim Step-2-Header, siehe layout.css). */
     .welcome__step1 .login__signup {
-        position: static;
-        justify-content: center;
-        padding: 170px 16px 0;
-    }
-
-    .welcome__step1-main {
-        padding: 24px 16px;
-    }
-
-    .welcome__card {
-        padding: 32px 16px;
-        gap: 24px;
-    }
-
-    /* The footer is "position: absolute; bottom: 64px" by default
-       (styles/login/layout.css), pinned to the viewport bottom regardless of
-       content height. Welcome's card is tall enough on mobile that this
-       overlaps it, unlike on the shorter login/signup cards this rule was
-       written for. Figma's mobile frame simply stacks the footer in normal
-       flow below the card, so it is switched to that here (welcome step 1
-       only - login.html keeps its own behaviour). */
-    .welcome__step1 .login__legalInformation--area {
-        position: static;
-        margin-top: 8px;
-        padding: 0 16px 16px;
-    }
-
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): Open Sans Bold 40px -
-       derselbe Wert wie login.html's mobile Ueberschrift (styles/login/
-       responsive.css), nur hier fuer den Welcome-Kontext gesetzt, damit
-       login.html unveraendert bleibt. Die 32px aus layout.css gelten sonst
-       (auch im 1080/820px-Zwischenbereich, fuer den es keinen eigenen
-       Figma-Rahmen gibt). */
-    .welcome__card .login__header {
-        font-size: 40px;
-    }
-
-    .welcome__intro {
-        font-size: 16px;
-    }
-
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 18px, nicht wie zuvor
-       16px - die Rollenfrage ist auf dem Mobile-Rahmen zwei Punkt groesser
-       als der Intro-Text darueber. */
-    .welcome__role-question {
-        font-size: 18px;
-    }
-
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): beide Beschriftungen
-       stehen dort im Stil "Version 2/body" (16px), nicht in den 23/19px vom
-       Desktop-Rahmen. */
-    .welcome__role .login__button--login,
-    .welcome__role .login__button--guest {
-        font-size: 16px;
-    }
-
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): die Buttons sind auch
-       hier nicht ueber die volle Breite gezogen, sondern so breit wie ihr
-       Text plus Padding und mittig unter der jeweiligen Frage zentriert
-       (der 1080px-Zwischenbereich behaelt die volle Breite, dafuer gibt es
-       keinen eigenen Figma-Rahmen). */
-    .welcome__role {
-        align-items: center;
-    }
-
-    .welcome__role .login__button--login {
-        width: auto;
-    }
-
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): "Create request" ist
-       dort dunkelblau (die normale Projekt-Buttonfarbe aus
-       styles/login/buttons.css), nicht das Hellblau der Vorlage-Farbe weiter
-       oben in dieser Datei - das Hellblau gilt laut Vorlage nur auf Desktop
-       und in Schritt 2. */
-    .welcome__step1 #welcome-create-request {
-        background-color: #2a3647;
+        padding-top: 170px;
     }
 
     /* Step 2: the back arrow moves from under the logo to next to the
@@ -286,5 +297,17 @@
         width: 100%;
         text-align: center;
         justify-self: center;
+    }
+}
+
+/* Kein eigener Figma-Rahmen unter 428px - die Karte schrumpft laut Auftrag
+   trotzdem fluessig weiter mit. Bei den kleinsten Breiten reicht die sonst
+   28px breite Karten-Innenflaeche (siehe Kommentar bei .welcome__card oben)
+   nicht mehr aus, um "Are you a team member?" einzeilig zu halten - hier
+   wird nur der Karten-Innenabstand reduziert, damit nichts umbricht. */
+@media (max-width: 350px) {
+    .welcome__card {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
