@@ -5,6 +5,20 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Kleinerer Abstand in der Urgent-Kachel auf dem Handy
+-------------------------------------------------------------------------------------
+- Auf schmalen Bildschirmen (bis 620 Pixel Breite) war der Abstand zwischen dem
+  linken Teil der Urgent-Kachel ("1 Urgent") und dem Datum rechts daneben mit
+  40 Pixeln recht gross. Er ist jetzt halbiert auf 20 Pixel.
+- Warum: Der gesparte Platz kommt der Kachel und ihrer Nachbarin zugute. Gemessen
+  bei 380 Pixel Breite waechst die "Email requests"-Kachel dadurch von 105 auf
+  118 Pixel, die Beschriftung "requests" bekommt entsprechend mehr Luft. Zwischen
+  540 und 620 Pixeln bekommt ausserdem der Kachelinhalt wieder einen echten
+  Innenabstand (vorher klebte das orange Symbol an der Kante).
+- Auf dem Desktop aendert sich nichts - die Regel gilt nur bis 620 Pixel.
+- Betroffene Datei:
+  - styles/summary/responsive.css: ein Wert im Handy-Bereich (gap 40 -> 20).
+
 [2026-08-30] Zahl der Kachel "Email requests" wird jetzt echt berechnet
 -------------------------------------------------------------------------------------
 - Bisher stand auf der neuen Kachel fest die Zahl 0. Jetzt zaehlt die Seite die
