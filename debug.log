@@ -5,6 +5,28 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Dropdown-Menue wieder in voller Breite, Logo nicht mehr verdeckt
+-------------------------------------------------------------------------------------
+- Problem 1: Nachdem das Menue neu am Initialen-Kreis aufgehaengt wurde, war es
+  ploetzlich viel schmaler als vorher. Die Eintraege "Privacy Policy",
+  "Legal Notice" und "Log out" wurden dadurch auf zwei Zeilen umgebrochen.
+- Ursache 1: Ein Menue, das an einem anderen Element haengt, richtet seine
+  Breite nach diesem Element aus - und der Bereich mit Fragezeichen-Symbol und
+  Initialen-Kreis ist nur rund 100 Pixel breit.
+- Geaendert 1: Das Menue bestimmt seine Breite jetzt wieder selbst nach seinem
+  laengsten Eintrag. Es sieht damit wieder genauso aus wie vor der Umstellung,
+  sitzt aber weiterhin korrekt unter dem Kreis.
+- Problem 2: Die dunkelblaue Seitenleiste links samt Join-Logo wurde oben vom
+  weissen Kopfbereich ueberdeckt - das Logo war angeschnitten.
+- Ursache 2: Bei der Umstellung war der Kopfbereich in der Stapel-Reihenfolge
+  nach vorne geholt worden (Wert 8 statt 6) und lag damit vor der Seitenleiste.
+- Geaendert 2: Der Kopfbereich liegt wieder auf seinem urspruenglichen Wert 6
+  und damit wie vorher hinter der Seitenleiste.
+- Unveraendert: Die Position des Menues direkt unter dem Kreis bleibt genau so,
+  wie sie ist.
+- Betroffene Dateien: styles/components/dropdown.css, styles/components/header.css
+
+
 [2026-08-30] Dropdown-Menü hinter den Initialen-Kreis oben rechts andocken
 -------------------------------------------------------------------------------------
 - Problem: Klickt man oben rechts im Header auf den runden Kreis mit den
