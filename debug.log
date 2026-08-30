@@ -5,6 +5,24 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Zahl der Kachel "Email requests" wird jetzt echt berechnet
+-------------------------------------------------------------------------------------
+- Bisher stand auf der neuen Kachel fest die Zahl 0. Jetzt zaehlt die Seite die
+  echten Vorgaenge und zeigt das Ergebnis an.
+- Gezaehlt werden alle Aufgaben auf dem Board, die per E-Mail hereingekommen
+  sind. Solche Aufgaben legt die Mail-Automatik (n8n) an und markiert den
+  Absender intern als "extern" - genau daran erkennt die Seite sie. Es spielt
+  keine Rolle, in welcher Spalte des Boards die Aufgabe gerade liegt und wie
+  alt sie ist.
+- Die Zahl wird zusammen mit allen anderen Kachel-Zahlen beim Laden der
+  Summary-Seite ermittelt; es wird dafuer nichts zusaetzlich nachgeladen, die
+  Aufgabenliste ist zu diesem Zeitpunkt schon da.
+- Findet die Seite die Kachel nicht (zum Beispiel weil jemand sie ausbaut),
+  passiert nichts - es gibt keine Fehlermeldung.
+- Betroffene Datei:
+  - scripts/summary.js: neue Funktion, die die E-Mail-Vorgaenge zaehlt, plus
+    ein Aufruf davon dort, wo auch die uebrigen Kachel-Zahlen gesetzt werden.
+
 [2026-08-30] Neue Kachel "Email requests" auf der Summary-Seite
 -------------------------------------------------------------------------------------
 - Neu: Rechts neben der grossen "Urgent / Upcoming Deadline"-Kachel steht jetzt

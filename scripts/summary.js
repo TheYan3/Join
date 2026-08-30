@@ -224,6 +224,7 @@ async function loadSummaryData() {
     updateAwaitingFeedbackCount(tasks);
     updateUrgentCount(tasks);
     updateUpcomingDeadline(tasks);
+    updateEmailRequestsCount(tasks);
 }
 
 
@@ -346,6 +347,22 @@ function updateUpcomingDeadline(tasks) {
     const nextDeadline = sortedUrgent[0].date;
     const deadlineElement = document.getElementById("upcomingDeadline");
     if (deadlineElement) deadlineElement.textContent = formatDeadlineDate(nextDeadline);
+}
+
+
+/**
+ * Updates the email requests count.
+ *
+ * Counts every task that was created by an external reporter (the n8n mail
+ * collector sets creator.type to "extern"), regardless of its board column.
+ *
+ * @param {Array<object>} tasks - The tasks list.
+ * @returns {void} Nothing.
+ */
+function updateEmailRequestsCount(tasks) {
+    const requestCount = tasks.filter(task => task.creator?.type === "extern").length;
+    const requestElement = document.getElementById("emailRequestsCount");
+    if (requestElement) requestElement.textContent = requestCount;
 }
 
 
