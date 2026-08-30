@@ -1,8 +1,8 @@
 .header__dropdown {
    color: #cdcdcd;
-   position: fixed;
-   top: 96px;
-   right: max(calc(100vw - 1440px + 40px), 40px);
+   position: absolute;
+   top: calc(100% + 20px);
+   right: 0;
    z-index: 10;
    display: none;
    border-radius: 20px 0 20px 20px;

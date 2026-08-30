@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Dropdown-Menü hinter den Initialen-Kreis oben rechts andocken
+-------------------------------------------------------------------------------------
+- Problem: Klickt man oben rechts im Header auf den runden Kreis mit den
+  eigenen Initialen, oeffnet sich ein Menue mit "Help", "Privacy Policy",
+  "Legal Notice" und "Log out". Dieses Menue sollte direkt unter dem Kreis
+  erscheinen, sass aber je nach Fensterbreite deutlich zu weit links -
+  besonders auf breiten Bildschirmen (ab ca. 1441 Pixel Fensterbreite, z.B.
+  vielen normalen Monitoren) klaffte eine grosse Luecke zwischen Kreis und
+  Menue.
+- Ursache: Die Position des Menues wurde bisher ueber eine feste Rechenformel
+  bestimmt, die nur fuer eine 1440 Pixel breite Seite passte. Rueckte der
+  Kreis durch ein breiteres Fenster weiter nach rechts, blieb das Menue an
+  seiner alten Stelle stehen.
+- Geaendert: Das Menue haengt jetzt direkt am Kreis selbst und wird
+  automatisch genau unter dessen rechter Kante platziert, egal wie breit das
+  Fenster ist. Die feste Rechenformel und die Sonderregeln fuer einzelne
+  Bildschirmbreiten wurden entfernt, da sie nicht mehr noetig sind.
+- Getestet: Mit einem Testbrowser bei Fensterbreiten von 320 bis 1920 Pixel
+  auf allen sieben Seiten mit diesem Menue (Summary, Board, Add Task,
+  Contacts, Help, Privacy Policy, Legal Notice) sowie nach dem Scrollen der
+  Seite - das Menue sitzt überall exakt unter dem Kreis.
+- Betroffene Dateien: templates/summary.html, templates/board.html,
+  templates/contacts.html, templates/add-task.html, templates/legalnotice.html,
+  templates/help.html, templates/privacy-Policy.html, styles/components/header.css,
+  styles/components/dropdown.css, styles/components/app-shell-responsive.css
+
+
 [2026-08-28] Handy-Ansicht der ersten Welcome-Seite an die Vorlage angeglichen
 -------------------------------------------------------------------------------------
 - Bisher gab es zwischen der großen Desktop-Ansicht (ab 1080 Pixel) und der

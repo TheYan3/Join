@@ -3,10 +3,6 @@
       height: 80px;
    }
 
-   .header__dropdown {
-      top: 80px;
-   }
-
    .topBar {
       height: 80px;
       padding: 20px 40px;
@@ -86,10 +82,6 @@
 
    .navBar__quicklink {
       width: 96px;
-   }
-
-   .header__dropdown {
-      right: 16px;
    }
 
    .quicklink__icon {
