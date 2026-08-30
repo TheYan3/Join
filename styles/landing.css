@@ -3,10 +3,13 @@
    fine print never below 14px. */
 
 .landing {
+   /* Gleiche Farben wie styles/welcome/layout.css, damit Startseite und
+      Welcome-/Guide-Seite denselben Eindruck machen: #2a3647 dunkel und
+      auf allen Knoepfen, #177da8 nur noch fuer die Schritt-Nummern,
+      #29abe2 Akzent/Hover, #f6f7f8 heller Grund. */
    --landing-navy: #2a3647;
+   --landing-blue: #177da8;
    --landing-cyan: #29abe2;
-   --landing-teal: #1fd7c1;
-   --landing-orange: #ff7a00;
    --landing-ink: #2a3647;
    --landing-muted: #5a6473;
    --landing-surface: #f6f7f8;
@@ -51,6 +54,19 @@
    height: auto;
 }
 
+/* Dieselbe Zeile wie auf der Welcome-Seite: Frage, Sign-up-Knopf, dann der
+   bisherige Log-in-Link. */
+.landing__nav {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+}
+
+.landing__signup-question {
+   font-size: 16px;
+   color: var(--landing-ink);
+}
+
 .landing__nav-link {
    font-size: 16px;
    font-weight: 600;
@@ -65,6 +81,18 @@
 .landing__nav-link:focus-visible {
    color: #ffffff;
    background: var(--landing-navy);
+}
+
+.landing__nav-link--primary {
+   color: #ffffff;
+   background: var(--landing-navy);
+}
+
+.landing__nav-link--primary:hover,
+.landing__nav-link--primary:focus-visible {
+   color: #ffffff;
+   background: var(--landing-cyan);
+   border-color: var(--landing-cyan);
 }
 
 /* Hero */
@@ -85,7 +113,6 @@
 }
 
 .landing__title {
-   font-family: "Poppins", "Inter", sans-serif;
    font-size: 61px;
    font-weight: 700;
    line-height: 1.1;
@@ -108,13 +135,16 @@
    margin-bottom: 20px;
 }
 
+/* Form und Hover-Verhalten der Welcome-Knoepfe (.login__button in
+   styles/login/buttons.css): 8px Radius, blau, beim Ueberfahren cyan. */
 .landing__button {
    font-size: 18px;
-   font-weight: 600;
+   font-weight: 700;
    padding: 16px 30px;
-   border-radius: 10px;
+   border-radius: 8px;
    display: inline-block;
    text-decoration: none;
+   transition: all 100ms ease-in-out;
 }
 
 .landing__button--primary {
@@ -125,6 +155,7 @@
 .landing__button--primary:hover,
 .landing__button--primary:focus-visible {
    background: var(--landing-cyan);
+   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .landing__button--ghost {
@@ -145,6 +176,7 @@
 }
 
 .landing__address a,
+.landing__note-link,
 .landing__try-address {
    color: var(--landing-cyan);
    font-weight: 600;
@@ -175,7 +207,6 @@
 }
 
 .landing__section-title {
-   font-family: "Poppins", "Inter", sans-serif;
    font-size: 32px;
    font-weight: 700;
    color: var(--landing-navy);
@@ -208,7 +239,7 @@
    font-size: 18px;
    font-weight: 700;
    color: #ffffff;
-   background: var(--landing-teal);
+   background: var(--landing-blue);
 }
 
 .landing__step-title {
@@ -222,6 +253,12 @@
    font-size: 16px;
    line-height: 1.5;
    color: var(--landing-muted);
+}
+
+/* Der zweite Einstieg direkt unter den drei Schritten - wer die Erklaerung
+   gelesen hat, soll nicht zurueck nach oben scrollen muessen. */
+.landing__steps-cta {
+   margin-top: 36px;
 }
 
 /* Notes */
@@ -323,7 +360,7 @@
    line-height: 1.5;
    color: var(--landing-muted);
    padding-left: 14px;
-   border-left: 3px solid var(--landing-teal);
+   border-left: 3px solid var(--landing-cyan);
 }
 
 /* Footer */
@@ -356,6 +393,20 @@
 /* Responsive */
 
 @media (max-width: 820px) {
+   /* Auf schmalen Schirmen bleibt in der Kopfzeile nur Logo + die beiden
+      Knoepfe; die Frage davor wuerde die Zeile umbrechen lassen. */
+   .landing__signup-question {
+      display: none;
+   }
+
+   .landing__nav {
+      gap: 12px;
+   }
+
+   .landing__nav-link {
+      padding: 10px 16px;
+   }
+
    .landing__title {
       font-size: 40px;
    }

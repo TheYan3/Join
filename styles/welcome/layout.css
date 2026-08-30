@@ -4,18 +4,13 @@
    - ".welcome--step2"  shows step 2 instead of step 1
    - ".welcome--limit"  switches step 2 into its "limit reached" state
    Farben stammen aus der Figma-Vorlage (per Pixelmessung an den Referenz-Frames
-   bestimmt): #2a3647 (dunkler Grund), #f6f7f8 (heller Grund), #177da8
-   (Primaerbutton), #ff3d00 (Limit-Rot, im Projekt bereits als Urgent-Farbe in
-   Gebrauch), #fbe4e5 (Hintergrund des Limit-Hinweises), #29abe2 (Akzent). */
+   bestimmt): #2a3647 (dunkler Grund und, auf Wunsch, alle Knoepfe),
+   #f6f7f8 (heller Grund), #ff3d00 (Limit-Rot, im Projekt bereits als
+   Urgent-Farbe in Gebrauch), #fbe4e5 (Hintergrund des Limit-Hinweises),
+   #29abe2 (Akzent). */
 
 body.welcome {
     background-color: #2a3647;
-}
-
-/* Der Primaerbutton ist in der Vorlage blau, nicht im Navy der Login-Seite.
-   Nur hier ueberschrieben, damit login.html unveraendert bleibt. */
-.welcome .login__button {
-    background-color: #177da8;
 }
 
 body.welcome.welcome--step2 {
@@ -52,9 +47,9 @@ body.welcome.welcome--step2 {
     }
 
     100% {
-        top: 80px;
-        left: 77px;
-        width: 46px;
+        top: 28px;
+        left: calc(max(0px, (100vw - 1100px) / 2) + 24px);
+        width: 48px;
         transform: translate(0, 0);
     }
 }
@@ -68,6 +63,37 @@ body.welcome.welcome--step2 {
 
 .welcome__step1-main {
     padding: 48px 0;
+}
+
+/* Ab 1081px traegt Step 1 dieselbe Kopfzeile wie die Startseite
+   (styles/landing.css: 1100px breite, mittig sitzende Zeile mit 28px/24px
+   Innenabstand, Logo links, Frage + Knopf rechts). Das Logo bleibt die
+   animierte Splash-Grafik, sie landet jetzt nur an derselben Stelle wie das
+   Logo der Startseite (siehe Keyframes oben). Die Zeile bleibt absolut
+   positioniert, weil das <main> darunter volle 100vh hoch ist - im Fluss
+   wuerde sie die Karte aus der Bildmitte schieben. 60px Mindesthoehe ist die
+   Hoehe des 48px breiten Logos plus den 2 x 28px Innenabstand (das Projekt
+   rechnet ueberall mit box-sizing: border-box), damit Frage und Knopf auf
+   derselben Linie sitzen wie auf der Startseite. Unter 1080px gilt weiter die
+   Figma-Mobile-Fassung aus responsive.css. */
+@media (min-width: 1081px) {
+    .welcome__step1 .header__flex-instructions {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        max-width: 1100px;
+        min-height: 116px;
+        margin: 0 auto;
+        padding: 28px 24px;
+        align-items: center;
+    }
+
+    .welcome__step1 .login__signup {
+        position: static;
+        padding: 0;
+        gap: 16px;
+    }
 }
 
 /* .login__signup is reused as-is (structure + JS wiring via #signup-button
@@ -192,8 +218,12 @@ body.welcome.welcome--step2 {
 /* Figma-Inspect (Desktop-Rahmen "Welcome"): die Beschriftungen sind normal
    gesetzt, nicht fett - im Textstil "Version 2/t5" (23px). Nur im
    Welcome-Kontext gesetzt, damit die geteilten Button-Klassen auf login.html
-   unveraendert bleiben. */
-.welcome__role .login__button--login {
+   unveraendert bleiben.
+   Auf Wunsch gilt diese Fassung fuer ALLE Knoepfe der Welcome-Strecke, also
+   auch fuer den Mail-Knopf in Schritt 2 (.welcome__mailto traegt dieselbe
+   Klasse) - darum haengt die Regel am ganzen .welcome-Kontext statt nur an
+   .welcome__role. */
+.welcome .login__button--login {
     font-size: 23px;
     font-weight: 400;
     padding: 10px 18px;
@@ -446,7 +476,11 @@ body.welcome.welcome--step2 {
     background-color: #fbe4e5;
 }
 
-.welcome__mailto {
+/* Zwei Klassen im Selektor (statt nur .welcome__mailto), damit diese Regel
+   die gemeinsame Knopf-Regel weiter oben schlaegt: sonst gewaenne deren
+   "display: inline-block / width: auto" und der Knopf wuerde als Rasterfeld
+   auf die volle Spaltenbreite gezogen. */
+.welcome .welcome__mailto {
     grid-area: button;
     width: fit-content;
     text-decoration: none;

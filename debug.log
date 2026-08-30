@@ -5,6 +5,45 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Welcome Schritt 1: passt sich jetzt an jede Handy-Bildschirmhoehe an
+-------------------------------------------------------------------------------------
+- Problem: Auf kleineren Handy-Bildschirmen (z.B. 320 x 658 Pixel) lag die
+  weisse Karte ueber der Zeile "Not a Join user? Sign up" - die Zeile war gar
+  nicht mehr zu sehen - und unten wurde die Fusszeile abgeschnitten.
+- Ursache: Der Bereich um die Karte hatte eine fest eingestellte Hoehe von
+  55 Prozent der Bildschirmhoehe (auf 658 Pixel Bildschirm also 362 Pixel).
+  Die Karte selbst war aber 614 Pixel hoch. Ein zu grosser Inhalt in einem zu
+  kleinen, mittig ausrichtenden Kasten ragt oben UND unten gleichmaessig
+  heraus - deshalb schob sich die Karte ueber die Zeile darueber.
+- Geaendert 1 (Aufteilung): Schritt 1 der Welcome-Seite ist jetzt genau eine
+  Bildschirmhoehe hoch und teilt sich diese sauber auf: Zeile "Not a Join
+  user?" oben, Fusszeile unten, Karte mittig im Platz dazwischen. Die feste
+  55-Prozent-Hoehe ist weg. Passt der Inhalt auf sehr flachen Bildschirmen
+  trotzdem nicht, waechst die Seite nach unten und laesst sich scrollen -
+  ueberlappen kann jetzt nichts mehr.
+- Geaendert 2 (mitwachsende Abstaende): Innenabstaende der Karte, die
+  Abstaende zwischen ihren Bloecken, der Abstand zwischen den beiden
+  Rollen-Bloecken, der Freiraum unter dem Logo und die Logo-Groesse selbst
+  sind keine festen Zahlen mehr. Sie haben jetzt jeweils einen Kleinstwert,
+  einen Groesstwert und dazwischen einen Wert, der mit der Bildschirmgroesse
+  mitwaechst. Auf grossen Handys gelten damit weiterhin exakt die Masse aus
+  der Figma-Vorlage, auf kleinen schrumpfen die Abstaende mit - die
+  Schriftgroessen bleiben dabei unveraendert.
+- Geaendert 3 (Umbruch): Auf sehr schmalen Geraeten (unter 360 Pixel Breite,
+  z.B. iPhone SE) ist die Frage "Are you a team member?" einen Punkt kleiner
+  (16 statt 18 Pixel), sonst bricht sie dort auf zwei Zeilen um.
+- Entfallen: Die frueher noetige Sonderregel fuer Bildschirme unter 350 Pixel
+  wird nicht mehr gebraucht, weil der seitliche Innenabstand der Karte jetzt
+  ohnehin mit der Breite mitwaechst.
+- Geprueft: Die Seite passt jetzt ohne Scrollen auf 320x658, 360x640, 375x667,
+  360x740, 390x844, 412x915, 430x932 und 768x1024. Nur der sehr alte
+  iPhone-SE-Bildschirm (320x568) muss noch ein Stueck gescrollt werden - dort
+  ueberlappt aber nichts mehr.
+- Unveraendert: Die Ansicht ab 1081 Pixel Breite (Desktop) und Schritt 2 der
+  Welcome-Seite.
+- Betroffene Dateien: styles/welcome/responsive.css
+
+
 [2026-08-30] Dropdown-Menue wieder in voller Breite, Logo nicht mehr verdeckt
 -------------------------------------------------------------------------------------
 - Problem 1: Nachdem das Menue neu am Initialen-Kreis aufgehaengt wurde, war es
@@ -52,6 +91,170 @@ neuester Eintrag oben.
   templates/contacts.html, templates/add-task.html, templates/legalnotice.html,
   templates/help.html, templates/privacy-Policy.html, styles/components/header.css,
   styles/components/dropdown.css, styles/components/app-shell-responsive.css
+
+
+[2026-08-30] Logo-Animation beim Seitenstart doppelt so lang
+-------------------------------------------------------------------------------------
+- Problem: Beim Wechsel von der Startseite auf "Member log in" lief die
+  Logo-Animation (Logo wandert von der Bildmitte in die obere linke Ecke und
+  wird dabei kleiner) so schnell ab, dass sie kaum wahrnehmbar war und wie gar
+  nicht vorhanden wirkte.
+- Geaendert: Die Animation dauert jetzt 1 Sekunde statt einer halben. Die kurze
+  Startverzoegerung von 0,2 Sekunden bleibt.
+- Geaendert: Der restliche Seiteninhalt wird passend dazu erst nach 1,2 Sekunden
+  eingeblendet (vorher 0,7 Sekunden), damit er wie bisher genau dann erscheint,
+  wenn das Logo an seinem Platz angekommen ist. Das gilt auch fuer den kurzen
+  dunklen Hintergrund, der auf dem Handy waehrend der Animation zu sehen ist.
+- Hinweis: Die Welcome-Seite nutzt dieselbe Animationsregel und laeuft damit
+  ebenfalls eine Sekunde. Unveraendert bleibt, dass die Animation nur einmal
+  pro Browser-Tab gezeigt wird.
+- Betroffene Dateien: styles/login/layout.css, scripts/auth/index.js,
+  scripts/welcome.js
+
+
+[2026-08-28] Welcome-Karte ab 1080px weiter oben im Bild
+-------------------------------------------------------------------------------------
+- Problem: Auf Tablet-Breiten (ab 1080 Pixel abwaerts) sass der Inhaltsbereich
+  der Welcome-Seite in einem bildschirmhohen Kasten (Hoehe 100vh) und wurde
+  darin senkrecht mittig ausgerichtet. Dadurch rutschte die weisse Karte
+  optisch zu weit nach unten und passte nicht zur Design-Vorlage.
+- Geaendert: Fuer Fensterbreiten bis 1080 Pixel ist dieser Kasten jetzt nur
+  noch halb so hoch wie der Bildschirm (Hoehe 50vh). Die Karte bleibt dadurch
+  im oberen Bildbereich stehen, der Rest der Seite bleibt dunkelblau.
+- Unveraendert: Ab 1081 Pixel (Desktop) gilt weiterhin die volle
+  Bildschirmhoehe; Schritt 2 der Welcome-Strecke hat eine eigene Regel und ist
+  nicht betroffen.
+- Betroffene Datei: styles/welcome/responsive.css
+
+[2026-08-28] Alle Knoepfe in Dunkelblau (#2a3647)
+-------------------------------------------------------------------------------------
+- Wunsch: Alle Knoepfe sollen dieselbe Farbe haben, naemlich das Dunkelblau
+  #2a3647 des Projekts.
+- Vorher: Auf der Welcome-Seite war der Hauptknopf ab 1081 Pixel Fensterbreite
+  hellblau (#177da8, so stand es in der Figma-Vorlage) und nur auf dem Handy
+  dunkelblau. Auf der Startseite (Landing) war der Hauptknopf ebenfalls
+  hellblau.
+- Geaendert:
+  - Welcome-Seite: Die Sonderregel "Knopf hellblau" ist geloescht. Damit gilt
+    ueberall automatisch die normale Projekt-Knopffarbe Dunkelblau - auf dem
+    Handy wie am grossen Bildschirm.
+  - Welcome-Seite (Handy): Die extra Handy-Regel, die den Knopf wieder auf
+    Dunkelblau gesetzt hat, ist ebenfalls weg - sie wird nicht mehr gebraucht.
+  - Startseite: Der Hauptknopf steht jetzt auf Dunkelblau statt Hellblau.
+    Das Hellblau bleibt nur noch fuer die kleinen Nummern-Kreise der
+    "So funktioniert's"-Schritte.
+  - Alle uebrigen Knoepfe im Projekt waren bereits dunkelblau und blieben
+    unveraendert; die farbigen Prioritaets-Knoepfe (rot/orange/gruen) sind
+    davon bewusst ausgenommen, sie sind keine normalen Knoepfe.
+- Nicht angefasst: Verhalten beim Ueberfahren mit der Maus (Hellblau #29abe2)
+  und beim Klicken (sehr dunkles Blau) - das war schon vorher einheitlich.
+- Betroffene Dateien: styles/welcome/layout.css, styles/welcome/responsive.css,
+  styles/landing.css
+
+
+[2026-08-28] Beide Welcome-Seiten benutzen jetzt denselben Knopf
+-------------------------------------------------------------------------------------
+- Problem: Der Knopf auf der zweiten Welcome-Seite (E-Mail-Leitfaden) sah anders
+  aus als der Knopf "Create request" auf der ersten Welcome-Seite: er war
+  hellblau statt dunkelblau, die Schrift war groesser und fett, und auf dem
+  Handy zog er sich ueber die ganze Bildschirmbreite.
+- Geaendert: Die Knopf-Gestaltung der Welcome-Strecke gilt jetzt fuer beide
+  Seiten gemeinsam statt nur fuer die Rollen-Auswahl. Damit sind Farbe,
+  Schriftgroesse, Schriftstaerke, Innenabstand und Ecken auf beiden Seiten
+  identisch:
+  - Unter 1080 Pixel Fensterbreite: dunkelblau, 16 Pixel Schrift, normal
+    (nicht fett), 15/24 Pixel Innenabstand - genau wie in der Handy-Vorlage.
+  - Ab 1081 Pixel: hellblau und 23 Pixel Schrift - so wie es die
+    Desktop-Vorlage fuer die erste Seite schon vorgab.
+  - Auf schmalen Bildschirmen ist der Knopf der zweiten Seite jetzt nur noch so
+    breit wie seine Beschriftung und sitzt mittig (vorher volle Breite), wie in
+    der Vorlage "Stakeholder" (161 x 49 Pixel).
+- Nebenbei noetig: Weil die gemeinsame Regel nun auch den Mail-Knopf trifft,
+  musste dessen eigene Regel etwas "staerker" adressiert werden - sonst haette
+  die gemeinsame Regel ihn im Raster auf volle Spaltenbreite gezogen und das
+  Haekchen neben der Beschriftung verrutscht.
+- Betroffene Dateien: styles/welcome/layout.css, styles/welcome/responsive.css
+
+[2026-08-28] Mobile: mehr Luft unter dem Logo, Zurueck-Pfeil an den rechten Rand
+-------------------------------------------------------------------------------------
+- Auf schmalen Bildschirmen (unter 620 Pixel Fensterbreite) sassen die Inhalte
+  zu dicht unter dem Join-Logo, und der blaue Zurueck-Pfeil klebte direkt neben
+  der Ueberschrift "Welcome" statt am rechten Bildschirmrand - beides weicht von
+  der Handy-Vorlage aus Figma ab.
+- Geaendert:
+  - Erste Welcome-Seite (Rollen-Auswahl): die Zeile "Not a Join user? Sign up"
+    ruecht weiter nach unten, so dass zwischen Logo-Unterkante und Text jetzt
+    rund 86 statt 64 Pixel liegen - wie in der Vorlage gemessen.
+  - Zweite Welcome-Seite (E-Mail-Leitfaden): die Ueberschrift "Welcome" startet
+    56 statt 16 Pixel unter dem Kopfbereich, damit auch hier der in der Vorlage
+    sichtbare Abstand zum Logo entsteht.
+  - Der Zurueck-Pfeil steht jetzt am rechten Rand auf einer Hoehe mit
+    "Welcome" (vorher direkt hinter dem Wort). Damit die Pfeilspitze wirklich
+    auf der Randkante steht, wird der unsichtbare Leerraum der Grafik
+    herausgerechnet - dieselbe Technik wie beim Pfeil unter dem Logo auf
+    breiten Bildschirmen.
+- Betroffene Datei: styles/welcome/responsive.css
+
+[2026-08-28] Seitenabstand der Guide-Seite unter 1080 Pixel repariert
+-------------------------------------------------------------------------------------
+- Problem: Auf Bildschirmen schmaler als 1080 Pixel klebten Ueberschrift,
+  Text und Zaehler der zweiten Welcome-Seite (der E-Mail-Leitfaden) direkt am
+  linken und rechten Fensterrand - der Abstand zum Rand fehlte komplett.
+- Ursache: Der Abstand war zwar schon vorgesehen, wurde vom Browser aber
+  ignoriert. Der Grundwert (kein Seitenabstand, gilt fuer breite Bildschirme)
+  war ueber eine staerkere Adressierung gesetzt als die Regel fuer schmale
+  Bildschirme; bei zwei widersprechenden Regeln gewinnt immer die staerkere.
+- Loesung: Die Regeln fuer schmale Bildschirme sprechen den Bereich jetzt
+  genauso stark an und setzen sich damit durch - wie in der Mobil-Vorlage
+  bekommt der Inhalt so wieder Luft zum Rand (54 Pixel zwischen 620 und 1080
+  Pixel Fensterbreite, 16 Pixel darunter, passend zum Logo darueber).
+- Betroffene Datei: styles/welcome/responsive.css
+
+[2026-08-28] Startseite an die neue Welcome-/Guide-Seite angeglichen
+-------------------------------------------------------------------------------------
+- Die Startseite (index.html) sah bisher anders aus als die neue Welcome-Seite
+  und erzaehlte an einer Stelle auch etwas anderes. Beides ist jetzt angeglichen.
+- Die beiden grossen Knoepfe im oberen Bereich heissen jetzt genau wie die
+  beiden Auswahlmoeglichkeiten auf der Welcome-Seite: "Create request" (fuehrt
+  zur Welcome-Seite) und "Member log in" (fuehrt direkt zur Anmeldung). Vorher
+  hiessen sie "Submit a feature request" und "Explore the board", und beide
+  fuehrten zur selben Seite.
+- Neu: Unter den drei Schritten im Abschnitt "How it works" steht jetzt noch
+  einmal ein blauer Knopf "Create request". Wer die Erklaerung gelesen hat,
+  kann also sofort loslegen und muss nicht wieder nach oben scrollen.
+- Der Hinweis "Ten requests per day" stimmte nicht mehr mit der Welcome-Seite
+  ueberein: Dort steht, dass nach den 10 Tickets weiterhin E-Mails ankommen,
+  sie dann aber von Hand geprueft werden. Genau das steht jetzt auch auf der
+  Startseite, mit einem Link zur Welcome-Seite, wo der Tageszaehler live zu
+  sehen ist.
+- Farben und Knopf-Form kommen jetzt aus derselben Vorlage wie die
+  Welcome-Seite: Knoepfe blau (#177da8) mit 8 Pixel runden Ecken und cyanem
+  Hover statt dunkelblau mit 10 Pixel Ecken, die tuerkise Akzentfarbe ist
+  ersetzt (Schritt-Nummern blau, Markierungsstrich cyan).
+- Die Ueberschriften nutzen jetzt dieselbe Schrift wie der Rest des Projekts
+  (Inter) statt Poppins - so wirken Startseite und Welcome-Seite wie eine
+  Seite aus einem Guss.
+- Geaenderte Dateien: index.html, styles/landing.css
+
+[2026-08-28] Gleiche Kopfzeile auf Startseite und Welcome-Seite
+-------------------------------------------------------------------------------------
+- Startseite (index.html): Oben rechts stand bisher nur der Knopf "Log in".
+  Jetzt steht dort zusaetzlich - wie auf der Welcome-Seite - die Zeile
+  "Not a Join user?" mit einem dunkel gefuellten Knopf "Sign up", der direkt
+  zur Registrierung (templates/signup.html) fuehrt. "Log in" bleibt daneben
+  erhalten.
+- Auf schmalen Bildschirmen (unter 820 Pixel) wird die Frage "Not a Join user?"
+  ausgeblendet und nur die beiden Knoepfe bleiben stehen, sonst wuerde die
+  Kopfzeile umbrechen.
+- Welcome-Seite (welcome.html): Die Kopfzeile der ersten Seite sitzt auf grossen
+  Bildschirmen (ab 1081 Pixel) jetzt genau dort, wo sie auch auf der Startseite
+  sitzt - dieselbe Breite (1100 Pixel, mittig), derselbe Abstand zum oberen
+  Rand und zu den Seiten, gleiche Logo-Groesse (48 statt 46 Pixel).
+- Das Join-Logo fliegt beim Laden weiterhin wie gewohnt aus der Bildmitte in
+  die Ecke, es landet nur an der neuen, zur Startseite passenden Stelle.
+- Die Handy-Ansicht der Welcome-Seite (unter 1080 Pixel) bleibt unveraendert,
+  dort gilt weiter die Vorlage aus Figma.
+- Geaenderte Dateien: index.html, styles/landing.css, styles/welcome/layout.css
 
 
 [2026-08-28] Handy-Ansicht der ersten Welcome-Seite an die Vorlage angeglichen

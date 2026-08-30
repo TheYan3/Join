@@ -31,7 +31,13 @@
             class="landing__logo"
             src="./assets/icons/desktop/Dark_Logo.svg"
             alt="Join" />
-         <nav aria-label="Primary">
+         <nav class="landing__nav" aria-label="Primary">
+            <p class="landing__signup-question">Not a Join user?</p>
+            <a
+               class="landing__nav-link landing__nav-link--primary"
+               href="./templates/signup.html">
+               Sign up
+            </a>
             <a class="landing__nav-link" href="./login.html">Log in</a>
          </nav>
       </header>
@@ -53,10 +59,10 @@
                <a
                   class="landing__button landing__button--primary"
                   href="./welcome.html">
-                  Submit a feature request
+                  Create request
                </a>
-               <a class="landing__button landing__button--ghost" href="./welcome.html">
-                  Explore the board
+               <a class="landing__button landing__button--ghost" href="./login.html">
+                  Member log in
                </a>
             </div>
 
@@ -98,6 +104,11 @@
                   </p>
                </li>
             </ol>
+            <a
+               class="landing__button landing__button--primary landing__steps-cta"
+               href="./welcome.html">
+               Create request
+            </a>
          </section>
 
          <section class="landing__section landing__section--notes" aria-labelledby="notes-title">
@@ -106,10 +117,12 @@
                <li class="landing__note">
                   <h3 class="landing__note-title">Ten requests per day</h3>
                   <p class="landing__note-text">
-                     To keep AI costs predictable, the collector accepts
-                     <strong>10 requests per day</strong> in total. If the limit
-                     is reached, you still get a reply telling you so — your
-                     message is not silently dropped.
+                     To keep AI costs predictable, the collector creates
+                     <strong>10 tickets per day</strong> in total. After that you
+                     can still send e-mails — our team then reviews them by hand
+                     instead of letting the AI create a ticket. The
+                     <a class="landing__note-link" href="./welcome.html">request page</a>
+                     shows how many of today's ten are already used.
                   </p>
                </li>
                <li class="landing__note">

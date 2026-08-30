@@ -199,7 +199,7 @@ function setMobileSplashBackground() {
     const resetBg = buildSplashBackgroundReset(originalBg, splashLogo);
     document.body.style.backgroundColor = "#2a3647";
     splash.addEventListener("animationend", resetBg, { once: true });
-    setTimeout(resetBg, 700);
+    setTimeout(resetBg, 1200);
 }
 
 
@@ -224,7 +224,7 @@ function setMainOpacity() {
     if (!mainContent) return;
     setTimeout(() => {
         mainContent.classList.add("main-content--opacity");
-    }, 700);
+    }, 1200);
 }
 
 

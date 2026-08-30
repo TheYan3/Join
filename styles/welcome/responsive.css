@@ -1,26 +1,57 @@
 /* Same breakpoints as the rest of the project: 1080 / 820 / 620 px. */
 
 @media (max-width: 1080px) {
-    /* Gleiche Groesse wie das Logo auf der zweiten Welcome-Seite, das in
+   /* Gleiche Groesse wie das Logo auf der zweiten Welcome-Seite, das in
        diesem Bereich ebenfalls bei 46px bleibt (siehe layout.css). Ab 620px
        wechseln beide auf 64px, wie der Figma-Mobile-Rahmen es vorgibt. */
-    @keyframes splash__logo--animation {
-        0% {
-            top: 50%;
-            left: 50%;
-            width: 274px;
-            transform: translate(-50%, -50%);
-        }
+   @keyframes splash__logo--animation {
+      0% {
+         top: 50%;
+         left: 50%;
+         width: 274px;
+         transform: translate(-50%, -50%);
+      }
 
-        100% {
-            top: 48px;
-            left: 54px;
-            width: 46px;
-            transform: translate(0, 0);
-        }
-    }
+      100% {
+         top: 48px;
+         left: 54px;
+         width: 46px;
+         transform: translate(0, 0);
+      }
+   }
 
-    /* Unter 1080px folgt Step 1 durchgehend bis 320px der Mobile-Figma-Vorlage
+   /* Schritt 1 fuellt genau eine Bildschirmhoehe: Kopfzeile oben, Fusszeile
+       unten, die Karte mittig im Rest dazwischen. Ist die Karte auf sehr
+       flachen Bildschirmen doch groesser als der Platz, waechst die Seite
+       nach unten und scrollt - sie ueberlappt nichts mehr.
+       "100vh" steht als Rueckfallwert fuer aeltere Browser vor "100dvh";
+       "dvh" ist die tatsaechlich sichtbare Hoehe, also ohne die ein- und
+       ausfahrende Adressleiste mobiler Browser. */
+   .welcome__step1 {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+   }
+
+   /* Vorher stand hier "height: 55vh" - eine feste Hoehe, die auf flachen
+       Handy-Bildschirmen kleiner war als die Karte selbst. Ein zu grosses
+       Element in einem zu kleinen, mittig ausrichtenden Kasten ragt oben UND
+       unten heraus: die Karte schob sich dadurch ueber die
+       "Not a Join user?"-Zeile und die Fusszeile. Jetzt nimmt der Bereich
+       einfach den uebrigen Platz ein (flex: 1) und wird nie kleiner als sein
+       Inhalt. Die 100vh aus styles/login/layout.css werden hier abgeloest. */
+   .main-content main,
+   .main-content--signup main {
+      width: 100%;
+      flex: 1;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   /* Unter 1080px folgt Step 1 durchgehend bis 320px der Mobile-Figma-Vorlage
        (Frame "Screen 1 - logo", 428px breit): Karte auf die dort gemessene
        Breite gedeckelt statt der vorherigen 789px-Desktop-Breite, Rollen
        untereinander statt nebeneinander. Figma zeigt fuer die Karte selbst
@@ -32,282 +63,303 @@
        340px Platz) als auch der schmalere Rollen-Block (242px), der von
        welcome__roles automatisch mittig eingerueckt wird - deshalb 28px statt
        der im Figma-Feld angezeigten 80px. */
-    .welcome__card {
-        width: 100%;
-        max-width: 396px;
-        padding: 64px 28px;
-        gap: 56px;
-    }
+   /* Die drei Abstandswerte sind bewusst keine festen Zahlen mehr, sondern
+       "clamp(minimum, mitwachsender Wert, maximum)": auf grossen Handys
+       gelten weiter exakt die Figma-Masse (64px Innenabstand oben/unten,
+       56px zwischen den Bloecken, 28px seitlich), auf flachen Bildschirmen
+       schrumpfen sie mit der Bildschirmhoehe (vh) bzw. -breite (vw) mit,
+       bis zum jeweiligen Minimum. So passt die Karte auf jedes Handy,
+       ohne dass Schriftgroessen kleiner werden. */
+   .welcome__card {
+      width: 100%;
+      max-width: 396px;
+      padding: clamp(24px, 4vh, 64px) clamp(16px, 6vw, 28px);
+      gap: clamp(20px, 3.5vh, 56px);
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 15px/24px Innenabstand
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 15px/24px Innenabstand
        fuer beide Knoepfe - identisch mit dem Projekt-Standardwert aus
-       styles/login/buttons.css, darum hier nur zur Klarheit wiederholt. */
-    .welcome__role .login__button--login,
-    .welcome__role .login__button--guest {
-        padding: 15px 24px;
-    }
+       styles/login/buttons.css, darum hier nur zur Klarheit wiederholt.
+       Gilt auf Wunsch fuer die ganze Welcome-Strecke, also auch fuer den
+       Mail-Knopf in Schritt 2. */
+   .welcome .login__button--login,
+   .welcome .login__button--guest {
+      padding: 15px 24px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 379): 70px
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 379): 70px
        Abstand zwischen den beiden Rollen-Bloecken, und der ganze
        Rollen-Container ist horizontal zentriert (242px breit in einer
        340px breiten Karten-Innenflaeche). */
-    .welcome__roles {
-        flex-direction: column;
-        align-items: center;
-        gap: 70px;
-    }
+   .welcome__roles {
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(24px, 5vh, 70px);
+   }
 
-    /* "align-items: center" zentriert Frage-Zeile und Knopf zueinander
+   /* "align-items: center" zentriert Frage-Zeile und Knopf zueinander
        innerhalb eines Rollen-Blocks (siehe Figma-Frames 157/158, dort ist der
        schmalere Knopf exakt mittig unter der breiteren Frage plaziert). */
-    .welcome__role {
-        align-items: center;
-        gap: 16px;
-    }
+   .welcome__role {
+      align-items: center;
+      gap: 16px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 156): "Not a Join
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Frame 156): "Not a Join
        user?" und "Sign up" sitzen zentriert ueber der Karte statt oben rechts,
        mit 16px Abstand zueinander (nicht das projektweite Standardmass, siehe
        styles/login/layout.css) und muessen nach unten hin die fixierte
        Logo-Grafik freihalten (siehe Kommentar bei den 620px-Regeln). */
-    .welcome__step1 .login__signup {
-        position: static;
-        width: 100%;
-        justify-content: center;
-        gap: 16px;
-        padding: 168px 16px 0;
-    }
+   .welcome__step1 .login__signup {
+      position: static;
+      width: 100%;
+      justify-content: center;
+      gap: 16px;
+      padding: clamp(112px, 21vh, 168px) 16px 0;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Text "Sign up"): kein
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo", Text "Sign up"): kein
        Knopf wie auf dem Desktop-Rahmen (dort weiss gefuellt, siehe
        layout.css), sondern nur groesserer, weisser Text (19px/regulaer)
        neben der 16px-Frage. */
-    .welcome__step1 .login__signup .login__button {
-        background-color: transparent;
-        color: #fff;
-        padding: 0;
-        font-size: 19px;
-        font-weight: 400;
-    }
+   .welcome__step1 .login__signup .login__button {
+      background-color: transparent;
+      color: #fff;
+      padding: 0;
+      font-size: 19px;
+      font-weight: 400;
+   }
 
-    .welcome__step1 .login__signup .login__button:hover {
-        background-color: transparent;
-    }
+   .welcome__step1 .login__signup .login__button:hover {
+      background-color: transparent;
+   }
 
-    /* Die Fusszeile ist auf der Login-Seite "position: absolute; bottom: 64px"
+   /* Die Fusszeile ist auf der Login-Seite "position: absolute; bottom: 64px"
        (styles/login/layout.css), an den Viewport-Rand gepinnt. Welcomes Karte
        ist hoch genug, dass das ueberlappen wuerde - Figmas Mobile-Rahmen
        stapelt die Fusszeile stattdessen im normalen Fluss unter der Karte. */
-    .welcome__step1-main {
-        padding: 24px 16px;
-    }
+   .welcome__step1-main {
+      padding: clamp(12px, 2vh, 24px) 16px;
+   }
 
-    .welcome__step1 .login__legalInformation--area {
-        position: static;
-        margin-top: 8px;
-        padding: 0 16px 16px;
-    }
+   .welcome__step1 .login__legalInformation--area {
+      position: static;
+      margin-top: 8px;
+      padding: 0 16px 16px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): Open Sans Bold 40px -
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): Open Sans Bold 40px -
        derselbe Wert wie login.html's mobile Ueberschrift (styles/login/
        responsive.css). Die 32px aus layout.css gelten nur noch ab 1080px. */
-    .welcome__card .login__header {
-        font-size: 40px;
-    }
+   .welcome__card .login__header {
+      font-size: 40px;
+   }
 
-    .welcome__intro {
-        font-size: 16px;
-    }
+   .welcome__intro {
+      font-size: 16px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 18px, nicht wie zuvor
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): 18px, nicht wie zuvor
        16px - die Rollenfrage ist auf dem Mobile-Rahmen zwei Punkt groesser
-       als der Intro-Text darueber. */
-    .welcome__role-question {
-        font-size: 18px;
-    }
+       als der Intro-Text darueber. Ab 360px Bildschirmbreite gelten diese
+       18px; auf noch schmaleren Geraeten (z.B. iPhone SE mit 320px) geht die
+       Frage sonst auf zwei Zeilen um - dort ist sie einen Punkt kleiner. */
+   .welcome__role-question {
+      font-size: clamp(16px, 5vw, 18px);
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): beide Beschriftungen
+   /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): beide Beschriftungen
        stehen dort im Stil "Version 2/body" (16px), nicht in den 23/19px vom
-       Desktop-Rahmen. */
-    .welcome__role .login__button--login,
-    .welcome__role .login__button--guest {
-        font-size: 16px;
-    }
+       Desktop-Rahmen. Auch hier wieder fuer die ganze Welcome-Strecke, damit
+       der Mail-Knopf in Schritt 2 dieselbe Schriftgroesse traegt. */
+   .welcome .login__button--login,
+   .welcome .login__button--guest {
+      font-size: 16px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Screen 1 - logo"): "Create request" ist
-       dort dunkelblau (die normale Projekt-Buttonfarbe aus
-       styles/login/buttons.css), nicht das Hellblau der Vorlage-Farbe weiter
-       oben in dieser Datei - das Hellblau gilt laut Vorlage nur auf Desktop
-       und in Schritt 2. */
-    .welcome__step1 #welcome-create-request {
-        background-color: #2a3647;
-    }
-
-    /* Unter 1080px wieder auf die Fassung zurueck, die an den Mobile-Figma-
+   /* Unter 1080px wieder auf die Fassung zurueck, die an den Mobile-Figma-
        Rahmen kalibriert ist (siehe layout.css): Logo und Nav-Zeile teilen
        sich wieder ein gemeinsames Padding statt eigener Einzuege, und
        Ueberschrift/Leitfaden sind wieder zentriert statt in einer eigenen,
        linksbuendigen Spalte. */
-    .welcome__step2-header {
-        padding: 48px 54px 0;
-    }
+   .welcome__step2-header {
+      padding: 48px 54px 0;
+   }
 
-    .welcome__step2-logo {
-        margin-left: 0;
-    }
+   .welcome__step2-logo {
+      margin-left: 0;
+   }
 
-    .welcome__step2-nav {
-        max-width: none;
-        margin: 0;
-    }
+   .welcome__step2-nav {
+      max-width: none;
+      margin: 0;
+   }
 
-    .welcome__step2-main {
-        padding: 32px 54px 64px;
-    }
+   /* Muss wie in layout.css ueber "#main-content" adressiert werden: die
+       Grundregel dort steht auf einer ID, eine reine Klassenregel hier waere
+       schwaecher und wuerde den Seitenabstand gar nicht setzen - der Inhalt
+       klebte dann bis 1080px herunter am Fensterrand. */
+   #main-content .welcome__step2-main {
+      padding: 32px 54px 64px;
+   }
 
-    .welcome__step2-title {
-        max-width: none;
-        margin: 0 0 64px;
-        justify-content: center;
-    }
+   .welcome__step2-title {
+      max-width: none;
+      margin: 0 0 64px;
+      justify-content: center;
+   }
 
-    .welcome__guide {
-        max-width: 1100px;
-        column-gap: 40px;
-        row-gap: 24px;
-    }
+   .welcome__guide {
+      max-width: 1100px;
+      column-gap: 40px;
+      row-gap: 24px;
+   }
 
-    .welcome__illustration {
-        max-width: 320px;
-    }
+   .welcome__illustration {
+      max-width: 320px;
+   }
 }
 
 @media (max-width: 820px) {
-    .welcome__step2-title {
-        margin-bottom: 40px;
-    }
+   .welcome__step2-title {
+      margin-bottom: 40px;
+   }
 
-    .welcome__guide {
-        column-gap: 24px;
-    }
+   .welcome__guide {
+      column-gap: 24px;
+   }
 
-    .welcome__illustration {
-        max-width: 260px;
-    }
+   .welcome__illustration {
+      max-width: 260px;
+   }
 }
 
 @media (max-width: 620px) {
-    @keyframes splash__logo--animation {
-        0% {
-            top: 50%;
-            left: 50%;
-            width: 274px;
-            transform: translate(-50%, -50%);
-        }
+   /* Das Logo haengt fest oben links im Bild (position: fixed) und traegt
+       deshalb nichts zur Seitenhoehe bei - es muss aber von der Zeile
+       darunter freigehalten werden. Damit auf flachen Handys nicht der
+       halbe Bildschirm fuer Logo + Freiraum draufgeht, wachsen Abstand und
+       Groesse hier mit der Bildschirmhoehe mit: auf grossen Handys weiter
+       die Figma-Masse (28px von oben, 64px breit), auf kleinen bis herunter
+       auf 16px/44px. */
+   @keyframes splash__logo--animation {
+      0% {
+         top: 50%;
+         left: 50%;
+         width: 274px;
+         transform: translate(-50%, -50%);
+      }
 
-        100% {
-            top: 28px;
-            left: 16px;
-            width: 64px;
-            transform: translate(0, 0);
-        }
-    }
+      100% {
+         top: clamp(16px, 3vh, 28px);
+         left: 16px;
+         width: clamp(44px, 9vh, 64px);
+         transform: translate(0, 0);
+      }
+   }
 
-    /* Ab hier wird das Logo 64px statt 46px breit (siehe Keyframes oben) und
-       damit 78px statt 56px hoch - die Karte, die Rollen und die Fusszeile
-       folgen ab 1080px bereits durchgehend der Mobile-Vorlage (siehe dort),
-       nur dieser eine Wert haengt an der Logo-Groesse und muss deshalb hier
-       gesondert nachgezogen werden: logo top (28px) + Logo-Hoehe (78px) +
-       64px Abstand, den Figma bei dieser Logo-Groesse konsistent verwendet
-       (derselbe Abstand wie beim Step-2-Header, siehe layout.css). */
-    .welcome__step1 .login__signup {
-        padding-top: 170px;
-    }
+   /* Der Abstand, der das Logo oben freihaelt: Logo-Oberkante (28px) +
+       Logo-Hoehe (78px) + 86px Luft, wie im Mobile-Rahmen gemessen, ergibt
+       die 192px auf grossen Handys. Auf flachen Bildschirmen schrumpft der
+       Wert mit (16vh), aber nie unter 100px - so viel braucht das dort
+       ebenfalls kleinere Logo (siehe Keyframes oben) mindestens. */
+   .welcome__step1 .login__signup {
+      padding-top: clamp(104px, 15vh, 192px);
+   }
 
-    /* Step 2: the back arrow moves from under the logo to next to the
+   /* Step 2: the back arrow moves from under the logo to next to the
        "Welcome" headline, and the counter moves under that headline. */
-    .welcome__step2-header {
-        padding: 24px 16px 0;
-    }
+   .welcome__step2-header {
+      padding: 24px 16px 0;
+   }
 
-    .welcome__step2-main {
-        padding: 16px 16px 48px;
-    }
+   /* Figma-Inspect (Mobile-Rahmen "Stakeholder"): 16px Seitenabstand.
+       ID-Selektor aus demselben Grund wie oben. Oben 56px statt der
+       vorherigen 16px: im Mobile-Rahmen liegen rund 70px zwischen der
+       Unterkante des Logos und der Oberkante von "Welcome", davon steuert
+       die Zeilenhoehe der Ueberschrift selbst schon einen Teil bei. */
+   #main-content .welcome__step2-main {
+      padding: 56px 16px 48px;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen "Stakeholder"/"Stakeholder limit reached"):
+   /* Figma-Inspect (Mobile-Rahmen "Stakeholder"/"Stakeholder limit reached"):
        Logo-Node "Capa 2" 63.97 x 78 -> gerundet 64 x 78, groesser als das
        46x56-Desktop-Logo aus layout.css. */
-    .welcome__step2-logo {
-        width: 64px;
-    }
+   .welcome__step2-logo {
+      width: 64px;
+   }
 
-    .welcome__back--brand {
-        display: none;
-    }
+   .welcome__back--brand {
+      display: none;
+   }
 
-    .welcome__back--inline {
-        display: inline-flex;
-    }
+   .welcome__back--inline {
+      display: inline-flex;
+   }
 
-    .welcome__counter--brand {
-        display: none;
-    }
+   .welcome__counter--brand {
+      display: none;
+   }
 
-    .welcome__counter--inline {
-        display: block;
-    }
+   .welcome__counter--inline {
+      display: block;
+   }
 
-    /* Figma-Inspect (Mobile-Rahmen, Text "Welcome"): Open Sans Bold 40px -
+   /* Figma-Inspect (Mobile-Rahmen, Text "Welcome"): Open Sans Bold 40px -
        same size as login.html's mobile headline. layout.css's 61px desktop
        size runs the headline off the right edge of narrow viewports and
        pushes the inline back arrow (which follows it in the same flex row)
        off-screen with it. */
-    .welcome__step2-title {
-        font-size: 40px;
-        justify-content: flex-start;
-        margin-bottom: 8px;
-    }
+   .welcome__step2-title {
+      font-size: 40px;
+      justify-content: space-between;
+      margin-bottom: 8px;
+   }
 
-    .welcome__guide {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "title"
-            "illustration"
-            "normal"
-            "limit"
-            "button";
-        row-gap: 20px;
-    }
+   /* Wie beim Pfeil unter dem Logo (siehe layout.css) wird auch hier der
+       Leerraum der Grafik herausgerechnet, damit das Symbol selbst - nicht
+       sein unsichtbarer Rahmen - auf der rechten Inhaltskante steht: 4px
+       Innenabstand des Knopfes plus rund 5px Rand rechts in arrowBack.svg
+       (die Pfeilgrafik endet dort bei x=26,7 von 32). */
+   .welcome__back--inline {
+      margin-right: -9px;
+   }
 
-    .welcome__illustration {
-        justify-self: center;
-        max-width: 280px;
-    }
+   .welcome__guide {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+         "title"
+         "illustration"
+         "normal"
+         "limit"
+         "button";
+      row-gap: 20px;
+   }
 
-    .welcome__guide-title {
-        font-size: 23px;
-    }
+   .welcome__illustration {
+      justify-self: center;
+      max-width: 280px;
+   }
 
-    .welcome__guide-normal,
-    .welcome__guide-limit {
-        font-size: 16px;
-    }
+   .welcome__guide-title {
+      font-size: 23px;
+   }
 
-    .welcome__mailto {
-        width: 100%;
-        text-align: center;
-        justify-self: center;
-    }
+   .welcome__guide-normal,
+   .welcome__guide-limit {
+      font-size: 16px;
+   }
+
+   /* Wie in Schritt 1 (und im Mobile-Rahmen "Stakeholder": 161 x 49) ist der
+       Knopf nur so breit wie seine Beschriftung und sitzt mittig, nicht ueber
+       die volle Spaltenbreite gezogen. */
+   .welcome__mailto {
+      justify-self: center;
+   }
 }
 
-/* Kein eigener Figma-Rahmen unter 428px - die Karte schrumpft laut Auftrag
-   trotzdem fluessig weiter mit. Bei den kleinsten Breiten reicht die sonst
-   28px breite Karten-Innenflaeche (siehe Kommentar bei .welcome__card oben)
-   nicht mehr aus, um "Are you a team member?" einzeilig zu halten - hier
-   wird nur der Karten-Innenabstand reduziert, damit nichts umbricht. */
-@media (max-width: 350px) {
-    .welcome__card {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-}
+/* Der frueher hier stehende Sonderfall fuer Bildschirme unter 350px
+   (schmalerer Karten-Innenabstand, damit "Are you a team member?" einzeilig
+   bleibt) wird nicht mehr gebraucht: der seitliche Innenabstand der Karte
+   waechst jetzt selbst mit der Bildschirmbreite mit (siehe .welcome__card
+   im 1080px-Block oben). */

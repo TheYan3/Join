@@ -45,7 +45,7 @@ function playOrSkipSplash() {
     if (!mainContent) return;
     setTimeout(() => {
         mainContent.classList.add("main-content--opacity");
-    }, 700);
+    }, 1200);
 }
 
 /**

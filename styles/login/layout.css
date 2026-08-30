@@ -9,7 +9,7 @@ body {
     z-index: 9999;
     width: 274px;
     height: auto;
-    animation: splash__logo--animation 500ms 200ms ease-in-out forwards;
+    animation: splash__logo--animation 1000ms 200ms ease-in-out forwards;
     transform: translate(-50%, -50%);
 }
 
