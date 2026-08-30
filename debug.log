@@ -40,6 +40,32 @@ neuester Eintrag oben.
 - Betroffene Datei:
   - styles/summary/responsive.css: der Bereich fuer Bildschirme bis 620 Pixel.
 
+[2026-08-30] Komplette Handy-Ansicht der Summary an die Vorlage angeglichen
+-------------------------------------------------------------------------------------
+- Bisher war nur die mittlere Zeile ("Urgent" + "Email requests") an die neue
+  Handy-Vorlage angepasst. Dadurch waren die Zahlen dort kleiner als in den
+  uebrigen fuenf Kacheln - das sah unstimmig aus. Jetzt ist der ganze Block
+  angeglichen.
+- Die Kachelflaeche ist nicht mehr zwangsweise quadratisch, sondern hat die
+  Hoehen aus der Vorlage: obere Zeile 110, mittlere Zeile 110, untere Zeile 116
+  Bildpunkte, dazwischen jeweils 24 Abstand. Ergibt zusammen genau die 384 der
+  Vorlage.
+- Weiter angeglichen: Abstand zwischen allen Kacheln (16 -> 24), Groesse aller
+  Zahlen (64 -> 47; nur die Zahl in der Urgent-Kachel bleibt bei 40 wie in der
+  Vorlage), die Symbole der oberen beiden Kacheln (jetzt 40x40 statt in die
+  Breite gezogen), der Abstand zwischen Symbol und Zahl (18 -> 10) und der
+  Abstand zwischen Zahl und Beschriftung in der unteren Zeile (0 -> 13).
+- Aufgeraeumt: doppelte und veraltete Regeln fuer sehr schmale Bildschirme.
+- Zwei technische Stolpersteine, die beim Messen auffielen: die Zeilenhoehen
+  mussten ueber die Flexbox gesetzt werden (eine reine Hoehenangabe wurde dort
+  ignoriert), und das Symbol brauchte zusaetzlich eine Breitenangabe, weil es
+  sonst die im Bild hinterlegte Breite von 69 behaelt.
+- Geprueft von 320 bis 620 Bildpunkten Breite: kein Element laeuft ueber, die
+  Zeilenhoehen stimmen ueberall. Die Desktop-Ansicht ist unveraendert.
+- Betroffene Datei:
+  - styles/summary/responsive.css: die Bereiche fuer Bildschirme bis 620 und
+    bis 380 Bildpunkte.
+
 [2026-08-30] Zahl der Kachel "Email requests" wird jetzt echt berechnet
 -------------------------------------------------------------------------------------
 - Bisher stand auf der neuen Kachel fest die Zahl 0. Jetzt zaehlt die Seite die

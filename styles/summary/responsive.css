@@ -95,8 +95,7 @@
    .overview__summary {
       width: calc(100% - 32px);
       height: auto;
-      aspect-ratio: 1/1;
-      gap: 16px;
+      gap: 24px;
    }
 
    .summary__card:hover {
@@ -104,15 +103,31 @@
    }
 
    .summary__todo {
-      gap: 16px;
+      flex: 0 0 110px;
+      gap: 24px;
+   }
+
+   .todo__card {
+      gap: 10px;
+   }
+
+   .todo__icon {
+      width: 40px;
+      height: 40px;
    }
 
    .summary__urgency {
+      flex: 0 0 110px;
       gap: 24px;
    }
 
    .summary__tasks {
-      gap: 16px;
+      flex: 0 0 116px;
+      gap: 24px;
+   }
+
+   .tasks__card {
+      gap: 13px;
    }
 
    .summary__urgent {
@@ -138,10 +153,6 @@
       font-size: 40px;
    }
 
-   .requests__card .summary__number {
-      font-size: 47px;
-   }
-
    .requests__card {
       gap: 13px;
    }
@@ -160,6 +171,10 @@
 
    .urgent__dividingLine {
       height: 68px;
+   }
+
+   .summary__number {
+      font-size: 47px;
    }
 
    .summary__text {
@@ -188,15 +203,6 @@
 @media (max-width: 380px) {
    .todo__card {
       gap: 0px;
-   }
-
-   .summary__number {
-      font-size: 47px;
-      font-weight: 600;
-   }
-
-   .todo__icon {
-      height: 40px;
    }
 
    .summary__number {
