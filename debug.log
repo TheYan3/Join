@@ -5,6 +5,25 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Anfragen-Zaehler auf Welcome aktualisiert sich ohne Neuladen
+-------------------------------------------------------------------------------------
+- Bisher: Die Anzeige "X of 10 requests used today" auf der Welcome-Seite wurde
+  nur ein einziges Mal geholt - beim Laden der Seite. Wer die Seite laenger
+  offen liess, sah eine veraltete Zahl, bis er die Seite neu geladen hat.
+- Geaendert: Die Zahl wird jetzt zusaetzlich in genau den zwei Momenten neu
+  gezaehlt, in denen sie wirklich wichtig ist:
+  1. beim Klick auf "Create request", also wenn Schritt 2 mit der E-Mail-
+     Anleitung aufgeht,
+  2. wenn der Browser-Tab wieder in den Vordergrund kommt (z.B. nach dem
+     Wechsel in ein anderes Fenster).
+- Warum nicht dauerhaft im Sekundentakt: Die Zahl aendert sich nur, wenn jemand
+  eine Mail schickt und die Automatisierung daraus ein Ticket baut - das dauert
+  ohnehin Minuten. Ein Dauer-Abruf wuerde also nur staendig unnoetig Daten
+  nachladen, ohne dass die Anzeige messbar aktueller waere.
+- Betroffene Dateien:
+  - scripts/welcome.js: neue kleine Funktion, die auf den Tab-Wechsel hoert,
+    und ein zusaetzlicher Zaehl-Aufruf beim Oeffnen von Schritt 2.
+
 [2026-08-30] Hinweis "Bitte Geraet drehen" komplett entfernt
 -------------------------------------------------------------------------------------
 - Bisher: Wer die Seite auf einem Handy oder Tablet quer gehalten hat, sah nur

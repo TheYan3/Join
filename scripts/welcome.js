@@ -1,5 +1,6 @@
 // Welcome page: role selection (step 1) and e-mail guide (step 2), joined by
-// a one-time splash animation and a live daily-request counter.
+// a one-time splash animation and a live daily-request counter (refreshed
+// when step 2 opens and whenever the tab becomes visible again).
 //
 // The step switch and the limit state are both plain CSS toggles on <body>
 // (".welcome--step2", ".welcome--limit") so layout.css/responsive.css can
@@ -24,7 +25,19 @@ function initWelcome() {
     playOrSkipSplash();
     setCreateRequestMailtoLink();
     bindStepNavigation();
+    bindCounterRefresh();
     loadDailyRequestCount();
+}
+
+/**
+ * Re-counts today's requests whenever the tab becomes visible again, so a
+ * page left open in the background does not keep showing a stale number.
+ * @returns {void} Nothing.
+ */
+function bindCounterRefresh() {
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) loadDailyRequestCount();
+    });
 }
 
 /**
@@ -69,11 +82,13 @@ function bindStepNavigation() {
 }
 
 /**
- * Switches the visible step to step 2 (the e-mail guide).
+ * Switches the visible step to step 2 (the e-mail guide) and re-counts
+ * today's requests, so the guide always opens with a fresh number.
  * @returns {void} Nothing.
  */
 function showStepTwo() {
     document.body.classList.add("welcome--step2");
+    loadDailyRequestCount();
 }
 
 /**
