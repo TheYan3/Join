@@ -108,7 +108,7 @@
    }
 
    .summary__urgency {
-      gap: 16px;
+      gap: 24px;
    }
 
    .summary__tasks {
@@ -116,11 +116,50 @@
    }
 
    .summary__urgent {
-      gap: 20px;
+      flex: 256;
+      min-width: 0;
+      gap: 6px;
+      padding: 0 16px;
+   }
+
+   .requests__card {
+      flex: 116;
+   }
+
+   .urgent__priority {
+      gap: 0;
+   }
+
+   .summary__card {
+      border-radius: 20px;
+   }
+
+   .summary__urgent .summary__number {
+      font-size: 40px;
+   }
+
+   .requests__card .summary__number {
+      font-size: 47px;
+   }
+
+   .requests__card {
+      gap: 13px;
+   }
+
+   .urgent__priority .priority__text {
+      font-size: 14px;
+   }
+
+   .urgent__date {
+      gap: 4px;
+   }
+
+   .date__deadline {
+      font-size: 14px;
    }
 
    .urgent__dividingLine {
-      height: 80px;
+      height: 68px;
    }
 
    .summary__text {
@@ -160,20 +199,7 @@
       height: 40px;
    }
 
-   .summary__card {
-      display: flex;
-      border-radius: 20px;
-   }
-
    .summary__number {
       font-size: 40px;
-   }
-
-   .summary__urgent {
-      gap: 8px;
-   }
-
-   .urgent__dividingLine {
-      height: 64px;
    }
 }

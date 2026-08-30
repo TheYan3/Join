@@ -19,6 +19,27 @@ neuester Eintrag oben.
 - Betroffene Datei:
   - styles/summary/responsive.css: ein Wert im Handy-Bereich (gap 40 -> 20).
 
+[2026-08-30] Handy-Ansicht der Urgency-Zeile an die Design-Vorlage angeglichen
+-------------------------------------------------------------------------------------
+- Fuer die Handy-Ansicht gibt es jetzt eine eigene Design-Vorlage (Figma). Die
+  Zeile mit "Urgent" und "Email requests" wurde Wert fuer Wert daran angeglichen.
+- Das orange Symbol bekommt links und rechts 16 Pixel Abstand zur Kachelkante -
+  es klebte vorher am Rand.
+- Angeglichen wurden ausserdem: Abstand zwischen den beiden Kacheln (16 -> 24),
+  abgerundete Ecken auf dem Handy (30 -> 20), Abstand innerhalb der
+  Urgent-Kachel (20 -> 6) und zwischen Symbol und Zahl (8 -> 0), Groesse der
+  Zahl in der Urgent-Kachel (64 -> 40) und in der Email-Kachel (64 -> 47),
+  Beschriftungen "Urgent" und "Upcoming Deadline" (16 -> 14), Hoehe der
+  Trennlinie (80 -> 68), Abstand ueber "Upcoming Deadline" (13 -> 4) sowie
+  das Breitenverhaeltnis der beiden Kacheln (jetzt 256 zu 116 wie in der
+  Vorlage).
+- Aufgeraeumt: Vier aeltere Regeln fuer sehr schmale Bildschirme wurden
+  entfernt, weil sie den neuen Vorlagenwerten widersprochen haetten.
+- Geprueft von 320 bis 620 Pixel Breite: nichts laeuft ueber, nichts wird
+  abgeschnitten.
+- Betroffene Datei:
+  - styles/summary/responsive.css: der Bereich fuer Bildschirme bis 620 Pixel.
+
 [2026-08-30] Zahl der Kachel "Email requests" wird jetzt echt berechnet
 -------------------------------------------------------------------------------------
 - Bisher stand auf der neuen Kachel fest die Zahl 0. Jetzt zaehlt die Seite die
