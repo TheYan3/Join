@@ -5,6 +5,20 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Hinweis "Bitte Geraet drehen" komplett entfernt
+-------------------------------------------------------------------------------------
+- Bisher: Wer die Seite auf einem Handy oder Tablet quer gehalten hat, sah nur
+  eine leere helle Flaeche mit dem Satz "Please rotate your device to portrait
+  mode." Die eigentliche Seite war dahinter komplett ausgeblendet.
+- Geaendert: Dieser Sperr-Hinweis wurde restlos geloescht. Die Seite zeigt jetzt
+  auch im Querformat ganz normal ihren Inhalt.
+- Betroffene Dateien:
+  - style.css: Die Gestaltungsregeln fuer den Hinweis und die Regel, die im
+    Querformat alles andere versteckt hat, sind raus.
+  - welcome.html, login.html sowie templates/signup.html, summary.html,
+    board.html, add-task.html, contacts.html, help.html, legalnotice.html und
+    privacy-Policy.html: die Textzeile mit dem Hinweis wurde entfernt.
+
 [2026-08-30] Welcome Schritt 1: passt sich jetzt an jede Handy-Bildschirmhoehe an
 -------------------------------------------------------------------------------------
 - Problem: Auf kleineren Handy-Bildschirmen (z.B. 320 x 658 Pixel) lag die
