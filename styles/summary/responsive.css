@@ -7,11 +7,11 @@
       gap: 24px;
    }
 
-   .todo__card {
-      gap: 14px;
+   .summary__urgency {
+      gap: 24px;
    }
 
-   .urgent__priority {
+   .todo__card {
       gap: 14px;
    }
 
@@ -104,6 +104,10 @@
    }
 
    .summary__todo {
+      gap: 16px;
+   }
+
+   .summary__urgency {
       gap: 16px;
    }
 

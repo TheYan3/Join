@@ -5,6 +5,41 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-30] Neue Kachel "Email requests" auf der Summary-Seite
+-------------------------------------------------------------------------------------
+- Neu: Rechts neben der grossen "Urgent / Upcoming Deadline"-Kachel steht jetzt
+  eine zweite, quadratische Kachel mit der Ueberschrift "Email requests" und
+  einer grossen Zahl darueber. Die Zahl steht vorerst fest auf 0 - sie wird
+  noch nicht berechnet, das kommt in einem spaeteren Schritt.
+- Aussehen: Die Zahl ist nicht einfarbig, sondern hat einen Farbverlauf von
+  Lila (oben) nach Blau (unten) - genau so, wie es in der Design-Vorlage
+  (Figma) hinterlegt ist. Ansonsten sieht die Kachel aus wie ihre Nachbarn:
+  weiss, abgerundete Ecken, leichter Schatten.
+- Klick-Verhalten: Ein Klick auf die neue Kachel fuehrt - wie bei allen anderen
+  Kacheln der Seite auch - zum Board. Dafuer war kein neuer Programmcode noetig,
+  die Kachel nutzt einfach dieselbe Kennzeichnung wie die uebrigen Kacheln.
+- Beim Darueberfahren mit der Maus wird die Kachel dunkel und die Zahl weiss
+  (wie bei den Nachbarkacheln); beim Draufdruecken wird sie wieder hell und die
+  Zahl bekommt ihren Farbverlauf zurueck.
+- Warum sich die "Urgent"-Kachel mitveraendert hat: Sie war vorher allein in
+  ihrer Zeile und damit ueber die volle Breite gezogen. Jetzt teilt sie sich die
+  Zeile mit der neuen Kachel und ist entsprechend schmaler (Aufteilung wie in
+  der Design-Vorlage). Damit ihr Inhalt in die schmalere Kachel passt, wurden
+  drei Werte auf die Vorgaben aus der Design-Vorlage gesetzt:
+  - der Abstand zwischen dem orangen Symbol und der Zahl "1" wurde kleiner,
+  - das Datum ist minimal kleiner (20 statt 21 Punkt),
+  - Datum und "Upcoming Deadline" haben jetzt den dunkelblauen Grauton der
+    uebrigen Beschriftungen statt reinem Schwarz.
+- Auf schmalen Bildschirmen (Handy) schrumpfen beide Kacheln gemeinsam mit; die
+  Seite bleibt an allen geprueften Breiten (380 bis 1440 Pixel) ohne Ueberlauf.
+- Betroffene Dateien:
+  - templates/summary.html: die beiden Kacheln stehen jetzt gemeinsam in einer
+    Zeile; die neue Kachel wurde ergaenzt.
+  - styles/summary/layout.css: Aussehen der neuen Kachel, der Farbverlauf der
+    Zahl und die neue Zeilen-Aufteilung.
+  - styles/summary/responsive.css: die Abstaende der neuen Zeile fuer kleinere
+    Bildschirme.
+
 [2026-08-30] Anfragen-Zaehler auf Welcome aktualisiert sich ohne Neuladen
 -------------------------------------------------------------------------------------
 - Bisher: Die Anzeige "X of 10 requests used today" auf der Welcome-Seite wurde

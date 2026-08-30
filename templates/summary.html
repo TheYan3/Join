@@ -211,30 +211,42 @@
                            </div>
                         </div>
                      </div>
-                     <div class="summary__urgent summary__card">
-                        <div class="urgent__priority priority">
+                     <div class="summary__urgency urgency">
+                        <div class="summary__urgent summary__card">
+                           <div class="urgent__priority priority">
+                              <img
+                                 src="../assets/icons/desktop/urgent.svg"
+                                 alt="Urgent"
+                                 class="urgent__icon" />
+                              <div class="priority__card">
+                                 <span class="summary__number" id="urgentCount"
+                                    >0</span
+                                 >
+                                 <span class="priority__text summary__text"
+                                    >Urgent</span
+                                 >
+                              </div>
+                           </div>
                            <img
-                              src="../assets/icons/desktop/urgent.svg"
-                              alt="Urgent"
-                              class="urgent__icon" />
-                           <div class="priority__card">
-                              <span class="summary__number" id="urgentCount"
-                                 >0</span
+                              src="../assets/icons/desktop/urgent__dividingLine.svg"
+                              alt="Dividing Line"
+                              class="urgent__dividingLine" />
+                           <div class="urgent__date">
+                              <span class="date__number" id="upcomingDeadline"
+                                 >-</span
                               >
-                              <span class="priority__text summary__text"
-                                 >Urgent</span
-                              >
+                              <span class="date__deadline">Upcoming Deadline</span>
                            </div>
                         </div>
-                        <img
-                           src="../assets/icons/desktop/urgent__dividingLine.svg"
-                           alt="Dividing Line"
-                           class="urgent__dividingLine" />
-                        <div class="urgent__date">
-                           <span class="date__number" id="upcomingDeadline"
-                              >-</span
+                        <div class="requests__card summary__card">
+                           <span
+                              class="summary__number summary__number--gradient"
+                              id="emailRequestsCount"
+                              >0</span
                            >
-                           <span class="date__deadline">Upcoming Deadline</span>
+                           <span class="summary__text"
+                              >Email <br />requests</span
+                           >
                         </div>
                      </div>
                      <div class="summary__tasks tasks">

@@ -63,6 +63,11 @@
    color: #fff;
 }
 
+.summary__card:hover .summary__number--gradient {
+   background-image: none;
+   color: #fff;
+}
+
 .summary__card:hover .todo__icon--circle {
    fill: #fff;
 }
@@ -84,6 +89,11 @@
 
 .summary__card:active .summary__text {
    color: #2b3647;
+}
+
+.summary__card:active .summary__number--gradient {
+   background-image: var(--number-gradient);
+   color: transparent;
 }
 
 .summary__card:active .todo__icon--circle {
@@ -123,19 +133,25 @@
    gap: 18px;
 }
 
+.summary__urgency {
+   display: flex;
+   flex: 1;
+   gap: 28px;
+}
+
 .summary__urgent {
    display: flex;
    justify-content: center;
    align-items: center;
-   flex: 1;
-   gap: 61px;
+   flex: 364;
+   gap: 16px;
 }
 
 .urgent__priority {
    display: flex;
    justify-content: center;
    align-items: center;
-   gap: 18px;
+   gap: 8px;
 }
 
 .urgent__icon {
@@ -166,13 +182,15 @@
 }
 
 .date__number {
-   font-size: 21px;
+   font-size: 20px;
    font-weight: 700;
+   color: #2a3647;
 }
 
 .date__deadline {
    font-size: 16px;
    font-weight: 400;
+   color: #2a3647;
 }
 
 .summary__tasks {
@@ -187,6 +205,22 @@
    align-items: center;
    flex: 1;
    flex-direction: column;
+}
+
+.requests__card {
+   text-align: center;
+   justify-content: center;
+   align-items: center;
+   flex: 168;
+   flex-direction: column;
+}
+
+.summary__number--gradient {
+   --number-gradient: linear-gradient(180deg, #8933fc 0%, #29abe2 100%);
+   background-image: var(--number-gradient);
+   -webkit-background-clip: text;
+   background-clip: text;
+   color: transparent;
 }
 
 .overview__greetings {
