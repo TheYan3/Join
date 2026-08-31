@@ -5,6 +5,55 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-31] n8n-Workflow: Erklaertexte auf der Arbeitsflaeche ergaenzt
+-------------------------------------------------------------------------------------
+- Eine Pruefer-Rueckmeldung war, dass nicht verstaendlich ist, wie die
+  Tageslimit-Pruefung im automatischen Ticket-Workflow funktioniert. Auf der
+  n8n-Arbeitsflaeche gab es zwar fuenf farbige Bereiche, aber in den
+  zugehoerigen Notizzetteln stand jeweils nur eine Ueberschrift wie
+  "Ueberpruefung des Limits von 10" - also der Name des Bereichs, aber keine
+  Erklaerung.
+- Alle fuenf Notizzettel enthalten jetzt einen ausformulierten Text in
+  einfacher Sprache: was in diesem Bereich passiert, warum es so gemacht wird,
+  und was die einzelnen Bausteine tun. Der Bereich zum Tageslimit ist der
+  ausfuehrlichste und beantwortet drei Fragen: wozu es das Limit ueberhaupt
+  gibt (die KI-Auswertung kostet pro Mail ein Stueck vom Gratis-Kontingent),
+  woher die Vergleichszahl kommt (es wird kein eigener Zaehler gefuehrt,
+  sondern im Board nachgezaehlt) und warum die Pruefung vor der KI steht und
+  nicht dahinter (eine abgewiesene Mail soll gar nichts kosten).
+- Ausserdem wurde die Workflow-Datei durch den aktuellen Stand aus der
+  laufenden n8n-Instanz ersetzt, damit Datei und laufender Workflow wieder
+  uebereinstimmen. Damit ist der weiter unten beschriebene Umbau
+  ("Tageslimit-Pruefung im n8n-Workflow zusammengelegt") wieder
+  zurueckgenommen: Es gibt weiterhin die zwei getrennten Bausteine
+  "Innerhalb Tageslimit" und "Ueber Tageslimit".
+- Beim Ablegen wurden die instanz-eigenen Angaben aus dem Export entfernt
+  (Workflow-Nummer, Versionsnummer, Kennung der n8n-Installation). Das
+  verlangt die n8n-README so, weil der Import sonst einen zweiten Workflow
+  daneben anlegt statt den bestehenden zu aktualisieren.
+- Die Beschreibung der Workflows (n8n/README.md) war unvollstaendig: Die
+  Tabelle der Bausteine listete 8 von 22 auf und sah trotzdem vollstaendig
+  aus - das gesamte Tageslimit kam darin gar nicht vor. Jetzt sind alle
+  Bausteine aufgefuehrt, plus ein eigener Abschnitt, der das Tageslimit
+  erklaert.
+- Zwei tote Verweise beseitigt:
+  - Die Beschreibung nannte einen Baustein "Statusänderungen finden", der in
+    Wirklichkeit "Statusaenderungen finden" heisst (ohne Umlaut). Wer danach
+    gesucht hat, fand nichts.
+  - Ein Erklaertext im Code verwies auf "Maengelliste P2-7". Diese Liste
+    liegt nur lokal und ist bewusst nicht Teil des Repositorys - fuer alle
+    anderen zeigte der Verweis ins Leere. Der Text erklaert den Grund jetzt
+    selbst.
+- An der Funktionsweise aendert sich nichts: Die Bausteine selbst und ihre
+  Verbindungen sind unveraendert, geaendert wurden nur Beschreibungstexte.
+- Betroffene Dateien:
+  - n8n/issue-collector.json: Texte der fuenf Notizzettel gefuellt, Datei auf
+    den aktuellen Stand aus n8n gebracht, Instanz-Angaben entfernt, toten
+    Verweis im Erklaertext ersetzt.
+  - n8n/README.md: Baustein-Tabelle vervollstaendigt, Abschnitt zum
+    Tageslimit ergaenzt, falschen Baustein-Namen korrigiert.
+
+
 [2026-08-31] Welcome-Fenster: "Not a Join user?"-Zeile auf Desktop entfernt
 -------------------------------------------------------------------------------------
 - Im ersten Schritt des Welcome-Fensters (welcome.html, Rollen-Auswahl) stand

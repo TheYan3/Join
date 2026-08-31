@@ -28,16 +28,47 @@ Fetches mails from the mailbox `join-issues@gmx.de`, has them analysed by
 Google Gemini, and creates a ticket from them in the Triage column of the
 Join board.
 
+The canvas is split into five coloured sections, each carrying a sticky note
+that explains that section in plain language — that's the fastest way in.
+The full node list:
+
 | Node | Purpose |
 |---|---|
 | Neue E-Mail | IMAP trigger on INBOX, marks processed mails as read |
 | Mail aufbereiten | extracts sender, subject and body and builds the Gemini request |
+| Tickets abrufen | fetches all tickets from Firebase — the basis for counting the daily limit |
+| Innerhalb Tageslimit | lets through only the mails that still fit today's limit, adds their queue position |
+| Ueber Tageslimit | the counterpart: the mails beyond the limit, which never reach the AI |
 | KI analysiert Mail | **Information Extractor** – pulls the ticket fields using a fixed schema |
 | Google Gemini Chat Model | the language model behind it (`gemini-3.5-flash-lite`), attached to the extractor |
 | Ticket bauen | evaluates the response, converts the date, discards non-requests |
+| Kein Ticket noetig | the other branch: mails that were no real request, deliberately without a ticket |
 | Ticket in Triage anlegen | writes the ticket into the Firebase database via REST |
 | Ticket-Ergebnis anreichern | attaches the write result to each mail's ticket data |
 | Ticket erfolgreich geschrieben? | splits the success path from the error path afterwards |
+| Bestaetigung vorbereiten → Bestaetigung senden | confirmation mail to the sender after the ticket was created |
+| Fehlerhinweis vorbereiten → Fehlerhinweis senden | honest notice to the sender when the write failed |
+| Limit-Hinweis vorbereiten → Limit-Hinweis senden | notice that today's limit is reached, sent instead of creating a ticket |
+| Mail nach erledigt | moves the handled mail to the *erledigt* folder |
+| Mail nach zu bearbeiten | moves the mail to *zu bearbeiten* so a human picks it up |
+| Mail erledigt (kein Ticket) | files mails that correctly produced no ticket |
+| Mail erledigt (Limit) | files mails that were turned away by the daily limit |
+
+### The daily limit of 10
+
+`Innerhalb Tageslimit` and `Ueber Tageslimit` both sit directly behind
+`Tickets abrufen` and each recompute the same number: how many AI tickets
+exist for today already. There is deliberately **no separate counter** that
+could drift out of sync with reality. A ticket counts when both hold:
+
+- `creator.type` is `extern` — it came from a mail, not from the board's UI
+- the timestamp inside its `id` falls on today
+
+Each waiting mail then takes a slot (`already today + its queue position`),
+so the limit still holds when several mails arrive in one run. The check
+runs **before** the AI on purpose: a mail that gets turned away costs no
+quota. Behind the AI it would be a pointless brake — the request would
+already be paid for.
 
 The write node is set to "continue on fail". Because of that, **every**
 incoming mail produces exactly one result, in unchanged order — failures
@@ -117,7 +148,7 @@ creator by e-mail.
 |---|---|
 | Alle 5 Minuten | schedule trigger |
 | Tickets abrufen | fetches the current state of all tickets |
-| Statusänderungen finden | compares against the last-seen state |
+| Statusaenderungen finden | compares against the last-seen state |
 | Benachrichtigung vorbereiten | builds the mail text, guards against infinite loops |
 | Benachrichtigung senden | sends via SMTP |
 

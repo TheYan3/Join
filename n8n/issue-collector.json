@@ -1,23 +1,22 @@
 {
   "name": "Join Issue Collector",
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "nodes": [
     {
       "parameters": {
-        "mailbox": "INBOX",
-        "postProcessAction": "read",
         "format": "resolved",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000001",
+      "id": "2f39471f-146f-4c85-93d4-2f3fded29705",
       "name": "Neue E-Mail",
       "type": "n8n-nodes-base.emailReadImap",
       "typeVersion": 2,
       "position": [
-        -260,
-        300
+        384,
+        2720
       ],
       "credentials": {
         "imap": {
@@ -31,13 +30,13 @@
         "mode": "runOnceForEachItem",
         "jsCode": "/**\n * @fileoverview Node \"Mail aufbereiten\": holt Absender, Betreff, Text und die\n * IMAP-UID aus der eingegangenen Mail und baut daraus den Text, den die\n * KI-Analyse auswertet.\n *\n * Ausgabe: ein Item je eingegangener Mail mit den Feldern uid, absenderMail,\n * absenderName, betreff und mailText.\n */\n\n/**\n * Liest Mailadresse und Anzeigename aus dem \"from\"-Feld einer Mail.\n * Die IMAP-Node liefert ein Objekt ({ value: [{ address, name }], text, html });\n * aeltere Formate liefern einen reinen String wie 'Max <max@example.org>' -\n * beides wird unterstuetzt.\n *\n * @param {{value?: Array<{address?: string, name?: string}>}|string|null|undefined} feld\n *   Das \"from\"-Feld der Mail.\n * @returns {{mail: string, name: string}} Kleingeschriebene Mailadresse und\n *   Anzeigename; beide leer, wenn das Feld fehlt.\n */\nfunction absenderAus(feld) {\n  if (!feld) return { mail: '', name: '' };\n  if (typeof feld === 'string') {\n    const treffer = feld.match(/<([^>]+)>/);\n    return {\n      mail: (treffer ? treffer[1] : feld).trim().toLowerCase(),\n      name: feld.replace(/<[^>]*>/, '').replace(/\"/g, '').trim()\n    };\n  }\n  const erster = Array.isArray(feld.value) && feld.value[0] ? feld.value[0] : {};\n  return {\n    mail: String(erster.address || '').trim().toLowerCase(),\n    name: String(erster.name || '').trim()\n  };\n}\n\nconst mail = $json;\nconst absender = absenderAus(mail.from);\nconst betreff = String(mail.subject || '').trim();\n// UID der Nachricht im Postfach - wird zum Verschieben in Ordner gebraucht\nconst uid = mail?.attributes?.uid ?? null;\nconst text = String(mail.text || mail.textAsHtml || '').trim().slice(0, 6000);\n// Heutiges Datum im JJJJ-MM-TT-Format, damit die KI-Analyse relative\n// Zeitangaben wie naechsten Freitag oder in zwei Wochen berechnen kann.\nconst heute = new Date().toISOString().slice(0, 10);\n\nreturn {\n  json: {\n    uid,\n    absenderMail: absender.mail,\n    absenderName: absender.name,\n    betreff,\n    mailText: `Heutiges Datum: ${heute}\\nVon: ${absender.mail}\\nBetreff: ${betreff}\\n\\n${text}`\n  }\n};"
       },
-      "id": "a1000000-0000-4000-8000-000000000002",
+      "id": "dec2b39a-6ab3-405a-84c6-1dd736c44101",
       "name": "Mail aufbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -40,
-        300
+        608,
+        2720
       ]
     },
     {
@@ -49,13 +48,13 @@
           "systemPromptTemplate": "Du bist der Issue-Collector eines Kanban-Boards. Analysiere die E-Mail eines Stakeholders und extrahiere daraus genau ein Ticket.\n\nRegeln:\n- istEchteAnfrage: true, wenn die Mail ein konkretes Anliegen zum Produkt enthält (Fehlermeldung, Feature-Wunsch, technische Aufgabe). false bei Spam, Werbung, Autorespondern (\"bin im Urlaub\"), reinen Grußnachrichten oder Mails ohne erkennbares inhaltliches Anliegen (z.B. nur \"Bitte um Rückruf\"). Im Zweifel true – lieber ein Ticket zu viel als ein verlorenes Anliegen.\n- category: \"technical\" für technische Aufgaben UND Bug-Meldungen, \"user-story\" für Feature-Wünsche und fachliche Anforderungen.\n- title: prägnant, max 60 Zeichen, keine Anrede, kein \"Bitte\".\n- priority: \"urgent\" bei Wörtern wie dringend, sofort, kritisch, Ausfall, Produktion, blockiert. \"low\" bei irgendwann, Kleinigkeit, nice to have, kein Stress. Sonst \"medium\".\n- deadline: Datum aus dem Text streng im ISO-Format JJJJ-MM-TT (Beispiel: 2026-09-05). Wenn keins genannt wird: leer lassen. Relative Zeitangaben (\"nächsten Freitag\", \"in zwei Wochen\", \"bis Monatsende\") ausgehend vom \"Heutigen Datum\" am Anfang der Mail in JJJJ-MM-TT umrechnen.\n- description: 1-3 Sätze, sachlich zusammengefasst, ohne Grußformeln.\n\nSchreibe durchgängig korrektes Deutsch MIT Umlauten (ä, ö, ü, ß) – niemals Umschreibungen wie \"ae\", \"oe\", \"ue\" oder \"ss\"."
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000003",
+      "id": "2c063813-301c-4467-ba09-4610c5ee222e",
       "name": "KI analysiert Mail",
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        200,
-        300
+        1408,
+        2320
       ],
       "retryOnFail": true,
       "maxTries": 2,
@@ -67,13 +66,13 @@
         "modelName": "models/gemini-3.5-flash-lite",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000006",
+      "id": "7a7e8311-f7da-4d12-9472-d06728a54c21",
       "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        220,
-        520
+        1408,
+        2512
       ],
       "credentials": {
         "googlePalmApi": {
@@ -84,16 +83,15 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Ticket bauen\": wandelt die Ergebnisse des Information\n * Extractors in Join-Tickets um und verwirft alles, was keine echte Anfrage\n * ist (darum kuemmert sich der Zweig \"Kein Ticket noetig\").\n *\n * Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt: Der\n * Extractor liefert genau ein Ergebnis je eingehender Mail. Nur die vom\n * IF-Baustein \"Innerhalb Limit?\" durchgelassenen Mails erreichen die KI -\n * Bezugsgroesse sind deshalb genau die Items aus \"Tageslimit pruefen\" mit\n * innerhalbLimit === true.\n *\n * Ausgabe: ein Item je angelegtem Ticket mit uid, absenderMail, betreff und\n * dem fertigen ticket-Objekt.\n */\nconst quellen = $('Tageslimit pruefen').all().filter((eintrag) => eintrag.json.innerhalbLimit === true);\n\n/**\n * Wandelt ein ISO-Datum (JJJJ-MM-TT) in das von Join erwartete Format\n * TT/MM/JJJJ um.\n *\n * @param {string|null|undefined} iso Datum aus der KI-Analyse.\n * @returns {string} Datum als TT/MM/JJJJ, oder \"\" wenn nichts Verwertbares\n *   geliefert wurde.\n */\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Ticket bauen\": wandelt die Ergebnisse des Information\n * Extractors in Join-Tickets um und verwirft alles, was keine echte Anfrage\n * ist (darum kuemmert sich der Zweig \"Kein Ticket noetig\").\n *\n * Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt: Der\n * Extractor liefert genau ein Ergebnis je eingehender Mail. Nach der\n * Limitpruefung erreichen nur die durchgelassenen Mails die KI, deshalb ist\n * \"Innerhalb Tageslimit\" die Bezugsgroesse fuer diese Zuordnung.\n *\n * Ausgabe: ein Item je angelegtem Ticket mit uid, absenderMail, betreff und\n * dem fertigen ticket-Objekt.\n */\nconst quellen = $('Innerhalb Tageslimit').all();\n\n/**\n * Wandelt ein ISO-Datum (JJJJ-MM-TT) in das von Join erwartete Format\n * TT/MM/JJJJ um.\n *\n * @param {string|null|undefined} iso Datum aus der KI-Analyse.\n * @returns {string} Datum als TT/MM/JJJJ, oder \"\" wenn nichts Verwertbares\n *   geliefert wurde.\n */\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000004",
+      "id": "78a0447b-ed92-4788-af3d-ad97a34ed1cc",
       "name": "Ticket bauen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        480,
-        300
+        2080,
+        1984
       ]
     },
     {
@@ -107,13 +105,13 @@
           "timeout": 30000
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000005",
+      "id": "aeb75690-e06b-42b1-8c03-c7a41796096e",
       "name": "Ticket in Triage anlegen",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        700,
-        300
+        2304,
+        1984
       ],
       "retryOnFail": true,
       "maxTries": 1,
@@ -122,16 +120,15 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "/**\n * @fileoverview Node \"Ticket-Ergebnis anreichern\": fuehrt die Ticketdaten aus\n * \"Ticket bauen\" und das Schreibergebnis aus \"Ticket in Triage anlegen\"\n * wieder zu einem Item zusammen.\n *\n * \"Ticket in Triage anlegen\" laeuft mit onError: continueRegularOutput -\n * dadurch erzeugt JEDES Eingangs-Item garantiert genau ein Ausgangs-Item, in\n * derselben Reihenfolge, egal ob das Schreiben geklappt hat oder nicht (nur\n * der Inhalt unterscheidet sich: { name: \"<Firebase-Schluessel>\" } bei\n * Erfolg, { error: ... } bei einem Fehler). An DIESER Stelle - direkt hinter\n * \"Ticket in Triage anlegen\", bevor irgendetwas gefiltert wird - hat dieser\n * Baustein deshalb IMMER genau so viele Items in derselben Reihenfolge wie\n * \"Ticket bauen\". Die Zuordnung ueber die Position ist hier also sicher,\n * ganz ohne pairedItem oder $('Node').item (ein bekannter n8n-Fehler laesst\n * Letzteres nach einem Fehlerausgang gelegentlich ins Leere laufen -\n * deshalb wird das hier bewusst nicht verwendet).\n *\n * Alle nachfolgenden Bausteine (Mail verschieben, Bestaetigung/Fehlerhinweis\n * schicken) lesen ihre Daten danach direkt aus dem eigenen Eingangs-Item -\n * das funktioniert nur, weil dieses Item hier BEIDE Haelften (Ticketdaten\n * und Schreibergebnis) bekommt, BEVOR der nachfolgende IF-Baustein die\n * Liste in Erfolg/Fehler aufteilt (danach waere die Position nicht mehr\n * sicher).\n *\n * Ausgabe: ein Item je Ticket mit uid, absenderMail, absenderName, betreff,\n * ticket (aus \"Ticket bauen\") sowie zusaetzlich name bzw. error (aus\n * \"Ticket in Triage anlegen\").\n */\nconst quellen = $('Ticket bauen').all();\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: { ...quelle, ...items[i].json } });\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000021",
+      "id": "c90c91b5-1074-43e9-b291-182e3b49cdce",
       "name": "Ticket-Ergebnis anreichern",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        820,
-        300
+        2528,
+        1984
       ]
     },
     {
@@ -158,83 +155,78 @@
         },
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000022",
+      "id": "ede4c900-eea9-4ea1-aeb3-bec508cf4646",
       "name": "Ticket erfolgreich geschrieben?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        960,
-        300
+        2752,
+        1984
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Kein Ticket noetig\": zweiter Zweig hinter der KI-Analyse,\n * fuer Mails die KEINE echte Anfrage waren (Spam, Autoresponder, inhaltslose\n * Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket - und gelten\n * deshalb als erledigt.\n *\n * Die Zuordnung erfolgt ueber die Position; Bezugsgroesse sind die Items aus\n * \"Tageslimit pruefen\" mit innerhalbLimit === true, weil nur die vom\n * IF-Baustein \"Innerhalb Limit?\" durchgelassenen Mails die KI erreichen.\n *\n * Ausgabe: ein Item je verworfener Mail mit uid, betreff und Grund.\n */\nconst quellen = $('Tageslimit pruefen').all().filter((eintrag) => eintrag.json.innerhalbLimit === true);\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Kein Ticket noetig\": zweiter Zweig hinter der KI-Analyse,\n * fuer Mails die KEINE echte Anfrage waren (Spam, Autoresponder, inhaltslose\n * Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket - und gelten\n * deshalb als erledigt.\n *\n * Die Zuordnung erfolgt ueber die Position; Bezugsgroesse ist\n * \"Innerhalb Tageslimit\", weil nur die durchgelassenen Mails die KI erreichen.\n *\n * Ausgabe: ein Item je verworfener Mail mit uid, betreff und Grund.\n */\nconst quellen = $('Innerhalb Tageslimit').all();\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000007",
+      "id": "b0035bf7-f71b-4c0a-b373-fcf4e674b03c",
       "name": "Kein Ticket noetig",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        480,
-        480
+        2080,
+        2288
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = items[i].json.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000008",
+      "id": "3f3aee8e-4995-4a07-9bf6-d19fd0faa9c5",
       "name": "Mail nach erledigt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        960,
-        260
+        3152,
+        1968
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = items[i].json.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'zu bearbeiten', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'zu bearbeiten' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000009",
+      "id": "ac16f04e-65e5-4c4c-b872-4dd38be58d6d",
       "name": "Mail nach zu bearbeiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        960,
-        640
+        3152,
+        2656
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Jedes Item einzeln verschieben. Fehler werden gesammelt statt den ganzen\n// Lauf abzubrechen - eine nicht verschiebbare Mail soll nicht das Ticket\n// entwerten, das bereits angelegt wurde.\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const uid = items[i].json.uid;\n  if (!uid) {\n    ergebnisse.push({ json: { verschoben: false, grund: 'keine UID ermittelbar' } });\n    continue;\n  }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt' } });\n  } catch (fehler) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(fehler.message) } });\n  }\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000010",
+      "id": "b4e43197-093f-4933-8647-d5f33ac86254",
       "name": "Mail erledigt (kein Ticket)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        720,
-        480
+        2544,
+        2288
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Bestaetigung vorbereiten\": baut die Bestaetigungsmail an\n * den Absender, nachdem sein Ticket angelegt wurde.\n *\n * Liest die Ticketdaten aus dem EIGENEN Eingangs-Item statt sie ueber die\n * Position aus einem fruehen Baustein zu erraten. Dieses Item kommt vom\n * IF-Baustein \"Ticket erfolgreich geschrieben?\" (Erfolgs-Ausgang) und\n * enthaelt dank \"Ticket-Ergebnis anreichern\" bereits beides: die\n * Ticketdaten UND das Schreibergebnis. Das haelt die Zuordnung auch dann\n * richtig, wenn in einem Lauf mehrere Mails ankommen und nur ein Teil davon\n * erfolgreich geschrieben wird (siehe Maengelliste P2-7).\n *\n * Ausgabe: ein Item je zu versendender Mail mit an, betreff und text.\n */\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const quelle = items[i].json;\n  if (!quelle || !quelle.ticket) continue;\n\n  // SCHUTZ VOR ENDLOSSCHLEIFE: Niemals an das eigene Postfach antworten.\n  // Sonst loest die Antwort den Workflow erneut aus - endlos.\n  if (String(quelle.absenderMail || '').toLowerCase() === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an: quelle.absenderMail,\n    betreff: `Ihre Anfrage ist angekommen: ${quelle.ticket.title}`,\n    text: [\n      'Hallo,',\n      '',\n      'vielen Dank fuer Ihre Nachricht. Wir haben daraus ein Ticket erstellt:',\n      '',\n      `  Titel:       ${quelle.ticket.title}`,\n      `  Einstufung:  ${quelle.ticket.category === 'technical' ? 'Technische Aufgabe' : 'Feature-Wunsch'}`,\n      `  Prioritaet:  ${quelle.ticket.priority}`,\n      quelle.ticket.date ? `  Faellig bis: ${quelle.ticket.date}` : '  Faellig bis: nicht angegeben',\n      '',\n      'Das Ticket liegt jetzt in unserer Triage-Spalte und wird dort gesichtet.',\n      'Sobald es sich bewegt, melden wir uns erneut.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n      'Titel und Einstufung stammen aus einer KI-Analyse Ihrer Mail.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Bestaetigung vorbereiten\": baut die Bestaetigungsmail an\n * den Absender, nachdem sein Ticket angelegt wurde.\n *\n * Liest die Ticketdaten aus dem EIGENEN Eingangs-Item statt sie ueber die\n * Position aus einem fruehen Baustein zu erraten. Dieses Item kommt vom\n * IF-Baustein \"Ticket erfolgreich geschrieben?\" (Erfolgs-Ausgang) und\n * enthaelt dank \"Ticket-Ergebnis anreichern\" bereits beides: die\n * Ticketdaten UND das Schreibergebnis. Das haelt die Zuordnung auch dann\n * richtig, wenn in einem Lauf mehrere Mails ankommen und nur ein Teil davon\n * erfolgreich geschrieben wird: Wuerde stattdessen ueber die Position in\n * einem frueheren Baustein zugeordnet, bekaeme nach dem ersten Fehlschlag\n * jeder folgende Absender die Bestaetigung fuer ein fremdes Ticket.\n *\n * Ausgabe: ein Item je zu versendender Mail mit an, betreff und text.\n */\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const quelle = items[i].json;\n  if (!quelle || !quelle.ticket) continue;\n\n  // SCHUTZ VOR ENDLOSSCHLEIFE: Niemals an das eigene Postfach antworten.\n  // Sonst loest die Antwort den Workflow erneut aus - endlos.\n  if (String(quelle.absenderMail || '').toLowerCase() === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an: quelle.absenderMail,\n    betreff: `Ihre Anfrage ist angekommen: ${quelle.ticket.title}`,\n    text: [\n      'Hallo,',\n      '',\n      'vielen Dank fuer Ihre Nachricht. Wir haben daraus ein Ticket erstellt:',\n      '',\n      `  Titel:       ${quelle.ticket.title}`,\n      `  Einstufung:  ${quelle.ticket.category === 'technical' ? 'Technische Aufgabe' : 'Feature-Wunsch'}`,\n      `  Prioritaet:  ${quelle.ticket.priority}`,\n      quelle.ticket.date ? `  Faellig bis: ${quelle.ticket.date}` : '  Faellig bis: nicht angegeben',\n      '',\n      'Das Ticket liegt jetzt in unserer Triage-Spalte und wird dort gesichtet.',\n      'Sobald es sich bewegt, melden wir uns erneut.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n      'Titel und Einstufung stammen aus einer KI-Analyse Ihrer Mail.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000011",
+      "id": "4e85d745-d2c0-4032-b5a2-87c3fc040a9e",
       "name": "Bestaetigung vorbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        960,
-        100
+        3152,
+        1776
       ]
     },
     {
@@ -248,34 +240,34 @@
           "appendAttribution": false
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000012",
+      "id": "37183688-80e2-4803-aec4-81eb3e1dfded",
       "name": "Bestaetigung senden",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        1180,
-        100
+        3376,
+        1776
       ],
-      "onError": "continueRegularOutput",
+      "webhookId": "0e59ee3a-1223-470e-bbb3-cad91d9cec9c",
       "credentials": {
         "smtp": {
           "id": "Hap4YDNAMBaOKZAK",
           "name": "SMTP account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "/**\n * @fileoverview Node \"Fehlerhinweis vorbereiten\": baut den Hinweis an den\n * Absender, wenn die automatische Verarbeitung scheiterte. Die Items der\n * Fehlerausgaenge fuehren die Absenderadresse mit.\n *\n * Ausgabe: ein Item je zu versendender Mail mit an, betreff und text.\n */\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\n\nconst ergebnisse = [];\nfor (const item of items) {\n  const an = String(item.json.absenderMail || '').toLowerCase();\n  if (!an) continue;\n  // Schutz vor Endlosschleife (siehe Bestaetigungs-Node)\n  if (an === eigenesPostfach) continue;\n\n  ergebnisse.push({ json: {\n    an,\n    betreff: 'Ihre Nachricht ist angekommen',\n    text: [\n      'Hallo,',\n      '',\n      'wir haben Ihre Nachricht erhalten. Die automatische Verarbeitung hat',\n      'diesmal nicht funktioniert, deshalb schaut sich jemand aus dem Team',\n      'Ihre Anfrage persoenlich an und meldet sich zeitnah bei Ihnen.',\n      '',\n      'Es geht nichts verloren - Ihre Mail ist bei uns gespeichert.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000013",
+      "id": "f41cb87a-7c4e-47ea-9a6c-0d75378a6317",
       "name": "Fehlerhinweis vorbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        960,
-        820
+        3152,
+        2848
       ]
     },
     {
@@ -289,21 +281,22 @@
           "appendAttribution": false
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000014",
+      "id": "12a5861b-70ec-4326-9c41-df2b094a08c4",
       "name": "Fehlerhinweis senden",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        1180,
-        820
+        3376,
+        2848
       ],
-      "onError": "continueRegularOutput",
+      "webhookId": "20049f97-3042-4139-9821-4e5dfbfc6d4d",
       "credentials": {
         "smtp": {
           "id": "Hap4YDNAMBaOKZAK",
           "name": "SMTP account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -312,13 +305,13 @@
           "timeout": 20000
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000015",
+      "id": "4de4496b-07a2-4dba-af7d-54df63c5a840",
       "name": "Tickets abrufen",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        140,
-        300
+        832,
+        2720
       ],
       "executeOnce": true,
       "retryOnFail": true,
@@ -328,63 +321,41 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Tageslimit pruefen\": ermittelt einmalig, wie viele\n * KI-Tickets heute schon erstellt wurden, und markiert jede wartende Mail\n * mit ihrem Platz im Tageslimit. Die eigentliche Weiche (durchlassen oder\n * abweisen) uebernimmt der nachfolgende IF-Baustein \"Innerhalb Limit?\" -\n * diese Node filtert NICHT mehr, sondern gibt IMMER alle wartenden Mails\n * aus.\n *\n * Gezaehlt werden die Tickets selbst statt eines separaten Zaehlers, der\n * auseinanderlaufen koennte: KI-Tickets sind an creator.type \"extern\"\n * erkennbar, das Anlegedatum steckt als Zeitstempel in der id.\n *\n * Ausgabe: ein Item je wartender Mail mit allen bisherigen Feldern der Mail\n * plus platzNr, heuteSchon, limit und innerhalbLimit.\n */\nconst TAGESLIMIT = 10;\n\n// $input.first() statt $json: In der Betriebsart \"Run Once for All Items\"\n// ist $json laut n8n-Doku nicht vorgesehen. \"Tickets abrufen\" liefert genau\n// ein Item mit allen Tickets - das ist hier gemeint.\nconst roh = $input.first().json.data ?? $input.first().json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Jede wartende Mail belegt einen Platz. Position i bekommt Platz\n// heuteSchon + i - dadurch greift das Limit auch bei mehreren Mails im\n// selben Durchlauf korrekt. Gefiltert wird hier nicht mehr - das\n// entscheidet der nachfolgende IF-Baustein anhand von innerhalbLimit.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  ergebnisse.push({ json: {\n    ...mails[i].json,\n    platzNr: heuteSchon + i + 1,\n    heuteSchon,\n    limit: TAGESLIMIT,\n    innerhalbLimit: heuteSchon + i < TAGESLIMIT\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Innerhalb Tageslimit\": laesst nur die Mails durch, die\n * heute noch in das Tageslimit passen. Die Pruefung laeuft VOR der KI-Analyse,\n * damit eine abgewiesene Mail gar kein KI-Kontingent kostet.\n *\n * Gezaehlt werden die Tickets selbst statt eines separaten Zaehlers, der\n * auseinanderlaufen koennte: KI-Tickets sind an creator.type \"extern\"\n * erkennbar, das Anlegedatum steckt als Zeitstempel in der id.\n *\n * Ausgabe: ein Item je durchgelassener Mail, ergaenzt um platzNr.\n */\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Jede wartende Mail belegt einen Platz. Position i bekommt Platz\n// heuteSchon + i - dadurch greift das Limit auch bei mehreren Mails\n// im selben Durchlauf korrekt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i >= TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, platzNr: heuteSchon + i + 1 } });\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000023",
-      "name": "Tageslimit pruefen",
+      "id": "1c904e40-8dc3-468a-9cb1-775389c2123c",
+      "name": "Innerhalb Tageslimit",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        340,
-        480
+        1088,
+        2320
       ]
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "21000000-0000-4000-8000-000000000002",
-              "leftValue": "={{ $json.innerhalbLimit }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
+        "jsCode": "/**\n * @fileoverview Node \"Ueber Tageslimit\": Gegenstueck zu\n * \"Innerhalb Tageslimit\" - gibt genau die Mails aus, die heute nicht mehr in\n * das Limit passen. Sie bekommen einen Hinweis per Mail statt eines Tickets.\n *\n * Gezaehlt wird nach derselben Regel wie im Gegenstueck: die Tickets selbst,\n * erkennbar an creator.type \"extern\", mit dem Anlegedatum als Zeitstempel in\n * der id.\n *\n * Ausgabe: ein Item je abgewiesener Mail, ergaenzt um heuteSchon und limit.\n */\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Gegenstueck: alles, was ueber dem Tageslimit liegt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i < TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, heuteSchon, limit: TAGESLIMIT } });\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000024",
-      "name": "Innerhalb Limit?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
+      "id": "33b4474c-c798-464b-b3a2-d63dbd286c1e",
+      "name": "Ueber Tageslimit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        580,
-        480
+        1104,
+        3104
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "/**\n * @fileoverview Node \"Limit-Hinweis vorbereiten\": baut die Mail, die dem\n * Absender das erreichte Tageslimit erklaert, damit seine Nachricht nicht\n * kommentarlos liegen bleibt.\n *\n * Ausgabe: ein Item je zu versendender Mail mit an, betreff und text.\n */\nconst eigenesPostfach = String($env.JOIN_MAIL_USER || '').toLowerCase();\nconst ergebnisse = [];\nfor (const item of items) {\n  const an = String(item.json.absenderMail || '').toLowerCase();\n  if (!an || an === eigenesPostfach) continue;   // Schutz vor Endlosschleife\n  ergebnisse.push({ json: {\n    an,\n    betreff: 'Tageslimit erreicht - Ihre Anfrage kam an',\n    text: [\n      'Hallo,',\n      '',\n      `fuer heute ist das Limit von ${item.json.limit} automatisch erstellten`,\n      'Anfragen erreicht. Ihre Nachricht ist bei uns angekommen, es wurde aber',\n      'noch kein Ticket daraus erzeugt.',\n      '',\n      'Das Limit schuetzt vor unerwartet hohen Kosten der KI-Auswertung.',\n      'Bitte schicken Sie Ihre Anfrage morgen noch einmal - oder warten Sie',\n      'kurz ab, jemand aus dem Team sieht die Nachricht ohnehin.',\n      '',\n      'Hinweis: Diese Nachricht wurde automatisch erzeugt.',\n    ].join('\\n')\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000018",
+      "id": "4f91ec8b-a341-4c92-861f-6f558e096ebd",
       "name": "Limit-Hinweis vorbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        560,
-        900
+        3152,
+        3360
       ]
     },
     {
@@ -398,41 +369,41 @@
           "appendAttribution": false
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000019",
+      "id": "40465ddf-af90-43ef-aef7-920add9c1a48",
       "name": "Limit-Hinweis senden",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        780,
-        900
+        3360,
+        3360
       ],
-      "onError": "continueRegularOutput",
+      "webhookId": "45264c9d-7f9f-48d3-8c4f-2f5c0f1ec1b3",
       "credentials": {
         "smtp": {
           "id": "Hap4YDNAMBaOKZAK",
           "name": "SMTP account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
         "jsCode": "const tls = require('tls');\n\n/**\n * Verschiebt eine E-Mail per IMAP in einen anderen Ordner.\n * Nutzt nur das eingebaute tls-Modul - Dateizugriff ist in dieser\n * n8n-Instanz bewusst gesperrt.\n */\nfunction mailVerschieben(zugang, uid, zielordner, quellordner) {\n  return new Promise((resolve, reject) => {\n    const socket = tls.connect(\n      { host: zugang.host, port: Number(zugang.port) || 993, servername: zugang.host },\n      () => {}\n    );\n    socket.setEncoding('utf8');\n    socket.setTimeout(20000);\n\n    let puffer = '';\n    let schritt = 0;\n    const q = (wert) => `\"${String(wert).replace(/\\\\/g, '\\\\\\\\').replace(/\"/g, '\\\\\"')}\"`;\n    const befehle = [\n      { tag: 'a1', cmd: `a1 LOGIN ${q(zugang.user)} ${q(zugang.passwort)}` },\n      { tag: 'a2', cmd: `a2 SELECT ${q(quellordner)}` },\n      { tag: 'a3', cmd: `a3 UID MOVE ${Number(uid)} ${q(zielordner)}` },\n      { tag: 'a4', cmd: 'a4 LOGOUT' },\n    ];\n\n    const abbrechen = (fehler) => { try { socket.destroy(); } catch (e) {} reject(fehler); };\n    socket.on('timeout', () => abbrechen(new Error('IMAP-Zeitueberschreitung')));\n    socket.on('error', (e) => abbrechen(e));\n\n    socket.on('data', (teil) => {\n      puffer += teil;\n      if (schritt === 0) {\n        if (!/^\\* OK/m.test(puffer)) return;\n        puffer = ''; socket.write(befehle[0].cmd + '\\r\\n'); schritt = 1; return;\n      }\n      const aktuell = befehle[schritt - 1];\n      const antwort = new RegExp(`^${aktuell.tag} (OK|NO|BAD)(.*)$`, 'm').exec(puffer);\n      if (!antwort) return;\n      if (antwort[1] !== 'OK') {\n        return abbrechen(new Error(`IMAP ${aktuell.tag}: ${antwort[1]}${antwort[2]}`));\n      }\n      // Ein blosses OK beweist nichts: bei unbekannter UID meldet der Server\n      // ebenfalls OK. Nur COPYUID/EXPUNGE belegen den echten Umzug.\n      if (aktuell.tag === 'a3' && !/COPYUID|EXPUNGE/.test(puffer)) {\n        return abbrechen(new Error(`Nachricht UID ${uid} nicht gefunden - nichts verschoben`));\n      }\n      puffer = '';\n      if (schritt >= befehle.length) { socket.end(); return resolve(true); }\n      socket.write(befehle[schritt].cmd + '\\r\\n'); schritt += 1;\n    });\n  });\n}\n\nconst zugang = {\n  host: $env.JOIN_MAIL_HOST,\n  port: $env.JOIN_MAIL_PORT,\n  user: $env.JOIN_MAIL_USER,\n  passwort: $env.JOIN_MAIL_PASSWORD,\n};\n\n// Ueber dem Limit abgewiesene Mails sind korrekt behandelt (Absender wurde\n// informiert), deshalb gelten sie als erledigt.\nconst ergebnisse = [];\nfor (const item of items) {\n  const uid = item.json.uid;\n  if (!uid) { ergebnisse.push({ json: { verschoben: false, grund: 'keine UID' } }); continue; }\n  try {\n    await mailVerschieben(zugang, uid, 'erledigt', 'INBOX');\n    ergebnisse.push({ json: { verschoben: true, uid, ordner: 'erledigt', grund: 'Tageslimit' } });\n  } catch (f) {\n    ergebnisse.push({ json: { verschoben: false, uid, fehler: String(f.message) } });\n  }\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000020",
+      "id": "360ac5e1-9311-4331-af47-6c3841ba5849",
       "name": "Mail erledigt (Limit)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        560,
-        1060
+        3152,
+        3568
       ]
     },
     {
       "parameters": {
-        "content": "Trigger und vorbereitung",
+        "content": "## 1. Post abholen und öffnen\n\n**Neue E-Mail** überwacht das Postfach und startet den\nAblauf, sobald eine ungelesene Nachricht eintrifft. Jede\nabgeholte Mail wird sofort als gelesen markiert, damit\nsie nicht doppelt bearbeitet wird.\n\n**Mail aufbereiten** zerlegt die Nachricht in ihre\nEinzelteile: Absender, Betreff und Text. Zusätzlich hängt\ndieser Schritt das heutige Datum an den Text – die KI\nbraucht es später, um Angaben wie „nächsten Freitag\" in\nein echtes Datum umzurechnen.",
         "height": 2224,
-        "width": 1008
+        "width": 464
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -445,7 +416,7 @@
     },
     {
       "parameters": {
-        "content": "Ticket KI Vearbeitung",
+        "content": "## 3. Die KI liest die Mail\n\n**KI analysiert Mail** bekommt den aufbereiteten Mailtext\nund füllt damit ein festes Formular aus – immer dieselben\nFelder, damit daraus ein Ticket werden kann:\n\n- Ist das überhaupt ein echtes Anliegen?\n- Titel und kurze Beschreibung\n- Dringlichkeit und Kategorie\n- gewünschtes Datum, falls eines genannt wurde\n\n**Google Gemini Chat Model** ist das Sprachmodell\ndahinter. Es hängt unter der Node und liefert nur die\nDenkleistung – *was* ausgefüllt werden soll, gibt die\nNode darüber vor.",
         "height": 2224,
         "width": 736,
         "color": 5
@@ -461,7 +432,7 @@
     },
     {
       "parameters": {
-        "content": "Ticket Erstellung",
+        "content": "## 4. Ticket anlegen – oder bewusst keines\n\nNach der KI-Analyse trennen sich zwei Wege.\n\n**Oberer Weg – es war ein echtes Anliegen:**\n**Ticket bauen** formt aus der Analyse ein fertiges\nTicket: Datum ins richtige Format gebracht, Absender als\nErsteller eingetragen. **Ticket in Triage anlegen**\nspeichert es in der Datenbank in der Spalte „Triage\".\n\n**Ticket-Ergebnis anreichern** hängt an jede Mail das\nErgebnis des Speicherversuchs. Erst dadurch ist im\nnächsten Schritt eindeutig, welche Mail geklappt hat und\nwelche nicht – auch wenn mehrere Mails gleichzeitig\nverarbeitet werden. **Ticket erfolgreich geschrieben?**\ntrennt danach Erfolg von Fehler.\n\n**Unterer Weg – es war kein echtes Anliegen:**\nBei Werbung, Abwesenheitsnotizen oder reinen Grüßen\nentsteht über **Kein Ticket noetig** bewusst kein Ticket.\nDie Mail gilt trotzdem als sauber bearbeitet und wandert\nüber **Mail erledigt (kein Ticket)** in den Ordner\n„erledigt\".",
         "height": 2224,
         "width": 944,
         "color": 7
@@ -477,7 +448,7 @@
     },
     {
       "parameters": {
-        "content": "Mail Senden",
+        "content": "## 5. Antwort schreiben und Mail einsortieren\n\nZum Schluss bekommt jeder Absender eine Rückmeldung, und\ndie ursprüngliche Mail wird im Postfach einsortiert. Drei\nAusgänge sind möglich:\n\n**Bestätigung** – Das Ticket wurde angelegt. Die Mail\nwandert in den Ordner „erledigt\".\n\n**Fehlerhinweis** – Das Speichern hat nicht geklappt. Die\nMail wandert nach „zu bearbeiten\", damit ein Mensch sie\nansieht, und der Absender erfährt ehrlich, dass es\ngehakt hat.\n\n**Limit-Hinweis** – Das Tageslimit war erreicht (siehe\nBereich 2). Die Mail wandert nach „erledigt\", weil sie\nkorrekt behandelt wurde: Der Absender wurde informiert.\n\nVor jedem Versand wird geprüft, ob der Empfänger zufällig\ndas eigene Postfach ist. Ohne diese Prüfung würde sich\ndas System selbst anschreiben und eine Endlosschleife\nauslösen.",
         "height": 2224,
         "width": 736,
         "color": 6
@@ -490,6 +461,22 @@
       ],
       "id": "cd9b7a8c-ad22-4993-b448-5c28ed71b7e9",
       "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Tageslimit: höchstens 10 Anfragen pro Tag\n\n**Wozu gibt es das?**\nJede Mail, die weitergereicht wird, kostet eine Anfrage\nbei der KI – und das Gratis-Kontingent ist pro Tag\nbegrenzt. Ohne Bremse könnte eine Spam-Welle das\nKontingent in wenigen Minuten aufbrauchen. Danach käme\nkeine einzige echte Anfrage mehr durch.\n\n**Woher kommt die Zahl, mit der verglichen wird?**\nEs gibt bewusst keinen eigenen Zähler, der mit der\nWirklichkeit auseinanderlaufen könnte. Stattdessen holt\n**Tickets abrufen** die Ticket-Liste aus der Datenbank\nund zählt darin die Tickets, die die KI heute schon\nangelegt hat. Erkennbar sind sie an zwei Merkmalen:\n\n- der Markierung „extern\" – das Ticket ist aus einer Mail\n  entstanden, nicht von Hand angelegt worden\n- dem Zeitstempel in der Ticket-Nummer – daraus ergibt\n  sich, ob das Ticket von heute ist\n\n**Die Weiche**\nJede wartende Mail bekommt eine Platznummer: die heute\nbereits angelegten Tickets plus ihre eigene Position in\nder Warteschlange. Dadurch stimmt die Zählung auch dann,\nwenn mehrere Mails gleichzeitig eintreffen.\n\n- **Innerhalb Tageslimit** (Platz 1 bis 10):\n  Die Mail läuft weiter zur KI-Analyse.\n- **Über Tageslimit** (ab Platz 11):\n  Die Mail geht *nicht* zur KI. Der Absender bekommt eine\n  Antwort, dass das Tageslimit erreicht ist und er es\n  morgen erneut versuchen soll. Seine Mail wandert in den\n  Ordner „erledigt\", weil sie korrekt behandelt wurde.\n\n**Warum steht die Prüfung vor der KI und nicht dahinter?**\nWeil eine abgewiesene Mail so gar kein Kontingent\nverbraucht. Stünde die Prüfung dahinter, wäre die Bremse\nwirkungslos – die Anfrage wäre dann längst bezahlt.",
+        "height": 2224,
+        "width": 528,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        736,
+        1648
+      ],
+      "id": "4f23fd9a-91d8-4e0d-ad10-932924816624",
+      "name": "Sticky Note4"
     }
   ],
   "connections": {
@@ -613,7 +600,12 @@
       "main": [
         [
           {
-            "node": "Tageslimit pruefen",
+            "node": "Innerhalb Tageslimit",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Ueber Tageslimit",
             "type": "main",
             "index": 0
           }
@@ -632,18 +624,7 @@
         ]
       ]
     },
-    "Tageslimit pruefen": {
-      "main": [
-        [
-          {
-            "node": "Innerhalb Limit?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Innerhalb Limit?": {
+    "Innerhalb Tageslimit": {
       "main": [
         [
           {
@@ -651,7 +632,11 @@
             "type": "main",
             "index": 0
           }
-        ],
+        ]
+      ]
+    },
+    "Ueber Tageslimit": {
+      "main": [
         [
           {
             "node": "Limit-Hinweis vorbereiten",
