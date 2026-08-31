@@ -5,6 +5,21 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-31] Welcome-Fenster: "Not a Join user?"-Zeile auf Desktop entfernt
+-------------------------------------------------------------------------------------
+- Im ersten Schritt des Welcome-Fensters (welcome.html, Rollen-Auswahl) stand
+  oben rechts neben dem Logo die Zeile "Not a Join user? / Sign up". Die
+  wurde auf Wunsch komplett entfernt, weil der Anmelde-Weg fuer Nicht-Nutzer
+  auf Desktop schon ueber die Startseite laeuft.
+- Auf schmalen Bildschirmen (Handy/Tablet, unter 1081px) bleibt die Zeile
+  unveraendert sichtbar und funktioniert weiterhin wie bisher - dort ist sie
+  seit der Figma-Vorlage fester Bestandteil.
+- Umgesetzt als reine Anzeige-Aenderung: Der Knopf bleibt technisch im
+  Hintergrund vorhanden (unsichtbar auf Desktop), nichts wurde geloescht -
+  so bleibt die Mobile-Ansicht garantiert unangetastet.
+- Betroffene Datei: styles/welcome/layout.css.
+
+
 [2026-08-31] Tageslimit-Pruefung im n8n-Workflow zusammengelegt
 -------------------------------------------------------------------------------------
 - Im automatischen Ticket-Workflow (n8n) gab es bisher zwei fast identische
