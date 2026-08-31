@@ -5,6 +5,18 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-31] Symbol fuer KI-generierte Tickets abgelegt
+-------------------------------------------------------------------------------------
+- Neu im Projekt liegt das Bild "Note _ KI generiert.svg" - ein schmales
+  Abzeichen (177 x 22 Bildpunkte), das spaeter an Tickets angezeigt werden
+  soll, die automatisch aus einer E-Mail entstanden sind.
+- Es wird im Moment noch nirgends verwendet. Abgelegt wird es jetzt schon,
+  damit es beim Einbauen bereitliegt und nicht nur lokal auf einem Rechner
+  herumliegt.
+- Betroffene Datei:
+  - assets/icons/desktop/Note _ KI generiert.svg: neu hinzugefuegt.
+
+
 [2026-08-31] n8n-Workflow: Erklaertexte auf der Arbeitsflaeche ergaenzt
 -------------------------------------------------------------------------------------
 - Eine Pruefer-Rueckmeldung war, dass nicht verstaendlich ist, wie die
