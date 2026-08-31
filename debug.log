@@ -5,6 +5,16 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-31] n8n-README auf Englisch umgestellt
+-------------------------------------------------------------------------------------
+- Die Datei n8n/README.md war komplett auf Deutsch geschrieben, obwohl der
+  Rest des Projekts (Haupt-README, Oberflaeche) auf Englisch ist.
+- Warum: Einheitliche Sprache im Projekt. Inhalt und Struktur (Tabellen,
+  Warnhinweise, technische Node-Namen wie "Mail aufbereiten") sind unveraendert
+  geblieben - nur der Fliesstext wurde uebersetzt.
+- Betroffene Datei:
+  - n8n/README.md: komplett ins Englische uebersetzt.
+
 [2026-08-30] Kleinerer Abstand in der Urgent-Kachel auf dem Handy
 -------------------------------------------------------------------------------------
 - Auf schmalen Bildschirmen (bis 620 Pixel Breite) war der Abstand zwischen dem

@@ -1,150 +1,151 @@
-# n8n-Workflows
+# n8n Workflows
 
-Exportierte Workflows des Join Issue Collectors. Sie laufen auf der n8n-Instanz
-des Homeservers und werden über die n8n Public API eingespielt.
+Exported workflows for the Join issue collector. They run on the home server's
+n8n instance and are imported via the n8n Public API.
 
-## Importieren und aktivieren
+## Importing and activating
 
-Beim Einspielen von Hand gibt es zwei Stolpersteine:
+Importing by hand has two pitfalls:
 
-1. **In den bestehenden Workflow hinein importieren, nicht daneben.** Diese
-   Dateien enthalten bewusst keine Workflow-ID. Wer sie über „Import from File"
-   aus der Workflow-Übersicht einspielt, bekommt deshalb einen **zweiten**
-   Workflow gleichen Namens — dann laufen zwei Workflows auf dasselbe Postfach,
-   oder der falsche ist aktiv. Richtig ist: den vorhandenen Workflow öffnen und
-   erst **dort** im Drei-Punkte-Menü „Import from File" wählen. Das ersetzt den
-   Inhalt, ID und Aktivierung bleiben erhalten.
-2. **Danach den Active-Schalter prüfen.** Die Dateien enthalten kein
-   `active`-Flag. Ein frisch angelegter Workflow ist deshalb **inaktiv** und
-   verarbeitet nichts, bis er oben rechts eingeschaltet wird. Beide Workflows
-   müssen aktiv sein, sonst funktioniert keine der Automatisierungen.
+1. **Import into the existing workflow, not next to it.** These files
+   deliberately contain no workflow ID. Importing them via "Import from File"
+   from the workflow overview therefore creates a **second** workflow with the
+   same name — then two workflows run against the same mailbox, or the wrong
+   one is active. The right way: open the existing workflow and choose
+   "Import from File" from **its own** three-dot menu. That replaces the
+   content while keeping the ID and activation state.
+2. **Check the active toggle afterwards.** The files contain no `active`
+   flag. A freshly created workflow is therefore **inactive** and processes
+   nothing until it is switched on in the top right. Both workflows must be
+   active, otherwise none of the automations work.
 
-Die Zugangsdaten müssen nach dem Import nicht neu verbunden werden, solange die
-Credential-IDs auf der Instanz dieselben sind — sie stehen im JSON.
+Credentials don't need to be reconnected after import, as long as the
+credential IDs on the instance are the same — they're stored in the JSON.
 
 ## issue-collector.json
 
-Holt Mails aus dem Postfach `join-issues@gmx.de`, lässt sie von Google Gemini
-analysieren und legt daraus ein Ticket in der Triage-Spalte des Join-Boards an.
+Fetches mails from the mailbox `join-issues@gmx.de`, has them analysed by
+Google Gemini, and creates a ticket from them in the Triage column of the
+Join board.
 
-| Node | Aufgabe |
+| Node | Purpose |
 |---|---|
-| Neue E-Mail | IMAP-Trigger auf INBOX, markiert verarbeitete Mails als gelesen |
-| Mail aufbereiten | zieht Absender, Betreff und Text heraus und baut die Gemini-Anfrage |
-| KI analysiert Mail | **Information Extractor** – zieht die Ticketfelder nach festem Schema heraus |
-| Google Gemini Chat Model | das Sprachmodell dahinter (`gemini-3.5-flash-lite`), angedockt am Extractor |
-| Ticket bauen | wertet die Antwort aus, wandelt das Datum um, verwirft Nicht-Anfragen |
-| Ticket in Triage anlegen | schreibt das Ticket per REST in die Firebase-Datenbank |
-| Ticket-Ergebnis anreichern | hängt das Schreibergebnis an die Ticketdaten der jeweiligen Mail |
-| Ticket erfolgreich geschrieben? | trennt danach den Erfolgs- vom Fehlerweg |
+| Neue E-Mail | IMAP trigger on INBOX, marks processed mails as read |
+| Mail aufbereiten | extracts sender, subject and body and builds the Gemini request |
+| KI analysiert Mail | **Information Extractor** – pulls the ticket fields using a fixed schema |
+| Google Gemini Chat Model | the language model behind it (`gemini-3.5-flash-lite`), attached to the extractor |
+| Ticket bauen | evaluates the response, converts the date, discards non-requests |
+| Ticket in Triage anlegen | writes the ticket into the Firebase database via REST |
+| Ticket-Ergebnis anreichern | attaches the write result to each mail's ticket data |
+| Ticket erfolgreich geschrieben? | splits the success path from the error path afterwards |
 
-Der Schreib-Baustein ist auf „bei Fehler normal weiterleiten" gestellt. Dadurch
-kommt für **jede** eingehende Mail genau ein Ergebnis heraus, in unveränderter
-Reihenfolge — gescheiterte eingeschlossen. Nur deshalb darf `Ticket-Ergebnis
-anreichern` die Daten über die Position zuordnen. Diese eine Stelle ist der Kern
-der Zuordnung: Wird der Baustein später verschoben oder der Fehlerweg wieder auf
-einen eigenen Ausgang umgestellt, verrutscht die Zuordnung bei mehreren Mails in
-einem Durchlauf, und Bestätigungen gingen an die falsche Adresse.
+The write node is set to "continue on fail". Because of that, **every**
+incoming mail produces exactly one result, in unchanged order — failures
+included. That's the only reason `Ticket-Ergebnis anreichern` is allowed to
+match data by position. This one spot is the crux of the matching: if the
+node is later moved, or the error path is switched back to its own output,
+the matching shifts once several mails go through in one run, and
+confirmations would go to the wrong address.
 
-### Das Mailpasswort steht an zwei Stellen — beide müssen stimmen
+### The mail password lives in two places — both must match
 
-Das ist die unangenehmste Falle des ganzen Aufbaus. Der Zugang zum Postfach wird
-an **zwei voneinander unabhängigen Stellen** gebraucht:
+This is the nastiest trap in the whole setup. Access to the mailbox is
+needed in **two independent places**:
 
-| Stelle | Wofür | Wo |
+| Place | What for | Where |
 |---|---|---|
-| n8n-Credentials **IMAP** und **SMTP** | Mails abholen, Mails versenden | in der n8n-Oberfläche |
-| Umgebungsvariable `JOIN_MAIL_PASSWORD` | Mails zwischen den Ordnern verschieben | `.env` im Docker-Stack |
+| n8n credentials **IMAP** and **SMTP** | fetching mails, sending mails | in the n8n UI |
+| Environment variable `JOIN_MAIL_PASSWORD` | moving mails between folders | `.env` in the Docker stack |
 
-Die Verschiebe-Bausteine (`Mail nach erledigt`, `Mail nach zu bearbeiten`,
-`Mail erledigt (kein Ticket)`, `Mail erledigt (Limit)`) sprechen IMAP selbst über
-`tls` an und lesen ihre Zugangsdaten aus `$env.JOIN_MAIL_HOST/PORT/USER/PASSWORD`
-— **nicht** aus den n8n-Credentials.
+The move nodes (`Mail nach erledigt`, `Mail nach zu bearbeiten`,
+`Mail erledigt (kein Ticket)`, `Mail erledigt (Limit)`) talk to IMAP
+themselves via `tls` and read their credentials from
+`$env.JOIN_MAIL_HOST/PORT/USER/PASSWORD` — **not** from the n8n credentials.
 
-**Folge beim Passwortwechsel:** Ändert man nur die n8n-Credentials, funktioniert
-alles Sichtbare weiter — Mails kommen an, Tickets entstehen, Bestätigungen gehen
-raus. Nur das Verschieben scheitert still mit `IMAP a1: NO authentication failed`,
-und der Fehler steht ausschließlich im Lauf-Detail des jeweiligen Bausteins
-(Feld `verschoben: false`), nicht als roter Fehler am Workflow. Der Lauf gilt
-weiterhin als „success".
+**Consequence when the password changes:** if only the n8n credentials are
+updated, everything visible keeps working — mails arrive, tickets get
+created, confirmations go out. Only the moving fails silently with
+`IMAP a1: NO authentication failed`, and the error only shows up in that
+node's run detail (field `verschoben: false`), not as a red error on the
+workflow. The run still counts as "success".
 
-Nach dem Ändern von `.env` muss der Container **neu gestartet** werden
-(`docker compose up -d` im Stack-Ordner) — Umgebungsvariablen werden nur beim
-Start gelesen.
+After changing `.env` the container must be **restarted**
+(`docker compose up -d` in the stack folder) — environment variables are
+only read at startup.
 
-### Gescheiterte Mails bleiben liegen und kommen nicht wieder
+### Failed mails stay put and are never retried
 
-Der IMAP-Trigger markiert jede Mail **sofort beim Abholen als gelesen**, bevor
-irgendein weiterer Baustein läuft. Er holt aber nur **ungelesene** Mails.
+The IMAP trigger marks every mail **as read immediately on fetch**, before
+any further node runs. But it only fetches **unread** mails.
 
-Daraus folgt: Bricht die Verarbeitung später ab — oder scheitert wie oben nur das
-Verschieben — bleibt die Mail als gelesen im Posteingang liegen und wird
-**nie erneut verarbeitet**. Ein erneuter Lauf holt sie nicht nach.
+As a result: if processing later aborts — or only the move step fails as
+above — the mail stays in the inbox marked as read and is **never processed
+again**. A later run won't pick it up.
 
-Wer solche Mails nachträglich verarbeiten lassen will, muss sie im Postfach von
-Hand wieder auf **ungelesen** setzen. Wer sie nur loswerden will, verschiebt oder
-löscht sie von Hand. Vor einer Vorführung lohnt ein Blick in den Posteingang: Was
-dort liegt, hat das System entweder nicht geschafft oder gar nicht erst gesehen.
+To have such mails processed after the fact, mark them **unread** again by
+hand in the mailbox. To just get rid of them, move or delete them by hand.
+Before a demo it's worth checking the inbox: whatever is sitting there, the
+system either failed to handle it or never saw it at all.
 
-### Benötigte Zugangsdaten (in n8n anzulegen, nicht in dieser Datei)
+### Required credentials (set up in n8n, not in this file)
 
-- **IMAP** – `imap.gmx.net:993`, SSL an
-- **SMTP** – `mail.gmx.net:465`, SSL an
-- **Google Gemini (PaLM) API** – Host `https://generativelanguage.googleapis.com`, dazu der API-Schlüssel
+- **IMAP** – `imap.gmx.net:993`, SSL on
+- **SMTP** – `mail.gmx.net:465`, SSL on
+- **Google Gemini (PaLM) API** – host `https://generativelanguage.googleapis.com`, plus the API key
 
-Die IDs der Zugangsdaten stehen im JSON, die Geheimnisse selbst liegen
-ausschließlich verschlüsselt in n8n.
+The credential IDs are in the JSON, the secrets themselves live only
+encrypted inside n8n.
 
-### Grenzen des kostenlosen Gemini-Tarifs
+### Limits of the free Gemini tier
 
-Das Kontingent zählt **pro Tag und Modell**, nicht pro Minute – Googles
-Fehlermeldung ("retry in 41s") führt hier in die Irre. `gemini-3.5-flash` erlaubt
-nur 20 Anfragen am Tag, deshalb läuft der Workflow auf `gemini-3.5-flash-lite`.
-Wiederholversuche sind auf zwei begrenzt, weil jeder Versuch vom Tageskontingent
-abgeht.
+The quota counts **per day and model**, not per minute — Google's error
+message ("retry in 41s") is misleading here. `gemini-3.5-flash` only allows
+20 requests per day, which is why the workflow runs on
+`gemini-3.5-flash-lite`. Retries are capped at two, because every attempt
+counts against the daily quota.
 
-Zusätzlich filtert GMX offensichtlichen Spam bereits vor dem Postfach heraus
-(Ordner "Spamverdacht"), sodass solche Mails gar kein Kontingent verbrauchen.
+Additionally, GMX already filters obvious spam before it reaches the
+mailbox (folder "Spamverdacht"), so such mails don't consume any quota.
 
 
 ## statusbenachrichtigung.json
 
-Schaut alle 5 Minuten nach, ob ein Ticket die Spalte gewechselt hat, und
-benachrichtigt den Ersteller per Mail.
+Checks every 5 minutes whether a ticket has changed column, and notifies its
+creator by e-mail.
 
-| Node | Aufgabe |
+| Node | Purpose |
 |---|---|
-| Alle 5 Minuten | Zeitplan-Auslöser |
-| Tickets abrufen | holt den aktuellen Stand aller Tickets |
-| Statusänderungen finden | vergleicht mit dem zuletzt gesehenen Stand |
-| Benachrichtigung vorbereiten | baut den Mailtext, schützt vor Endlosschleifen |
-| Benachrichtigung senden | verschickt über SMTP |
+| Alle 5 Minuten | schedule trigger |
+| Tickets abrufen | fetches the current state of all tickets |
+| Statusänderungen finden | compares against the last-seen state |
+| Benachrichtigung vorbereiten | builds the mail text, guards against infinite loops |
+| Benachrichtigung senden | sends via SMTP |
 
-### Warum Abfragen statt sofortiger Meldung
+### Why polling instead of an instant notification
 
-Die n8n-Instanz ist bewusst nur im Heimnetz erreichbar. Das Board läuft aber im
-Browser der Stakeholder irgendwo im Internet und könnte n8n deshalb gar nicht
-direkt ansprechen. Statt einen Zugang von außen zu öffnen, fragt n8n selbst
-regelmäßig nach. Preis dafür: bis zu 5 Minuten Verzögerung.
+The n8n instance is deliberately reachable only from the home network. But
+the board runs in the stakeholders' browser somewhere on the internet and
+couldn't reach n8n directly at all. Instead of opening access from outside,
+n8n itself polls regularly. The price for that: up to 5 minutes of delay.
 
-### Der gemerkte Stand
+### The remembered state
 
-Der zuletzt gesehene Status jedes Tickets liegt im internen Speicher des
-Workflows und überlebt einzelne Durchläufe. Zwei Eigenschaften sind wichtig:
+The last-seen status of every ticket lives in the workflow's internal
+storage and survives individual runs. Two properties matter:
 
-- **Der allererste Lauf verschickt nichts.** Er merkt sich nur den Ausgangsstand.
-  Sonst bekäme jeder Ersteller sofort eine Mail für ein Ticket, das sich nie
-  bewegt hat.
-- **Gelöschte Tickets werden aus dem Gedächtnis entfernt**, damit es nicht
-  unbegrenzt wächst.
+- **The very first run sends nothing.** It only records the starting state.
+  Otherwise every creator would immediately get a mail for a ticket that
+  never actually moved.
+- **Deleted tickets are removed from memory**, so it doesn't grow without
+  bound.
 
-### Schutz vor Endlosschleifen
+### Protection against infinite loops
 
-Alle Mail-versendenden Stellen prüfen, ob der Empfänger das eigene Postfach ist,
-und brechen dann ab. Ohne das würde eine Antwort im eigenen Posteingang landen,
-den Sammel-Workflow erneut auslösen und die nächste Mail erzeugen.
+Every mail-sending node checks whether the recipient is the collector's own
+mailbox and aborts if so. Without that, a reply would land in the collector's
+own inbox, re-trigger the workflow, and generate the next mail.
 
-Zusätzlich werden Adressen auf `.local` übersprungen. Der Gast-Login des Boards
-legt Tickets unter `guest@join.local` an — eine Domain, die es nicht gibt. Ohne
-diese Prüfung erzeugt jedes Verschieben eines Gast-Tickets einen SMTP-Fehler im
-n8n-Protokoll.
+Addresses ending in `.local` are also skipped. The board's guest login
+creates tickets under `guest@join.local` — a domain that doesn't exist.
+Without this check, moving a guest ticket would produce an SMTP error in the
+n8n log every time.
