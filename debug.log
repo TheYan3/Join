@@ -5,6 +5,42 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-08-31] Tageslimit-Pruefung im n8n-Workflow zusammengelegt
+-------------------------------------------------------------------------------------
+- Im automatischen Ticket-Workflow (n8n) gab es bisher zwei fast identische
+  Bausteine ("Innerhalb Tageslimit" und "Ueber Tageslimit"), die beide separat
+  ausgerechnet haben, wie viele Tickets heute schon automatisch per KI erstellt
+  wurden, und dieselbe Zehner-Grenze pro Tag doppelt gepflegt haben.
+- Das ist jetzt zu einem Baustein zusammengefasst ("Tageslimit pruefen"), der
+  die Berechnung nur noch einmal macht. Direkt danach entscheidet ein sichtbarer
+  Verzweigungs-Baustein ("Innerhalb Limit?") auf der Werkbank, ob eine Mail zur
+  KI-Analyse weiterlaeuft oder den Limit-Hinweis bekommt - das war vorher in den
+  beiden Code-Bausteinen versteckt.
+- Warum: Weniger Redundanz, die Tages-Grenze (10 Anfragen) steht nur noch an
+  einer Stelle im Code. Die Verzweigung ist jetzt auf einen Blick auf der
+  n8n-Werkbank sichtbar statt in zwei aehnlich benannten Programmier-Bausteinen
+  versteckt zu sein.
+- Am Verhalten fuer Absender aendert sich nichts: Wer heute noch Platz hat,
+  bekommt weiter ein Ticket per KI, wer druebersteigt, bekommt weiter den
+  Hinweis "Tageslimit erreicht" per Mail.
+- Beim Gegenpruefen noch zwei Dinge nachgezogen:
+  - In zwei Bausteinen ("Ticket bauen", "Kein Ticket noetig") standen in den
+    Erklaertexten noch die Namen der geloeschten Bausteine. Der Programmcode
+    dort war schon richtig, nur die Beschreibung zeigte auf etwas, das es
+    nicht mehr gibt - jetzt korrigiert.
+  - Der neue Baustein liest die Ticket-Liste jetzt ueber die von n8n offiziell
+    vorgesehene Schreibweise ein ("$input.first()"). Die vorher uebernommene
+    Kurzform ("$json") ist fuer diese Betriebsart laut n8n-Doku nicht
+    vorgesehen und haette bei einem n8n-Update Aerger machen koennen.
+- Geprueft: Alte und neue Rechenweise wurden gegeneinander durchgerechnet
+  (leeres Board, genau an der Grenze, Limit voll, mehrere Mails gleichzeitig) -
+  beide kommen ueberall auf dasselbe Ergebnis. Nicht geprueft: ein echter
+  Durchlauf in n8n selbst, das steht noch aus.
+- Betroffene Datei:
+  - n8n/issue-collector.json: zwei Bausteine entfernt, ein neuer
+    Programmier-Baustein und ein neuer Verzweigungs-Baustein eingefuegt, alle
+    internen Verweise auf die alten Bausteinnamen umgestellt.
+
 [2026-08-31] n8n-README auf Englisch umgestellt
 -------------------------------------------------------------------------------------
 - Die Datei n8n/README.md war komplett auf Deutsch geschrieben, obwohl der

@@ -85,7 +85,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Ticket bauen\": wandelt die Ergebnisse des Information\n * Extractors in Join-Tickets um und verwirft alles, was keine echte Anfrage\n * ist (darum kuemmert sich der Zweig \"Kein Ticket noetig\").\n *\n * Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt: Der\n * Extractor liefert genau ein Ergebnis je eingehender Mail. Nach der\n * Limitpruefung erreichen nur die durchgelassenen Mails die KI, deshalb ist\n * \"Innerhalb Tageslimit\" die Bezugsgroesse fuer diese Zuordnung.\n *\n * Ausgabe: ein Item je angelegtem Ticket mit uid, absenderMail, betreff und\n * dem fertigen ticket-Objekt.\n */\nconst quellen = $('Innerhalb Tageslimit').all();\n\n/**\n * Wandelt ein ISO-Datum (JJJJ-MM-TT) in das von Join erwartete Format\n * TT/MM/JJJJ um.\n *\n * @param {string|null|undefined} iso Datum aus der KI-Analyse.\n * @returns {string} Datum als TT/MM/JJJJ, oder \"\" wenn nichts Verwertbares\n *   geliefert wurde.\n */\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Ticket bauen\": wandelt die Ergebnisse des Information\n * Extractors in Join-Tickets um und verwirft alles, was keine echte Anfrage\n * ist (darum kuemmert sich der Zweig \"Kein Ticket noetig\").\n *\n * Laeuft ueber ALLE Items, weil die Zuordnung ueber die Position erfolgt: Der\n * Extractor liefert genau ein Ergebnis je eingehender Mail. Nur die vom\n * IF-Baustein \"Innerhalb Limit?\" durchgelassenen Mails erreichen die KI -\n * Bezugsgroesse sind deshalb genau die Items aus \"Tageslimit pruefen\" mit\n * innerhalbLimit === true.\n *\n * Ausgabe: ein Item je angelegtem Ticket mit uid, absenderMail, betreff und\n * dem fertigen ticket-Objekt.\n */\nconst quellen = $('Tageslimit pruefen').all().filter((eintrag) => eintrag.json.innerhalbLimit === true);\n\n/**\n * Wandelt ein ISO-Datum (JJJJ-MM-TT) in das von Join erwartete Format\n * TT/MM/JJJJ um.\n *\n * @param {string|null|undefined} iso Datum aus der KI-Analyse.\n * @returns {string} Datum als TT/MM/JJJJ, oder \"\" wenn nichts Verwertbares\n *   geliefert wurde.\n */\nfunction alsJoinDatum(iso) {\n  if (!iso) return '';\n  const teile = String(iso).trim().split('-');\n  if (teile.length !== 3) return '';\n  const [jahr, monat, tag] = teile;\n  return `${tag}/${monat}/${jahr}`;\n}\n\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  const quelle = quellen[i] ? quellen[i].json : {};\n\n  // Keine echte Anfrage: kein Ticket. Der Zweig \"Kein Ticket noetig\"\n  // kuemmert sich um diese Mails.\n  if (analyse.istEchteAnfrage !== true) continue;\n\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    absenderMail: quelle.absenderMail,\n    betreff: quelle.betreff,\n    ticket: {\n      id: Date.now() + i,\n      title: String(analyse.title || quelle.betreff || 'Anfrage ohne Titel').slice(0, 120),\n      description: `${String(analyse.description || '').trim()} Dieses Ticket wurde KI-generiert.`,\n      date: alsJoinDatum(analyse.deadline),\n      priority: analyse.priority || 'medium',\n      category: analyse.category || 'user-story',\n      status: 'triage',\n      assigned: [],\n      subtasks: [],\n      creator: {\n        email: quelle.absenderMail,\n        name: quelle.absenderName || quelle.absenderMail,\n        type: 'extern'\n      }\n    }\n  }});\n}\nreturn ergebnisse;"
       },
       "id": "a1000000-0000-4000-8000-000000000004",
       "name": "Ticket bauen",
@@ -170,7 +170,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Kein Ticket noetig\": zweiter Zweig hinter der KI-Analyse,\n * fuer Mails die KEINE echte Anfrage waren (Spam, Autoresponder, inhaltslose\n * Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket - und gelten\n * deshalb als erledigt.\n *\n * Die Zuordnung erfolgt ueber die Position; Bezugsgroesse ist\n * \"Innerhalb Tageslimit\", weil nur die durchgelassenen Mails die KI erreichen.\n *\n * Ausgabe: ein Item je verworfener Mail mit uid, betreff und Grund.\n */\nconst quellen = $('Innerhalb Tageslimit').all();\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Kein Ticket noetig\": zweiter Zweig hinter der KI-Analyse,\n * fuer Mails die KEINE echte Anfrage waren (Spam, Autoresponder, inhaltslose\n * Nachrichten). Sie sind korrekt verarbeitet - bewusst ohne Ticket - und gelten\n * deshalb als erledigt.\n *\n * Die Zuordnung erfolgt ueber die Position; Bezugsgroesse sind die Items aus\n * \"Tageslimit pruefen\" mit innerhalbLimit === true, weil nur die vom\n * IF-Baustein \"Innerhalb Limit?\" durchgelassenen Mails die KI erreichen.\n *\n * Ausgabe: ein Item je verworfener Mail mit uid, betreff und Grund.\n */\nconst quellen = $('Tageslimit pruefen').all().filter((eintrag) => eintrag.json.innerhalbLimit === true);\nconst ergebnisse = [];\nfor (let i = 0; i < items.length; i++) {\n  const analyse = items[i].json.output ?? items[i].json;\n  if (analyse.istEchteAnfrage === true) continue;\n  const quelle = quellen[i] ? quellen[i].json : {};\n  ergebnisse.push({ json: {\n    uid: quelle.uid ?? null,\n    betreff: quelle.betreff,\n    kein_ticket: true,\n    grund: 'keine echte Anfrage'\n  }});\n}\nreturn ergebnisse;"
       },
       "id": "a1000000-0000-4000-8000-000000000007",
       "name": "Kein Ticket noetig",
@@ -329,29 +329,48 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Innerhalb Tageslimit\": laesst nur die Mails durch, die\n * heute noch in das Tageslimit passen. Die Pruefung laeuft VOR der KI-Analyse,\n * damit eine abgewiesene Mail gar kein KI-Kontingent kostet.\n *\n * Gezaehlt werden die Tickets selbst statt eines separaten Zaehlers, der\n * auseinanderlaufen koennte: KI-Tickets sind an creator.type \"extern\"\n * erkennbar, das Anlegedatum steckt als Zeitstempel in der id.\n *\n * Ausgabe: ein Item je durchgelassener Mail, ergaenzt um platzNr.\n */\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Jede wartende Mail belegt einen Platz. Position i bekommt Platz\n// heuteSchon + i - dadurch greift das Limit auch bei mehreren Mails\n// im selben Durchlauf korrekt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i >= TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, platzNr: heuteSchon + i + 1 } });\n}\nreturn ergebnisse;"
+        "jsCode": "/**\n * @fileoverview Node \"Tageslimit pruefen\": ermittelt einmalig, wie viele\n * KI-Tickets heute schon erstellt wurden, und markiert jede wartende Mail\n * mit ihrem Platz im Tageslimit. Die eigentliche Weiche (durchlassen oder\n * abweisen) uebernimmt der nachfolgende IF-Baustein \"Innerhalb Limit?\" -\n * diese Node filtert NICHT mehr, sondern gibt IMMER alle wartenden Mails\n * aus.\n *\n * Gezaehlt werden die Tickets selbst statt eines separaten Zaehlers, der\n * auseinanderlaufen koennte: KI-Tickets sind an creator.type \"extern\"\n * erkennbar, das Anlegedatum steckt als Zeitstempel in der id.\n *\n * Ausgabe: ein Item je wartender Mail mit allen bisherigen Feldern der Mail\n * plus platzNr, heuteSchon, limit und innerhalbLimit.\n */\nconst TAGESLIMIT = 10;\n\n// $input.first() statt $json: In der Betriebsart \"Run Once for All Items\"\n// ist $json laut n8n-Doku nicht vorgesehen. \"Tickets abrufen\" liefert genau\n// ein Item mit allen Tickets - das ist hier gemeint.\nconst roh = $input.first().json.data ?? $input.first().json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Jede wartende Mail belegt einen Platz. Position i bekommt Platz\n// heuteSchon + i - dadurch greift das Limit auch bei mehreren Mails im\n// selben Durchlauf korrekt. Gefiltert wird hier nicht mehr - das\n// entscheidet der nachfolgende IF-Baustein anhand von innerhalbLimit.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  ergebnisse.push({ json: {\n    ...mails[i].json,\n    platzNr: heuteSchon + i + 1,\n    heuteSchon,\n    limit: TAGESLIMIT,\n    innerhalbLimit: heuteSchon + i < TAGESLIMIT\n  }});\n}\nreturn ergebnisse;"
       },
-      "id": "a1000000-0000-4000-8000-000000000016",
-      "name": "Innerhalb Tageslimit",
+      "id": "a1000000-0000-4000-8000-000000000023",
+      "name": "Tageslimit pruefen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         340,
-        220
+        480
       ]
     },
     {
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "/**\n * @fileoverview Node \"Ueber Tageslimit\": Gegenstueck zu\n * \"Innerhalb Tageslimit\" - gibt genau die Mails aus, die heute nicht mehr in\n * das Limit passen. Sie bekommen einen Hinweis per Mail statt eines Tickets.\n *\n * Gezaehlt wird nach derselben Regel wie im Gegenstueck: die Tickets selbst,\n * erkennbar an creator.type \"extern\", mit dem Anlegedatum als Zeitstempel in\n * der id.\n *\n * Ausgabe: ein Item je abgewiesener Mail, ergaenzt um heuteSchon und limit.\n */\nconst TAGESLIMIT = 10;\n\nconst roh = $json.data ?? $json;\nconst alleTickets = (roh && typeof roh === 'object') ? Object.values(roh) : [];\n\nconst tagesbeginn = new Date();\ntagesbeginn.setHours(0, 0, 0, 0);\nconst grenze = tagesbeginn.getTime();\n\nconst heuteSchon = alleTickets.filter((t) =>\n  t && typeof t === 'object' &&\n  t.creator && t.creator.type === 'extern' &&\n  Number(t.id) >= grenze\n).length;\n\nconst mails = $('Mail aufbereiten').all();\n\n// Gegenstueck: alles, was ueber dem Tageslimit liegt.\nconst ergebnisse = [];\nfor (let i = 0; i < mails.length; i++) {\n  if (heuteSchon + i < TAGESLIMIT) continue;\n  ergebnisse.push({ json: { ...mails[i].json, heuteSchon, limit: TAGESLIMIT } });\n}\nreturn ergebnisse;"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "21000000-0000-4000-8000-000000000002",
+              "leftValue": "={{ $json.innerhalbLimit }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000017",
-      "name": "Ueber Tageslimit",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "id": "a1000000-0000-4000-8000-000000000024",
+      "name": "Innerhalb Limit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        340,
-        900
+        580,
+        480
       ]
     },
     {
@@ -594,12 +613,7 @@
       "main": [
         [
           {
-            "node": "Innerhalb Tageslimit",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Ueber Tageslimit",
+            "node": "Tageslimit pruefen",
             "type": "main",
             "index": 0
           }
@@ -618,7 +632,18 @@
         ]
       ]
     },
-    "Innerhalb Tageslimit": {
+    "Tageslimit pruefen": {
+      "main": [
+        [
+          {
+            "node": "Innerhalb Limit?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Innerhalb Limit?": {
       "main": [
         [
           {
@@ -626,11 +651,7 @@
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "Ueber Tageslimit": {
-      "main": [
+        ],
         [
           {
             "node": "Limit-Hinweis vorbereiten",
