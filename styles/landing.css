@@ -170,6 +170,22 @@
    border-color: var(--landing-cyan);
 }
 
+/* Einziger Hero-CTA: Text + gespiegelter arrowBack.svg als Vorwaerts-Pfeil.
+   Die feste SVG-Fuellfarbe (#29ABE2) wuerde beim Hover (Button wird cyan)
+   im Pfeil verschwinden, daher per Filter auf Weiss gezwungen. */
+.landing__button--cta {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+}
+
+.landing__button-icon {
+   width: 18px;
+   height: 18px;
+   transform: scaleX(-1);
+   filter: brightness(0) invert(1);
+}
+
 .landing__address {
    font-size: 16px;
    color: var(--landing-muted);

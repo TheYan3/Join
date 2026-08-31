@@ -20,6 +20,23 @@ neuester Eintrag oben.
 - Betroffene Datei: styles/welcome/layout.css.
 
 
+[2026-08-31] Startseite: ein Einstiegs-Knopf statt zwei doppelten
+-------------------------------------------------------------------------------------
+- Ein Pruefer hatte bemaengelt, dass die Startseite (index.html) und das
+  Welcome-Fenster (welcome.html) sich inhaltlich doppeln. Grund: Ganz oben auf
+  der Startseite standen schon zwei Knoepfe ("Create request" / "Member log
+  in"), und im Welcome-Fenster wurde direkt danach genau dieselbe Wahl
+  (Anfrage stellen oder als Team-Mitglied einloggen) noch einmal gestellt.
+- Aus den zwei Knoepfen im obersten Bereich ist jetzt ein einziger Knopf
+  "Get started" mit Pfeil-Symbol geworden, der zum Welcome-Fenster fuehrt. Die
+  eigentliche Wahl (Anfrage vs. Login) passiert weiterhin nur noch dort, nicht
+  mehr doppelt. Der zweite "Create request"-Knopf weiter unten auf der Seite
+  wurde aus Konsistenzgruenden ebenfalls in "Get started" umbenannt.
+- Betroffene Dateien: index.html (Knopf-Bereich ganz oben und nach "How it
+  works"), styles/landing.css (Styling fuer den neuen Knopf inkl. gespiegeltem
+  Pfeil-Symbol, wiederverwendet aus assets/icons/desktop/arrowBack.svg).
+
+
 [2026-08-31] Tageslimit-Pruefung im n8n-Workflow zusammengelegt
 -------------------------------------------------------------------------------------
 - Im automatischen Ticket-Workflow (n8n) gab es bisher zwei fast identische
