@@ -5,6 +5,41 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: Einstiegstext verkauft jetzt das ganze Produkt
+-------------------------------------------------------------------------------------
+- Der Text ganz oben auf der Startseite handelte nur von der E-Mail-Funktion
+  ("Send an e-mail. Get a ticket."). Wer die Seite zum ersten Mal aufmacht,
+  erfuhr also nicht, was Join eigentlich ist.
+- Neue Ueberschrift: "Every task on one board. Even the ones sent by e-mail."
+  - erst das Produkt, dann die Besonderheit als Aufhaenger.
+- Der Absatz darunter beschreibt jetzt zuerst das Kanban-Board allgemein
+  (Karten wandern von Triage bis Done, mit Prioritaet, Faelligkeit,
+  Teilaufgaben und zugeordneten Personen) und danach den E-Mail-Eingang.
+- Die kleine Zeile unter dem Knopf nennt jetzt den Gastzugang ("kein Konto
+  noetig") zusammen mit der E-Mail-Adresse - das ist der Grund, aus dem
+  jemand die Seite ueberhaupt ausprobiert.
+- Seitentitel und die Beschreibung fuer Suchmaschinen ziehen nach: vorher
+  "Join Issue Collector - Send an e-mail, get a ticket", jetzt "Join - Kanban
+  board with an AI issue collector".
+- Weil die Ueberschrift oben jetzt selbst sagt, dass Join ein Kanban-Board
+  ist, stand im dunklen Abschnitt darunter zweimal dasselbe. Dessen
+  Ueberschrift heisst deshalb nicht mehr "Join is a kanban board first."
+  sondern "Four screens and one mailbox." - also was drin ist, statt was es
+  ist.
+- Ausserdem mit drin: die von Hand geaenderte Mindesthoehe des oberen
+  Bereichs (64vh statt der vorher berechneten 60vh). Der Kommentar im
+  Stylesheet passte danach nicht mehr und beschreibt jetzt wieder, was der
+  Wert tatsaechlich bewirkt - naemlich 64vh plus 64 Punkte Innenabstand.
+- Nachgemessen bei 1440x900, 1280x720, 1024x640, 768x1024, 390x844 und
+  360x640: der dunkle Abschnitt passt weiterhin ueberall auf einen
+  Bildschirm, alle Startlinien liegen weiter auf einer Linie, kein
+  seitliches Verschieben der Seite.
+- Betroffene Dateien:
+  - index.html: Ueberschrift, Absatz, Zeile unter dem Knopf, Seitentitel,
+    Suchmaschinen-Beschreibung, Ueberschrift des dunklen Abschnitts.
+  - styles/landing.css: Mindesthoehe 64vh, Kommentar richtiggestellt.
+
+
 [2026-09-01] Echtes Board-Bild statt gezeichneter Illustration
 -------------------------------------------------------------------------------------
 - Auf der Startseite und in der README war das Board bisher nur nachgezeichnet

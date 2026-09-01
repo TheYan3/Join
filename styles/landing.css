@@ -100,15 +100,15 @@
 .landing__hero {
    max-width: 1100px;
    margin: 0 auto;
-   /* Zielhoehe 60vh. min-height statt height, weil der Hero-Inhalt selbst
-      469-546px hoch ist: eine feste Hoehe wuerde ihn auf niedrigen Schirmen
-      abschneiden (bei 360x640 waeren es 226px weg). Die 64px sind der eigene
-      Innenabstand - das Projekt hat keinen border-box-Reset, min-height gilt
-      hier also fuer die Inhaltsbox, und ohne den Abzug waere der Hero 60vh
-      PLUS Innenabstand hoch. Kein box-sizing, weil das die max-width und
-      damit die linke Kante gegenueber den anderen Sektionen verschieben
-      wuerde. */
-   min-height: calc(60vh - 64px);
+   /* min-height statt height, weil der Hero-Inhalt selbst 428-690px hoch ist:
+      eine feste Hoehe wuerde ihn auf niedrigen Schirmen abschneiden (bei
+      360x640 waeren es ueber 300px weg). Achtung beim Justieren: das Projekt
+      hat keinen border-box-Reset, der Wert gilt also fuer die Inhaltsbox -
+      die eigenen 64px Innenabstand kommen oben drauf, aus 64vh werden 64vh
+      + 64px Gesamthoehe (640px bei 900px Fensterhoehe). Kein box-sizing,
+      weil das ueber die max-width die linke Kante gegenueber den anderen
+      Sektionen verschieben wuerde. */
+   min-height: 64vh;
    padding: 24px 24px 40px;
 }
 
