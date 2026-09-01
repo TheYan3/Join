@@ -5,6 +5,43 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: Darstellung auf 4K- und Ultrawide-Bildschirmen
+-------------------------------------------------------------------------------------
+- Problem: Auf sehr grossen Bildschirmen sah die Startseite verloren aus.
+  Gemessen auf einem 4K-Schirm (3840x2160): der Text stand in einer nur
+  1148 Pixel breiten Spalte - das sind 30 Prozent der Bildschirmflaeche,
+  der Rest war leer. Unter dem Einstiegstext klaffte ausserdem eine fast
+  1000 Pixel hohe weisse Flaeche, und die Schrift blieb ueberall gleich
+  gross wie auf einem normalen Monitor.
+- Ausserdem stand der dunkle Abschnitt ("Four screens and one mailbox")
+  auf 4K anderthalb Bildschirme lang still: die Karten daneben sind dort
+  zusammen genau so breit wie der Bildschirm, es gab also nichts mehr
+  seitwaerts zu schieben.
+- Geaendert:
+  1. Die Breite der Inhaltsspalte haengt jetzt an einem einzigen Wert, den
+     alle Bereiche lesen (Kopfzeile, Einstieg, alle Abschnitte, der dunkle
+     Abschnitt). Ab 1600 Pixel Bildschirmbreite waechst er auf 1320 Pixel,
+     ab 2400 Pixel auf 1560 Pixel. Dadurch bleibt die linke Kante ueberall
+     buendig, auch wenn die Spalte breiter wird.
+  2. Der weisse Bereich ganz oben ist nach oben gedeckelt (hoechstens
+     620 Pixel statt "64 Prozent der Bildschirmhoehe"). Die grosse leere
+     Flaeche auf hohen Schirmen ist damit weg: 969 Pixel Leerraum vorher,
+     123 Pixel jetzt.
+  3. Ueberschriften und Textgroessen wachsen in zwei Stufen mit (Titel
+     61 -> 72 -> 84 Pixel, Absaetze 20 -> 22 -> 24 Pixel).
+  4. Die Karten im dunklen Abschnitt werden auf grossen Schirmen breiter
+     (340 -> 400 -> 480 Pixel). Dadurch ragt die Kartenreihe wieder ueber
+     den Bildschirmrand hinaus und die seitliche Bewegung beim Scrollen
+     funktioniert auch auf 4K.
+  5. Die groesste Schriftstufe im dunklen Abschnitt gilt nur, wenn das
+     Fenster auch hoch genug ist. Auf einem breiten, aber flachen Fenster
+     (2560x900) waere die Ueberschrift sonst oben abgeschnitten worden.
+- Nachgemessen bei 320, 768, 1280, 1600, 1920, 2400, 2560 (in drei Hoehen),
+  3440 (zwei Hoehen) und 3840 Pixel (zwei Hoehen): kein seitliches
+  Verschieben, und der dunkle Abschnitt passt ueberall vollstaendig auf
+  einen Bildschirm.
+- Betroffene Dateien: styles/landing.css, styles/landing-showcase.css
+
 [2026-09-01] Startseite: weisser Rand rechts auf schmalen Handys behoben
 -------------------------------------------------------------------------------------
 - Problem: Auf sehr schmalen Handys (320 Pixel Breite, z. B. Galaxy S9+ im

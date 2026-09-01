@@ -13,6 +13,11 @@
    --landing-ink: #2a3647;
    --landing-muted: #5a6473;
    --landing-surface: #f6f7f8;
+   /* Ein Knopf fuer die Breite der Inhaltsspalte. Header, Hero, alle Sektionen
+      und der Gutter des Showcase (landing-showcase.css) lesen ihn, damit die
+      linke Kante ueberall dieselbe bleibt. Auf sehr breiten Schirmen waechst er
+      mit - bei 1100px belegt der Inhalt auf 4K nur 30% der Flaeche. */
+   --landing-max: 1100px;
 
    display: block;
    min-height: 100vh;
@@ -40,7 +45,7 @@
 /* Header */
 
 .landing__header {
-   max-width: 1100px;
+   max-width: var(--landing-max);
    margin: 0 auto;
    padding: 28px 24px;
    display: flex;
@@ -98,7 +103,7 @@
 /* Hero */
 
 .landing__hero {
-   max-width: 1100px;
+   max-width: var(--landing-max);
    margin: 0 auto;
    /* min-height statt height, weil der Hero-Inhalt selbst 428-690px hoch ist:
       eine feste Hoehe wuerde ihn auf niedrigen Schirmen abschneiden (bei
@@ -108,7 +113,10 @@
       + 64px Gesamthoehe (640px bei 900px Fensterhoehe). Kein box-sizing,
       weil das ueber die max-width die linke Kante gegenueber den anderen
       Sektionen verschieben wuerde. */
-   min-height: 64vh;
+   /* min() statt purem 64vh: der Hero-Inhalt ist rund 480px hoch, auf einem
+      2160px hohen 4K-Schirm waeren 64vh 1382px - also ueber 900px leere
+      weisse Flaeche unter dem Text. */
+   min-height: min(64vh, 620px);
    padding: 24px 24px 40px;
 }
 
@@ -211,7 +219,7 @@
 /* Sections */
 
 .landing__section {
-   max-width: 1100px;
+   max-width: var(--landing-max);
    margin: 0 auto;
    padding: 56px 24px;
 }
@@ -224,7 +232,7 @@
 }
 
 .landing__section--notes > * {
-   max-width: 1100px;
+   max-width: var(--landing-max);
    margin-left: auto;
    margin-right: auto;
    padding-left: 24px;
@@ -460,5 +468,59 @@
    .landing__button {
       width: 100%;
       text-align: center;
+   }
+}
+
+/* Grosse Schirme (WQHD-Ultrawide, 4K).
+   Bis 1600px bleibt alles wie bisher. Darueber waechst die Inhaltsspalte mit,
+   weil eine feste 1100px-Spalte auf 3440px oder 3840px Breite nur noch ein
+   Drittel bzw. ein Drittel der Flaeche belegt und der Text verloren wirkt.
+   Die Schrift waechst in denselben Stufen mit - sonst steht eine 61px-Zeile
+   allein auf einer 1560px breiten Spalte. */
+@media (min-width: 1600px) {
+   .landing {
+      --landing-max: 1320px;
+   }
+
+   .landing__title {
+      font-size: 72px;
+   }
+
+   .landing__lead {
+      font-size: 22px;
+   }
+
+   .landing__section-title {
+      font-size: 38px;
+   }
+
+   .landing__step-title,
+   .landing__try-text {
+      font-size: 21px;
+   }
+}
+
+@media (min-width: 2400px) {
+   .landing {
+      --landing-max: 1560px;
+   }
+
+   .landing__title {
+      font-size: 84px;
+   }
+
+   .landing__lead {
+      font-size: 24px;
+   }
+
+   .landing__section-title {
+      font-size: 44px;
+   }
+
+   .landing__step-text,
+   .landing__note-text,
+   .landing__mail-body,
+   .landing__field-value {
+      font-size: 18px;
    }
 }

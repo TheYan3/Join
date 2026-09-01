@@ -75,9 +75,11 @@ body.landing {
    --showcase-ink-soft: #c3cbd6;
    --showcase-hairline: rgba(255, 255, 255, 0.14);
    /* Gleiche Startlinie wie .landing__hero und .landing__section: die haben
-      max-width 1100px (Content-Box) plus 24px Innenabstand und stehen zentriert,
-      ihr Text beginnt also bei (Breite - 1100) / 2, mindestens aber bei 24px. */
-   --showcase-gutter: max(24px, calc((100% - 1100px) / 2));
+      max-width var(--landing-max) (Content-Box) plus 24px Innenabstand und
+      stehen zentriert, ihr Text beginnt also bei (Breite - Spalte) / 2,
+      mindestens aber bei 24px. --landing-max kommt aus landing.css und waechst
+      auf breiten Schirmen mit. */
+   --showcase-gutter: max(24px, calc((100% - var(--landing-max, 1100px)) / 2));
 
    background: var(--showcase-navy);
    color: var(--showcase-ink);
@@ -305,5 +307,68 @@ body.landing {
 @media (max-width: 700px) {
    .landing__feature--wide .landing__feature-preview {
       display: none;
+   }
+}
+
+/* Grosse Schirme: die Karten wachsen mit.
+   Zwei Gruende. Erstens sehen 340px breite Karten auf einem 4K-Schirm winzig
+   aus. Zweitens lebt dieser Abschnitt davon, dass die Kartenreihe breiter ist
+   als der Bildschirm - nur diesen Ueberhang schiebt die Scroll-Animation
+   seitwaerts. Bei 3840px Breite war der Ueberhang auf 0 geschrumpft: die
+   Sektion blieb anderthalb Bildschirme lang stehen, ohne sich zu bewegen. */
+@media (min-width: 1600px) {
+   .landing__feature {
+      width: 400px;
+   }
+
+   .landing__feature--wide {
+      width: 660px;
+   }
+
+   /* Der Kopf des Abschnitts zieht mit der Ueberschrift des Hero mit -
+      52px neben einem 72px-Titel weiter oben wirkt wie ein Bruch. */
+   .landing__showcase-title {
+      font-size: 64px;
+   }
+
+   .landing__showcase-lead {
+      font-size: 22px;
+   }
+
+   .landing__showcase-head {
+      max-width: 900px;
+   }
+}
+
+@media (min-width: 2400px) {
+   .landing__feature {
+      width: 480px;
+   }
+
+   .landing__feature--wide {
+      width: 820px;
+   }
+
+   .landing__feature-text {
+      font-size: 18px;
+   }
+
+}
+
+/* Die groesste Kopf-Stufe haengt zusaetzlich an der Fensterhoehe: der Abschnitt
+   ist genau einen Bildschirm hoch, und auf einem 2560x900-Fenster ragten Kopf
+   plus Karten 17px darueber hinaus - die Ueberschrift waere oben abgeschnitten
+   worden. */
+@media (min-width: 2400px) and (min-height: 1000px) {
+   .landing__showcase-title {
+      font-size: 76px;
+   }
+
+   .landing__showcase-lead {
+      font-size: 24px;
+   }
+
+   .landing__showcase-head {
+      max-width: 1040px;
    }
 }
