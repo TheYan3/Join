@@ -5,6 +5,34 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: Hero auf 60vh, neuer Abschnitt auf gleiche Startlinie
+-------------------------------------------------------------------------------------
+- Der obere Bereich der Startseite (Ueberschrift "Send an e-mail. Get a ticket.")
+  war je nach Bildschirm 64 bis 102 Prozent der Fensterhoehe hoch. Jetzt sind
+  es 60 Prozent, sobald der Platz reicht - der neue Kanban-Abschnitt darunter
+  ist damit schon beim ersten Blick angeschnitten sichtbar.
+- Absichtlich als Mindesthoehe und nicht als feste Hoehe: der Text im oberen
+  Bereich braucht je nach Breite 469 bis 546 Bildpunkte. Eine feste Hoehe
+  wuerde ihn auf niedrigen Fenstern abschneiden - bei 360x640 waeren 226
+  Bildpunkte weg gewesen. Auf solchen Fenstern ist der Bereich daher weiterhin
+  so hoch, wie der Text es braucht.
+- Der dunkle Abschnitt beginnt jetzt an derselben senkrechten Linie wie alle
+  anderen Abschnitte der Seite: Ueberschrift, Text und die erste Karte starten
+  exakt dort, wo auch "Send an e-mail." und "How it works" starten. Vorher
+  begann er weiter links, was unruhig aussah. Beim Scrollen darf die
+  Kartenreihe wie bisher rechts aus dem Bild laufen.
+- Nachgemessen im echten Browser bei 1920x1080, 1440x900, 1440x720, 1280x800,
+  1024x640, 768x1024, 390x844 und 360x640: die vier Startlinien (oberer
+  Bereich, normale Abschnitte, Ueberschrift des dunklen Abschnitts, erste
+  Karte) liegen bei jeder Groesse auf demselben Wert, und die Seite laesst
+  sich nirgends seitlich verschieben.
+- Betroffene Dateien:
+  - styles/landing.css: Mindesthoehe und kleinerer Innenabstand fuer den
+    oberen Bereich.
+  - styles/landing-showcase.css: Startlinie des dunklen Abschnitts an die
+    Breite der uebrigen Abschnitte gekoppelt.
+
+
 [2026-09-01] Startseite: neuer Abschnitt ueber das ganze Projekt
 -------------------------------------------------------------------------------------
 - Die Startseite (index.html) hat bisher fast nur die E-Mail-Funktion mit der

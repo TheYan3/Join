@@ -74,7 +74,10 @@ body.landing {
    --showcase-ink: #ffffff;
    --showcase-ink-soft: #c3cbd6;
    --showcase-hairline: rgba(255, 255, 255, 0.14);
-   --showcase-gutter: clamp(24px, 6vw, 96px);
+   /* Gleiche Startlinie wie .landing__hero und .landing__section: die haben
+      max-width 1100px (Content-Box) plus 24px Innenabstand und stehen zentriert,
+      ihr Text beginnt also bei (Breite - 1100) / 2, mindestens aber bei 24px. */
+   --showcase-gutter: max(24px, calc((100% - 1100px) / 2));
 
    background: var(--showcase-navy);
    color: var(--showcase-ink);
