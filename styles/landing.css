@@ -240,14 +240,22 @@
 
 /* Steps */
 
+/* padding: 0 - eine <ul> hat 40px Browser-Einzug; ohne Aufzaehlungspunkte
+   verschiebt der die Karten nur gegen die Ueberschrift. min(260px, 100%)
+   statt 260px, weil eine feste Untergrenze auf 320px-Schirmen breiter ist
+   als der Platz und die Seite seitwaerts scrollen laesst. */
 .landing__steps {
    list-style: none;
+   padding: 0;
    display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
    gap: 28px;
 }
 
 .landing__step {
+   /* Projekt hat keinen border-box-Reset: ohne das kaemen 28px Innenabstand
+      und 1px Rahmen auf die volle Spaltenbreite obendrauf. */
+   box-sizing: border-box;
    padding: 28px;
    border-radius: 16px;
    border: 1px solid #e2e4e7;
@@ -289,9 +297,12 @@
 /* Notes */
 
 .landing__notes {
+   /* Kein padding-Reset wie bei .landing__steps: den Browser-Einzug ueberschreibt
+      hier schon .landing__section--notes > * mit den 24px Seitenabstand - ein
+      eigenes padding: 0 wuerde die Liste an den Bildschirmrand ziehen. */
    list-style: none;
    display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
    gap: 28px;
 }
 
@@ -320,13 +331,14 @@
 
 .landing__example {
    display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+   grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
    gap: 28px;
    margin-bottom: 32px;
    align-items: start;
 }
 
 .landing__mail {
+   box-sizing: border-box;
    padding: 24px;
    border-radius: 16px;
    border: 1px solid #e2e4e7;
@@ -357,6 +369,7 @@
 }
 
 .landing__result {
+   box-sizing: border-box;
    padding: 24px;
    border-radius: 16px;
    border: 1px solid #e2e4e7;

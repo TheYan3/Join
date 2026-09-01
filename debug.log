@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: weisser Rand rechts auf schmalen Handys behoben
+-------------------------------------------------------------------------------------
+- Problem: Auf sehr schmalen Handys (320 Pixel Breite, z. B. Galaxy S9+ im
+  Handy-Modus) liess sich die Startseite seitwaerts verschieben. Schob man sie
+  nach rechts, tauchte neben dem dunkelblauen Abschnitt ein weisser Streifen
+  auf und die Abschnitte wirkten verschoben.
+- Gemessen im Browser: die Seite war 24 Pixel breiter als der Bildschirm.
+  Schuld war nicht der dunkle Abschnitt, sondern drei Stellen im hellen Teil:
+  1. Die Liste mit den drei Schritten ("You write an e-mail" usw.) hatte den
+     Standard-Einzug, den Browser bei Aufzaehlungen automatisch setzen -
+     40 Pixel, die dort niemand wollte, weil die Punkte gar nicht sichtbar
+     sind. Dadurch standen die Karten auch nicht mehr auf einer Linie mit
+     der Ueberschrift darueber.
+  2. Die Karten hatten eine feste Mindestbreite (260 bzw. 320 Pixel), die auf
+     einem 320-Pixel-Bildschirm schlicht nicht mehr hineinpasst.
+  3. Bei den Karten wurden Innenabstand und Rahmen auf die volle Breite noch
+     obendrauf gerechnet, statt hineinzuzaehlen - macht pro Karte weitere
+     58 Pixel.
+- Behoben: Einzug bei der Schritte-Liste entfernt, die Mindestbreiten so
+  gesetzt, dass sie nie breiter werden als der Platz auf dem Bildschirm, und
+  bei den Karten den Innenabstand mitgerechnet statt draufgeschlagen.
+- Nachgemessen bei 320, 360, 390, 412, 480, 600, 768, 820, 900, 1024, 1280,
+  1440 und 1920 Pixel Breite: kein seitliches Verschieben mehr, und alle
+  Abschnitte (Ueberschrift, Karten, dunkler Abschnitt, Beispiel-Mail) beginnen
+  auf derselben linken Linie.
+- Betroffene Datei: styles/landing.css
+
 [2026-09-01] Startseite: Einstiegstext verkauft jetzt das ganze Produkt
 -------------------------------------------------------------------------------------
 - Der Text ganz oben auf der Startseite handelte nur von der E-Mail-Funktion
