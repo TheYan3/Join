@@ -217,9 +217,13 @@ body.landing {
 
 .landing__feature-preview {
    margin-top: auto;
-   /* auto width + a max on both axes: the box shrinks to the scaled image, so
-      there is no letterboxed gap next to it. The height cap keeps this one
-      wide card from setting a rail height taller than the pinned viewport. */
+   /* The card is a column flex container, so a stretched image would be pulled
+      to the full card width and squashed (560x234 instead of 376x234).
+      flex-start keeps its own aspect ratio; auto width plus a max on both axes
+      then shrinks the box to the scaled image, so there is no letterboxed gap
+      beside it. The height cap keeps this one wide card from setting a rail
+      height taller than the pinned viewport. */
+   align-self: flex-start;
    width: auto;
    max-width: 100%;
    max-height: clamp(150px, 26vh, 250px);
@@ -277,10 +281,6 @@ body.landing {
    .landing__feature {
       padding: 20px;
       gap: 10px;
-   }
-
-   .landing__feature-preview {
-      max-height: 20vh;
    }
 }
 

@@ -5,6 +5,35 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Echtes Board-Bild statt gezeichneter Illustration
+-------------------------------------------------------------------------------------
+- Auf der Startseite und in der README war das Board bisher nur nachgezeichnet
+  (eine selbstgebaute Grafik). Die zeigte vier Spalten, das Board hat aber
+  inzwischen fuenf - die Spalte "Triage" fehlte darauf komplett.
+- Jetzt ist dort ein echter Bildschirmfoto des laufenden Boards zu sehen, mit
+  allen fuenf Spalten, der Seitenleiste und echten Aufgabenkarten. In der
+  README ist auch der Hinweis "keine echte Aufnahme, zeigt Triage noch nicht"
+  weggefallen, weil er nicht mehr stimmt.
+- Die alte gezeichnete Datei wurde geloescht, sie wurde nirgends sonst
+  verwendet.
+- Beim Einbauen kam heraus, dass das Bild in der Karte auf der Startseite
+  breitgezogen wurde: die Karte ordnet ihre Inhalte untereinander an und hat
+  das Bild dabei auf die volle Kartenbreite gestreckt (560 statt 376 Punkte
+  breit bei gleicher Hoehe). Das Bild behaelt jetzt sein eigenes
+  Seitenverhaeltnis.
+- Ausserdem darf das Bild auf niedrigen Fenstern wieder etwas groesser sein
+  als zuletzt (187 statt 144 Punkte Hoehe bei 1280x720), weil es als
+  Foto mehr Details hat als die fruehere Zeichnung. Die Karten passen
+  weiterhin ueberall auf einen Bildschirm - nachgemessen bei 1440x900,
+  1280x720, 1024x640, 768x1024, 390x844 und 360x640.
+- Betroffene Dateien:
+  - assets/readme/board-preview.png: neu, das Bildschirmfoto.
+  - assets/readme/board-preview.svg: geloescht.
+  - index.html: Karte "Board" zeigt das neue Bild.
+  - README.md: neues Bild und angepasste Bildunterschrift.
+  - styles/landing-showcase.css: Bild wird nicht mehr gestreckt.
+
+
 [2026-09-01] Startseite: Hero auf 60vh, neuer Abschnitt auf gleiche Startlinie
 -------------------------------------------------------------------------------------
 - Der obere Bereich der Startseite (Ueberschrift "Send an e-mail. Get a ticket.")

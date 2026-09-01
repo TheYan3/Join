@@ -174,9 +174,9 @@ The board has five columns:
 - **Done** – completed tasks
 
 <p align="center">
-  <img src="assets/readme/board-preview.svg" alt="Illustration of the Join board with the columns To do, In progress, Await feedback, Done" width="100%" />
+  <img src="assets/readme/board-preview.png" alt="Screenshot of the Join board with the columns Triage, To do, In progress, Await feedback and Done" width="100%" />
   <br />
-  <sub><em>Illustration of the board layout — not a live screenshot; it predates the Triage column.</em></sub>
+  <sub><em>The board as it looks in the running app.</em></sub>
 </p>
 
 ### Creating contacts
