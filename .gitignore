@@ -3,3 +3,6 @@
 db.json
 **/db.json
 Documents/
+
+# Claude-Arbeitsstand (flüchtig, gehört nicht ins Repo)
+.claude/STAND.md
