@@ -5,6 +5,43 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: neuer Abschnitt ueber das ganze Projekt
+-------------------------------------------------------------------------------------
+- Die Startseite (index.html) hat bisher fast nur die E-Mail-Funktion mit der
+  KI beworben. Ein Besucher konnte nicht erkennen, dass Join vor allem ein
+  Kanban-Board mit Uebersicht, Aufgaben-Formular und Kontaktliste ist.
+- Neu gibt es direkt unter der Kopfzeile ("Send an e-mail. Get a ticket.") einen
+  dunkelblauen Abschnitt "Join is a kanban board first.". Darin stehen fuenf
+  Karten nebeneinander: Summary, Board, Add task, Contacts und ganz zum Schluss
+  der E-Mail-Sammler. Die KI-Funktion ist damit nur noch eine von fuenf Sachen,
+  statt der einzigen.
+- Der Abschnitt bewegt sich beim Scrollen: er bleibt kurz stehen und die
+  Kartenreihe wandert dabei seitlich durch das Bild. Dafuer wird ein fertiger
+  Baustein ("scrollcraft") verwendet, der unveraendert ins Projekt kopiert
+  wurde - es musste also nichts selbst programmiert werden.
+- Ohne JavaScript (oder wenn die Datei nicht laedt) bleibt der Abschnitt
+  benutzbar: dann steht er einfach still und die Kartenreihe laesst sich von
+  Hand zur Seite schieben. Nichts wird unsichtbar.
+- Zwei Sachen, die dabei am Rande repariert wurden, beide nur auf der
+  Startseite:
+  - Die Seite hatte rundherum einen 8 Pixel breiten weissen Rand (eine
+    Standard-Einstellung des Browsers, die nie abgeschaltet wurde). Bei einem
+    dunklen Abschnitt ueber die volle Breite waere das als weisser Streifen
+    links und rechts sichtbar geworden.
+  - Auf schmalen Bildschirmen (unter 820 Pixel) ragten die beiden grossen
+    Knoepfe "Get started" und "Open the board" etwa 30 Pixel ueber den rechten
+    Rand hinaus, sodass sich die ganze Seite seitlich verschieben liess. Das
+    war schon vorher so und ist jetzt behoben.
+- Nachgemessen im echten Browser bei 1440x900, 1280x720, 1024x640, 768x1024,
+  390x844 und 360x640: der Abschnitt passt ueberall auf einen Bildschirm, die
+  Kartenreihe endet genau am rechten Rand, und die Seite laesst sich nirgends
+  mehr seitlich verschieben.
+- Betroffene Dateien:
+  - index.html: neuer Abschnitt, zwei neue Verweise (Stylesheet und Skript).
+  - styles/landing-showcase.css: neu - das komplette Aussehen des Abschnitts.
+  - scripts/landing/scrollcraft.js: neu - der kopierte Scroll-Baustein.
+
+
 [2026-08-31] Symbol fuer KI-generierte Tickets abgelegt
 -------------------------------------------------------------------------------------
 - Neu im Projekt liegt das Bild "Note _ KI generiert.svg" - ein schmales

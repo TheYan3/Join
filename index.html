@@ -21,6 +21,7 @@
 
       <link rel="stylesheet" href="./style.css" />
       <link rel="stylesheet" href="./styles/landing.css" />
+      <link rel="stylesheet" href="./styles/landing-showcase.css" />
    </head>
 
    <body class="landing">
@@ -72,6 +73,126 @@
                <a href="mailto:join-issues@gmx.de">join-issues@gmx.de</a>
                from your own mail program.
             </p>
+         </section>
+
+         <section
+            class="landing__showcase"
+            aria-labelledby="showcase-title"
+            data-sc-act="pan"
+            data-sc-span="2.5">
+            <div class="landing__showcase-stage" data-sc-stage>
+               <div class="landing__showcase-head">
+                  <p class="landing__showcase-eyebrow">The whole tool</p>
+                  <h2 id="showcase-title" class="landing__showcase-title">
+                     Join is a kanban board first.
+                  </h2>
+                  <p class="landing__showcase-lead">
+                     The e-mail collector is one way in — but everything a
+                     request touches afterwards lives here: a dashboard, five
+                     columns you drag cards between, a task editor and a
+                     contact list.
+                  </p>
+                  <p class="landing__showcase-hint" data-sc-cue="0 0.3 0 0.6">Keep scrolling</p>
+               </div>
+
+               <div class="landing__showcase-rail" data-sc-pan="0">
+                  <article class="landing__feature">
+                     <span class="landing__feature-icon">
+                        <img src="./assets/icons/desktop/summary.svg" alt="" />
+                     </span>
+                     <p class="landing__feature-step">Summary</p>
+                     <h3 class="landing__feature-title">The day at a glance</h3>
+                     <p class="landing__feature-text">
+                        How many tasks sit in each stage, how many are marked
+                        urgent, and the next deadline coming up — the first
+                        screen after you log in.
+                     </p>
+                     <a class="landing__feature-link" href="./login.html">
+                        Log in and look
+                     </a>
+                  </article>
+
+                  <article
+                     class="landing__feature landing__feature--wide">
+                     <span class="landing__feature-icon">
+                        <img src="./assets/icons/desktop/board.svg" alt="" />
+                     </span>
+                     <p class="landing__feature-step">Board</p>
+                     <h3 class="landing__feature-title">Five columns, drag and drop</h3>
+                     <p class="landing__feature-text">
+                        Every task moves left to right as the work progresses.
+                        Drag a card into the next column, or open it to edit,
+                        tick off subtasks or delete it.
+                     </p>
+                     <ul class="landing__feature-columns">
+                        <li>Triage</li>
+                        <li>To do</li>
+                        <li>In progress</li>
+                        <li>Await feedback</li>
+                        <li>Done</li>
+                     </ul>
+                     <img
+                        class="landing__feature-preview"
+                        src="./assets/readme/board-preview.svg"
+                        alt="Illustration of the Join board with its columns and task cards"
+                        loading="lazy" />
+                  </article>
+
+                  <article class="landing__feature">
+                     <span class="landing__feature-icon">
+                        <img src="./assets/icons/desktop/addTask.svg" alt="" />
+                     </span>
+                     <p class="landing__feature-step">Add task</p>
+                     <h3 class="landing__feature-title">Write a ticket yourself</h3>
+                     <p class="landing__feature-text">
+                        Title, description, due date, priority, category,
+                        who it is assigned to and a checklist of subtasks.
+                        Tasks made here start in Triage, same as the ones the
+                        AI files.
+                     </p>
+                     <a class="landing__feature-link" href="./login.html">
+                        Try it as a guest
+                     </a>
+                  </article>
+
+                  <article class="landing__feature">
+                     <span class="landing__feature-icon">
+                        <img src="./assets/icons/desktop/contacts.svg" alt="" />
+                     </span>
+                     <p class="landing__feature-step">Contacts</p>
+                     <h3 class="landing__feature-title">The people behind the cards</h3>
+                     <p class="landing__feature-text">
+                        An address book with name, e-mail and phone number.
+                        Everyone in it can be assigned to a task and shows up
+                        on the card as a coloured initial.
+                     </p>
+                     <a class="landing__feature-link" href="./login.html">
+                        Open the contact list
+                     </a>
+                  </article>
+
+                  <article class="landing__feature">
+                     <span class="landing__feature-icon">
+                        <img src="./assets/icons/desktop/mail.svg" alt="" />
+                     </span>
+                     <p class="landing__feature-step">Issue collector</p>
+                     <h3 class="landing__feature-title">And the door from outside</h3>
+                     <p class="landing__feature-text">
+                        People with no account can just send an e-mail. An AI
+                        turns it into a ticket in Triage and keeps the sender
+                        posted whenever it moves.
+                     </p>
+                     <img
+                        src="./assets/icons/desktop/Note _ KI generiert.svg"
+                        alt="Badge reading: generated by AI"
+                        width="177"
+                        height="22" />
+                     <a class="landing__feature-link" href="#how-title">
+                        See how that works
+                     </a>
+                  </article>
+               </div>
+            </div>
          </section>
 
          <section class="landing__section" aria-labelledby="how-title">
@@ -244,5 +365,9 @@
             and accuracy are not guaranteed.
          </p>
       </footer>
+      <script src="./scripts/landing/scrollcraft.js"></script>
+      <script>
+         ScrollCraft.mount(document.querySelector(".landing__showcase").parentNode);
+      </script>
    </body>
 </html>

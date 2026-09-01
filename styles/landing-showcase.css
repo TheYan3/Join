@@ -1,0 +1,306 @@
+/* "The whole tool" section on the landing page.
+   Driven by the scrollcraft engine (scripts/landing/scrollcraft.js): the
+   section pins itself and the feature rail pans sideways while you scroll.
+
+   Only this section uses it. Everything is gated behind .sc-ready, the class
+   the engine puts on <html> once it has mounted — so without JavaScript the
+   section degrades to a normal block with a horizontally scrollable rail
+   instead of collapsing to an invisible, unreachable strip. */
+
+/* --- the few scrollcraft tokens the devices below actually read ----------- */
+:root {
+   --sc-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+   --sc-z-stage: 1;
+}
+
+/* --- scrollcraft devices (verbatim behaviour, .sc-ready-gated) ------------ */
+[data-sc-pan] {
+   display: flex;
+   will-change: transform;
+}
+
+.sc-ready [data-sc-cue] {
+   opacity: 0;
+   will-change: opacity, transform;
+}
+
+.sc-split {
+   display: inline-block;
+   overflow: hidden;
+   vertical-align: top;
+}
+
+.sc-split--line {
+   display: block;
+   padding-bottom: 0.14em;
+   margin-bottom: -0.14em;
+}
+
+.sc-split__i {
+   display: inline-block;
+   will-change: transform, opacity;
+}
+
+.sc-is-split {
+   opacity: 1 !important;
+}
+
+/* Pre-existing landing bug, ~30px of sideways page scroll below 820px:
+   landing.css sets .landing__button { width: 100% } there, and the project has
+   no border-box reset, so the button's 30px side padding is added on top of the
+   full width. Dropping the body margin above widened the parent and made it
+   38px, so it is corrected here instead of left worse than it was. */
+@media (max-width: 820px) {
+   body.landing .landing__button {
+      box-sizing: border-box;
+   }
+}
+
+/* --- the section --------------------------------------------------------- */
+
+/* style.css never resets the browser's default 8px body margin, so every page
+   sits in an 8px white frame. On a full-bleed dark section that frame shows up
+   as a white stripe down both sides, and it also pushes the panning rail 8px
+   past the right edge at the end of its travel. Dropped for this page only —
+   .landing is on the landing page's <body> and nowhere else. */
+body.landing {
+   margin: 0;
+}
+
+.landing__showcase {
+   --showcase-navy: #2a3647;
+   --showcase-surface: #343f52;
+   --showcase-cyan: #29abe2;
+   --showcase-ink: #ffffff;
+   --showcase-ink-soft: #c3cbd6;
+   --showcase-hairline: rgba(255, 255, 255, 0.14);
+   --showcase-gutter: clamp(24px, 6vw, 96px);
+
+   background: var(--showcase-navy);
+   color: var(--showcase-ink);
+}
+
+.landing__showcase-stage {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   gap: clamp(24px, 4vh, 48px);
+   padding-block: clamp(48px, 8vh, 96px);
+   /* No JavaScript: the rail is simply a scroll region the reader can swipe. */
+   overflow-x: auto;
+   overscroll-behavior-x: contain;
+}
+
+.sc-ready .landing__showcase-stage {
+   position: sticky;
+   top: 0;
+   height: 100vh;
+   height: 100svh;
+   padding-block: 0;
+   overflow: clip;
+   z-index: var(--sc-z-stage);
+}
+
+/* Headline block — stays put while the cards travel past it. */
+
+.landing__showcase-head {
+   padding-inline: var(--showcase-gutter);
+   max-width: 760px;
+}
+
+.landing__showcase-eyebrow {
+   margin: 0 0 12px;
+   font-size: 14px;
+   font-weight: 600;
+   letter-spacing: 0.12em;
+   text-transform: uppercase;
+   color: var(--showcase-cyan);
+}
+
+.landing__showcase-title {
+   margin: 0 0 16px;
+   font-size: clamp(30px, 5vw, 52px);
+   line-height: 1.08;
+   font-weight: 700;
+}
+
+.landing__showcase-lead {
+   margin: 0;
+   font-size: clamp(16px, 1.6vw, 19px);
+   line-height: 1.55;
+   color: var(--showcase-ink-soft);
+}
+
+.landing__showcase-hint {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   margin: 16px 0 0;
+   font-size: 14px;
+   color: var(--showcase-ink-soft);
+}
+
+.landing__showcase-hint::after {
+   content: "";
+   width: 42px;
+   height: 1px;
+   background: linear-gradient(
+      to right,
+      var(--showcase-cyan),
+      transparent
+   );
+}
+
+/* The rail. Wider than the viewport on purpose — that overhang is exactly
+   what the engine pans through as you scroll. */
+
+.landing__showcase-rail {
+   gap: clamp(16px, 2vw, 28px);
+   padding-inline: var(--showcase-gutter);
+   align-items: stretch;
+}
+
+.landing__feature {
+   flex: 0 0 auto;
+   width: clamp(250px, 76vw, 340px);
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   padding: clamp(20px, 2.4vw, 30px);
+   border: 1px solid var(--showcase-hairline);
+   border-radius: 20px;
+   background: var(--showcase-surface);
+   box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+}
+
+.landing__feature--wide {
+   width: clamp(280px, 86vw, 560px);
+}
+
+.landing__feature-icon {
+   width: 44px;
+   height: 44px;
+   display: grid;
+   place-items: center;
+   border-radius: 12px;
+   background: rgba(41, 171, 226, 0.16);
+}
+
+.landing__feature-icon img {
+   width: 26px;
+   height: 26px;
+}
+
+.landing__feature-step {
+   font-size: 14px;
+   font-weight: 600;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   color: var(--showcase-cyan);
+}
+
+.landing__feature-title {
+   margin: 0;
+   font-size: clamp(20px, 2.2vw, 24px);
+   font-weight: 700;
+}
+
+.landing__feature-text {
+   margin: 0;
+   font-size: 16px;
+   line-height: 1.55;
+   color: var(--showcase-ink-soft);
+}
+
+.landing__feature-preview {
+   margin-top: auto;
+   /* auto width + a max on both axes: the box shrinks to the scaled image, so
+      there is no letterboxed gap next to it. The height cap keeps this one
+      wide card from setting a rail height taller than the pinned viewport. */
+   width: auto;
+   max-width: 100%;
+   max-height: clamp(150px, 26vh, 250px);
+   border-radius: 12px;
+}
+
+.landing__feature-columns {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   margin: 4px 0 0;
+   padding: 0;
+   list-style: none;
+}
+
+.landing__feature-columns li {
+   padding: 6px 12px;
+   border: 1px solid var(--showcase-hairline);
+   border-radius: 999px;
+   font-size: 14px;
+   color: var(--showcase-ink-soft);
+}
+
+.landing__feature-link {
+   margin-top: auto;
+   align-self: flex-start;
+   font-size: 16px;
+   font-weight: 600;
+   color: var(--showcase-cyan);
+   text-decoration: none;
+   border-bottom: 1px solid transparent;
+}
+
+.landing__feature-link:hover,
+.landing__feature-link:focus-visible {
+   border-bottom-color: var(--showcase-cyan);
+}
+
+/* Short viewports. The stage is exactly one screen tall, so on a 640-720px
+   high window the head plus the tallest card no longer fit and the headline
+   gets clipped at the top. Trim the air rather than the content. */
+@media (max-height: 820px) {
+   .landing__showcase-stage {
+      gap: 16px;
+   }
+
+   .landing__showcase-title {
+      font-size: clamp(26px, 3.4vw, 38px);
+   }
+
+   .landing__showcase-hint {
+      display: none;
+   }
+
+   .landing__feature {
+      padding: 20px;
+      gap: 10px;
+   }
+
+   .landing__feature-preview {
+      max-height: 20vh;
+   }
+}
+
+/* Reduced motion: the engine stops panning, so the same cards have to stay
+   reachable by hand. */
+@media (prefers-reduced-motion: reduce) {
+   .sc-ready .landing__showcase-stage {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x proximity;
+   }
+
+   .landing__feature {
+      scroll-snap-align: center;
+   }
+
+   .sc-ready [data-sc-cue] {
+      opacity: 1;
+   }
+}
+
+@media (max-width: 700px) {
+   .landing__feature--wide .landing__feature-preview {
+      display: none;
+   }
+}
