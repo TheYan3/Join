@@ -22,6 +22,54 @@ neuester Eintrag oben.
   scripts/board/board-task-detail.js (blendet das Abzeichen je nach Ersteller
   ein oder aus).
 
+[2026-09-01] Startseite: Einstieg endet immer genau ueber "WHAT IS INSIDE"
+-------------------------------------------------------------------------------------
+- Ziel: Egal auf welchem Geraet - beim Aufrufen der Startseite fuellt der
+  Einstiegsbereich den Bildschirm so weit, dass unten gerade noch der dunkle
+  Abschnitt mit seiner Zeile "WHAT IS INSIDE" anfaengt. Die Ueberschrift
+  darunter ist abgeschnitten, damit man weiterscrollen will.
+- Warum das nicht allein mit CSS geht: Wie weit diese Zeile vom oberen Rand
+  des dunklen Abschnitts entfernt ist, haengt davon ab, wie hoch dessen
+  Inhalt gerade ist - der Abschnitt zentriert ihn senkrecht. Auf einem
+  4K-Schirm sind das ueber 600 Pixel, auf einem Handy 25. Ein fester Wert im
+  Stylesheet kann das nicht treffen.
+- Neu: scripts/landing/hero-fit.js misst diesen Abstand direkt auf der Seite
+  und setzt die Hoehe des Einstiegs auf "Bildschirmhoehe minus Kopfzeile minus
+  dieser Abstand". Es rechnet neu, wenn das Fenster in der Breite veraendert
+  wird und wenn die Schrift fertig geladen ist. Ohne JavaScript bleibt es bei
+  der bisherigen Hoehe aus dem Stylesheet - die Seite funktioniert weiter,
+  nur ohne den Anschnitt-Effekt.
+- Weil die Hoehe jetzt vom Bildschirm kommt und nicht vom Text, steht der
+  Text des Einstiegs senkrecht mittig. Sonst haengt er auf hohen Schirmen
+  oben und darunter klafft eine grosse leere Flaeche.
+- Damit das auch auf kleinen und flachen Geraeten aufgeht, schrumpfen
+  Schriftgroessen und Abstaende im Einstieg jetzt mit der Fensterhoehe
+  (Ueberschrift, Vorspann, Knopf, Kopfzeile). Auf hohen Fenstern bleibt alles
+  wie bisher - die Werte sind nach oben gedeckelt.
+- Drei Stellen geben auf sehr kleinen Geraeten Text auf, weil der Platz sonst
+  nicht reicht:
+  1. Auf schmalen Schirmen (bis 820 Pixel) faellt der zweite Satz des
+     Vorspanns weg ("Plus a mailbox anyone can write to ...").
+  2. Auf flachen Handys (bis 700 Pixel hoch) faellt die kleine Zeile ueber der
+     Ueberschrift weg ("KANBAN BOARD - AI ISSUE COLLECTOR").
+  3. Auf sehr flachen Fenstern (bis 520 Pixel hoch, z.B. Handy quer) faellt
+     der ganze Vorspann weg; auf sehr breiten und flachen Fenstern ab 2400
+     Pixel Breite ebenfalls.
+  Alle diese Inhalte stehen weiter im Abschnitt "How it works" und in der
+  Seitenbeschreibung.
+- Ausserdem richtet sich der dunkle Abschnitt auf schmalen und flachen
+  Fenstern oben statt mittig aus. Sonst haengt seine erste Zeile dort bis zu
+  130 Pixel unter der Abschnittskante, und der Einstieg muesste um genau
+  diesen Betrag kuerzer sein, als sein eigener Text braucht.
+- Nachgemessen bei 28 Bildschirmgroessen von 320x480 bis 3840x2160,
+  einschliesslich Handy quer (667x375), flacher Fenster (1920x500) und
+  Ultrawide (3440x1440): in allen 28 Faellen steht die Zeile "WHAT IS INSIDE"
+  10 Pixel ueber der unteren Bildschirmkante, die Ueberschrift darunter ist
+  abgeschnitten, der Einstiegstext wird nirgends abgeschnitten, und es gibt
+  kein seitliches Verschieben.
+- Betroffene Dateien: index.html, scripts/landing/hero-fit.js (neu),
+  styles/landing.css, styles/landing-showcase.css
+
 [2026-09-01] Startseite: letzte Karte laeuft bis zur Bildschirmmitte
 -------------------------------------------------------------------------------------
 - Problem: Im dunklen Abschnitt wandern die Karten beim Scrollen seitwaerts.

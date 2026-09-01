@@ -47,7 +47,12 @@
 .landing__header {
    max-width: var(--landing-max);
    margin: 0 auto;
-   padding: 28px 24px;
+   /* min() statt fester Werte in diesem ganzen Abschnitt: auf hohen Fenstern
+      bleibt exakt der bisherige Wert stehen, auf flachen schrumpft er mit der
+      Fensterhoehe. Das ist noetig, damit der Hero zusammen mit dem Guckloch auf
+      den dunklen Abschnitt (siehe scripts/landing/hero-fit.js) auf einen
+      Bildschirm passt. */
+   padding: min(28px, 2.4vh) 24px;
    display: flex;
    align-items: center;
    justify-content: space-between;
@@ -117,7 +122,18 @@
       2160px hohen 4K-Schirm waeren 64vh 1382px - also ueber 900px leere
       weisse Flaeche unter dem Text. */
    min-height: min(64vh, 620px);
-   padding: 24px 24px 40px;
+   padding: min(24px, 2.6vh) 24px min(40px, 3vh);
+}
+
+/* Setzt scripts/landing/hero-fit.js: der Hero bekommt per Inline-Stil genau die
+   Hoehe, die den dunklen Abschnitt mit seiner Zeile "WHAT IS INSIDE" an den
+   unteren Bildschirmrand schiebt. Weil die Hoehe dann vom Bildschirm kommt und
+   nicht vom Text, wird der Inhalt senkrecht mittig gestellt - sonst haengt er
+   auf hohen Schirmen oben und darunter steht eine grosse leere Flaeche. */
+.landing__hero--fill {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
 }
 
 .landing__eyebrow {
@@ -126,30 +142,31 @@
    letter-spacing: 0.08em;
    text-transform: uppercase;
    color: var(--landing-cyan);
-   margin-bottom: 16px;
+   margin-bottom: min(16px, 1.8vh);
 }
 
 .landing__title {
-   font-size: 61px;
+   font-size: min(61px, 6.6vh);
    font-weight: 700;
    line-height: 1.1;
    color: var(--landing-navy);
-   margin-bottom: 24px;
+   margin-bottom: min(24px, 2.8vh);
 }
 
 .landing__lead {
-   font-size: 20px;
+   /* 16px ist die Untergrenze aus der Projekt-Checkliste fuer Fliesstext. */
+   font-size: min(20px, max(16px, 2.4vh));
    line-height: 1.5;
    max-width: 62ch;
    color: var(--landing-muted);
-   margin-bottom: 36px;
+   margin-bottom: min(36px, 4vh);
 }
 
 .landing__actions {
    display: flex;
    flex-wrap: wrap;
    gap: 16px;
-   margin-bottom: 20px;
+   margin-bottom: min(20px, 2.2vh);
 }
 
 /* Form und Hover-Verhalten der Welcome-Knoepfe (.login__button in
@@ -157,7 +174,7 @@
 .landing__button {
    font-size: 18px;
    font-weight: 700;
-   padding: 16px 30px;
+   padding: min(16px, 1.8vh) 30px;
    border-radius: 8px;
    display: inline-block;
    text-decoration: none;
@@ -453,12 +470,43 @@
       padding: 10px 16px;
    }
 
+   /* Auf schmalen Schirmen bricht die Ueberschrift auf vier bis fuenf Zeilen
+      um, deshalb reagiert sie hier staerker auf die Fensterhoehe als oben. */
    .landing__title {
-      font-size: 40px;
+      font-size: min(40px, 4.6vh);
+      margin-bottom: min(24px, 2.2vh);
+   }
+
+   .landing__eyebrow {
+      margin-bottom: min(16px, 1.4vh);
+   }
+
+   .landing__button {
+      font-size: min(18px, max(16px, 2.6vh));
+   }
+
+   /* Der Hinweis unter dem Knopf ist Kleingedrucktes, die Untergrenze dafuer
+      sind 14px. */
+   .landing__address {
+      font-size: min(16px, max(14px, 2.2vh));
    }
 
    .landing__lead {
-      font-size: 18px;
+      font-size: min(18px, max(16px, 2.6vh));
+      margin-bottom: min(36px, 3vh);
+   }
+
+   .landing__actions {
+      margin-bottom: min(20px, 1.6vh);
+   }
+
+   /* Der zweite Satz des Vorspanns faellt auf schmalen Schirmen weg: er kostet
+      dort vier Zeilen, und genau die fehlen, damit der Einstieg zusammen mit
+      dem Guckloch auf den dunklen Abschnitt auf einen Bildschirm passt. Der
+      Inhalt steht unverkuerzt im Abschnitt "How it works" und in der
+      Seitenbeschreibung. */
+   .landing__lead-more {
+      display: none;
    }
 
    .landing__section-title {
@@ -482,12 +530,15 @@
       --landing-max: 1320px;
    }
 
+   /* Auch hier mit vh gedeckelt, sonst bleibt die Ueberschrift auf einem
+      flachen Fenster (z.B. 1920x500) bei 72px und der Einstieg passt nicht
+      mehr zusammen mit dem Guckloch auf einen Bildschirm. */
    .landing__title {
-      font-size: 72px;
+      font-size: min(72px, 7vh);
    }
 
    .landing__lead {
-      font-size: 22px;
+      font-size: min(22px, max(16px, 2.4vh));
    }
 
    .landing__section-title {
@@ -506,11 +557,11 @@
    }
 
    .landing__title {
-      font-size: 84px;
+      font-size: min(84px, 8vh);
    }
 
    .landing__lead {
-      font-size: 24px;
+      font-size: min(24px, max(16px, 2.6vh));
    }
 
    .landing__section-title {
@@ -522,5 +573,36 @@
    .landing__mail-body,
    .landing__field-value {
       font-size: 18px;
+   }
+}
+
+/* Flache Handy-Schirme. Hier reicht der Platz sonst nicht fuer Einstieg plus
+   das Guckloch auf den dunklen Abschnitt. Die Zeile ueber der Ueberschrift ist
+   die einzige rein schmueckende Zeile im Einstieg, deshalb faellt sie hier. */
+@media (max-width: 820px) and (max-height: 700px) {
+   .landing__eyebrow {
+      display: none;
+   }
+}
+
+/* Handy quer und aehnlich flache Fenster - auch am Desktop, wenn jemand das
+   Fenster flach zieht. Hier bleibt nach Ueberschrift, Knopf und Hinweiszeile
+   kein Platz mehr fuer den Vorspann, wenn der dunkle Abschnitt unten noch
+   angeschnitten sichtbar sein soll. Der Vorspann faellt deshalb weg - er steht
+   wortgleich in der Seitenbeschreibung und ausfuehrlich im Abschnitt
+   "How it works". */
+@media (max-height: 520px) {
+   .landing__lead {
+      display: none;
+   }
+}
+
+/* Sehr breite und dabei flache Fenster (Ultrawide, halbhoch aufgezogen).
+   Die Ueberschrift ist dort schon gross, der Vorspann steht in einer eigenen
+   Spalte darunter - zusammen passen sie nicht mehr ueber das Guckloch.
+   Gleiche Begruendung wie bei der flachen Regel oben. */
+@media (min-width: 2400px) and (max-height: 700px) {
+   .landing__lead {
+      display: none;
    }
 }
