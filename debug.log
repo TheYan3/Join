@@ -5,6 +5,27 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Startseite: letzte Karte laeuft bis zur Bildschirmmitte
+-------------------------------------------------------------------------------------
+- Problem: Im dunklen Abschnitt wandern die Karten beim Scrollen seitwaerts.
+  Die letzte Karte ("And the door from outside") kam dabei nur bis zum
+  rechten Bildschirmrand - sie klebte dort halb angeschnitten fest, und die
+  Seite ging sofort zum naechsten Abschnitt weiter.
+- Ursache: Die Animation schiebt die Kartenreihe genau so weit, wie sie
+  breiter ist als der Bildschirm. Der Abstand rechts hinter der letzten
+  Karte zaehlt bei dieser Rechnung nicht mit, also endet die Bewegung
+  buendig mit der Bildschirmkante.
+- Behoben: Hinter der letzten Karte steht jetzt ein unsichtbarer Platzhalter,
+  der genau so breit ist, dass die Karte bis kurz vor die Bildschirmmitte
+  laeuft. Auf schmalen Handys, wo dafuer kein Platz ist, wird er automatisch
+  kleiner, damit die Karte trotzdem vollstaendig sichtbar bleibt.
+- Nachgemessen bei 320, 390, 768, 1024, 1280, 1600, 1920, 2560, 3440 und
+  3840 Pixel Breite: ab 768 Pixel endet die Karte mit ihrer rechten Kante
+  bei 49 bis 51 Prozent der Bildschirmbreite, also praktisch in der Mitte.
+  Auf 320 und 390 Pixel bleibt sie wie bisher am rechten Rand, aber komplett
+  im Bild.
+- Betroffene Datei: styles/landing-showcase.css
+
 [2026-09-01] Startseite: Darstellung auf 4K- und Ultrawide-Bildschirmen
 -------------------------------------------------------------------------------------
 - Problem: Auf sehr grossen Bildschirmen sah die Startseite verloren aus.

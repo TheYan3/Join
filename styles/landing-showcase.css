@@ -80,6 +80,15 @@ body.landing {
       mindestens aber bei 24px. --landing-max kommt aus landing.css und waechst
       auf breiten Schirmen mit. */
    --showcase-gutter: max(24px, calc((100% - var(--landing-max, 1100px)) / 2));
+   /* Breite einer normalen Karte (Inhaltsbox) und daraus die Aussenbreite samt
+      Innenabstand und Rahmen. Der Nachlauf am Ende der Reihe rechnet damit,
+      wie weit die letzte Karte noch nach links laufen darf, ohne aus dem Bild
+      zu geraten. --sc-gap ist der Abstand zwischen zwei Karten. */
+   --sc-card: 340px;
+   --sc-gap: clamp(16px, 2vw, 28px);
+   --sc-card-outer: calc(
+      clamp(250px, 76vw, var(--sc-card)) + 2 * clamp(20px, 2.4vw, 30px) + 2px
+   );
 
    background: var(--showcase-navy);
    color: var(--showcase-ink);
@@ -160,14 +169,37 @@ body.landing {
    what the engine pans through as you scroll. */
 
 .landing__showcase-rail {
-   gap: clamp(16px, 2vw, 28px);
+   gap: var(--sc-gap);
    padding-inline: var(--showcase-gutter);
    align-items: stretch;
 }
 
+/* Nachlauf hinter der letzten Karte.
+   Die Animation schiebt die Reihe um (Reihenbreite - Bildschirmbreite) nach
+   links, und Chrome zaehlt den rechten Innenabstand eines Flex-Containers dabei
+   nicht mit. Ohne diesen Platzhalter endet die Bewegung genau dann, wenn die
+   letzte Karte ("And the door from outside") mit der rechten Bildschirmkante
+   abschliesst - sie klebt am Rand und die Sektion gibt sofort weiter.
+   Mit ihm laeuft sie bis kurz vor die Bildschirmmitte:
+   - 50vw waere die Mitte,
+   - der zweite Wert deckelt das auf "Karte bleibt ganz im Bild" (20px Reserve
+     fuer die Bildlaufleiste, die in 100vw mitzaehlt),
+   - der negative Aussenabstand hebt den Reihenabstand auf, damit der Wert
+     wirklich der Abstand zur rechten Kante ist und nicht 16-28px mehr. */
+.landing__showcase-rail::after {
+   content: "";
+   flex-grow: 0;
+   flex-shrink: 0;
+   flex-basis: min(
+      50vw,
+      max(0px, calc(100vw - var(--sc-card-outer) - 20px))
+   );
+   margin-inline-start: calc(-1 * var(--sc-gap));
+}
+
 .landing__feature {
    flex: 0 0 auto;
-   width: clamp(250px, 76vw, 340px);
+   width: clamp(250px, 76vw, var(--sc-card));
    display: flex;
    flex-direction: column;
    gap: 12px;
@@ -317,8 +349,8 @@ body.landing {
    seitwaerts. Bei 3840px Breite war der Ueberhang auf 0 geschrumpft: die
    Sektion blieb anderthalb Bildschirme lang stehen, ohne sich zu bewegen. */
 @media (min-width: 1600px) {
-   .landing__feature {
-      width: 400px;
+   .landing__showcase {
+      --sc-card: 400px;
    }
 
    .landing__feature--wide {
@@ -341,8 +373,8 @@ body.landing {
 }
 
 @media (min-width: 2400px) {
-   .landing__feature {
-      width: 480px;
+   .landing__showcase {
+      --sc-card: 480px;
    }
 
    .landing__feature--wide {
