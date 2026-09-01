@@ -25,6 +25,13 @@
    padding: 24px 24px 0;
 }
 
+.task-detail__header-labels {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 8px;
+}
+
 .task-detail__label {
    font-size: 16px;
    font-weight: 400;
@@ -37,6 +44,16 @@
 
 .task-detail__label--teal {
    background: #1fd7c1;
+}
+
+.task-detail__ai-badge {
+   width: 177px;
+   height: 22px;
+   display: none;
+}
+
+.task-detail__ai-badge--visible {
+   display: block;
 }
 
 .task-detail__close {

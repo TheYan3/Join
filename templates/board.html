@@ -772,9 +772,18 @@
          <dialog id="taskDetailDialog" class="task-detail-dialog">
             <article class="task-detail">
                <header class="task-detail__header">
-                  <span id="taskDetailCategory" class="task-detail__label"
-                     >Technical Task</span
-                  >
+                  <div class="task-detail__header-labels">
+                     <span id="taskDetailCategory" class="task-detail__label"
+                        >Technical Task</span
+                     >
+                     <img
+                        id="taskDetailAiBadge"
+                        class="task-detail__ai-badge"
+                        src="../assets/icons/desktop/Note _ KI generiert.svg"
+                        alt="AI-generated ticket"
+                        width="177"
+                        height="22" />
+                  </div>
                   <button
                      id="taskDetailClose"
                      class="task-detail__close"

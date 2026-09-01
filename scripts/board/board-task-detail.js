@@ -199,6 +199,19 @@
    }
 
    /**
+    * Toggles the AI-generated badge in the task detail header.
+    *
+    * Shown whenever the ticket came in through the e-mail issue collector
+    * (creator.type "extern"), matching the summary's request count.
+    * @param {object|null} creator - The creator object.
+    * @returns {void} Nothing.
+    */
+   function setTaskDetailAiBadge(creator) {
+      document.getElementById("taskDetailAiBadge")
+         ?.classList.toggle("task-detail__ai-badge--visible", creator?.type === "extern");
+   }
+
+   /**
     * Renders the task detail.
     *
     * @param {object} taskData - The task data object.
@@ -211,6 +224,7 @@
       setTaskDetailText("taskDetailDate", taskData.date, "No due date");
       setTaskDetailPriority(taskData.priority);
       setTaskDetailCreator(taskData.creator);
+      setTaskDetailAiBadge(taskData.creator);
       renderTaskDetailAssigned(taskData.assigned || []);
       renderTaskDetailSubtasks(taskData.subtasks || []);
    }

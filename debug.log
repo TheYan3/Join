@@ -5,6 +5,23 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] KI-Label in der Task-Detailansicht
+-------------------------------------------------------------------------------------
+- Aenderung: Oeffnet man eine Aufgabe, die per E-Mail-Ticket-Sammler automatisch
+  von der KI angelegt wurde, steht jetzt oben neben der Kategorie ein kleines
+  Abzeichen "Ai-generated ticket" (Zauberstab-Symbol, lila-blauer Farbverlauf).
+  Manuell angelegte Aufgaben zeigen das Abzeichen nicht.
+- Woran erkannt: Jedes Ticket, das der E-Mail-Sammler erstellt, traegt intern
+  schon die Markierung "extern" beim Ersteller - genau diese Markierung wird
+  jetzt zusaetzlich als sichtbares Abzeichen angezeigt.
+- Design-Vorlage: Yannics Figma-Export "task-overlay-mobile", das dort
+  vorhandene Abzeichen-Bild lag schon im Projekt (assets/icons/desktop/Note _
+  KI generiert.svg) und wird jetzt wiederverwendet statt neu erstellt.
+- Betroffene Dateien: templates/board.html (Abzeichen-Bild ergaenzt),
+  styles/board/task-detail.css (Platz und Ein-/Ausblenden fuers Abzeichen),
+  scripts/board/board-task-detail.js (blendet das Abzeichen je nach Ersteller
+  ein oder aus).
+
 [2026-09-01] Startseite: letzte Karte laeuft bis zur Bildschirmmitte
 -------------------------------------------------------------------------------------
 - Problem: Im dunklen Abschnitt wandern die Karten beim Scrollen seitwaerts.
