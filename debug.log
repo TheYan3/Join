@@ -5,6 +5,21 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-01] Logo auf der Welcome-Seite verschwindet jetzt auf Desktop
+-------------------------------------------------------------------------------------
+- Aenderung: Auf der "Welcome"-Seite (Rollenwahl: "Are you a stakeholder?" /
+  "Are you a team member?") fliegt das Join-Logo beim Laden weiterhin wie
+  gewohnt von der Bildschirmmitte in die obere linke Ecke - landet dort aber
+  ab einer Fensterbreite von 1081px jetzt unsichtbar, statt sichtbar stehen
+  zu bleiben. Grund: Das Figma-Design fuer diese Seite zeigt auf breiten
+  Bildschirmen gar kein Logo. Auf schmaleren Bildschirmen (Handy/Tablet)
+  bleibt alles wie bisher - dort landet das Logo weiterhin sichtbar.
+- Nebeneffekt: Auf breiten Bildschirmen war das Logo bisher auch ein Link
+  zurueck zur Startseite - dieser Link faellt mit dem unsichtbaren Logo weg
+  (kein Ersatz vorgesehen, entspricht dem Figma-Design).
+- Betroffene Datei: styles/welcome/layout.css (nur die Zoom-Animation des
+  Logos angepasst, sonst nichts veraendert).
+
 [2026-09-01] KI-Label in der Task-Detailansicht
 -------------------------------------------------------------------------------------
 - Aenderung: Oeffnet man eine Aufgabe, die per E-Mail-Ticket-Sammler automatisch

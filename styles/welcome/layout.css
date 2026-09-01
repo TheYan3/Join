@@ -31,18 +31,22 @@ body.welcome.welcome--step2 {
 
 /* The splash logo settles into step 1's header corner (see .login__signup
    below) and has no place once step 2's own header is showing. */
-/* Der Figma-Rahmen "Welcome" enthaelt selbst kein Logo, gibt also keine
-   Groesse vor. Auf Wunsch gilt hier dieselbe Groesse wie auf der zweiten
-   Welcome-Seite (Figma-Rahmen "Stakeholder": 46 x 56) statt der 100px von
-   der Login-Seite. Die Animation setzt die Breite per "forwards"-Fuellmodus,
-   darum muss der Endwert in den Keyframes selbst stehen - eine statische
-   Breite wuerde ueberschrieben. Diese Datei laedt nur welcome.html, login.html
-   behaelt seine eigenen 100px. */
+/* Der Figma-Rahmen "Welcome" enthaelt selbst kein Logo. Auf Desktop (ab
+   1081px, siehe die gleiche Grenze weiter unten bei .header__flex-instructions)
+   blendet der letzte Keyframe das Logo darum wieder aus - die Zoom-Animation
+   laeuft unveraendert, nur ihr Endzustand ist jetzt unsichtbar statt in der
+   Ecke zu docken. "opacity" faedet synchron zur Positions-/Groessenaenderung
+   aus, "visibility" nimmt den Link am Logo am Ende zusaetzlich aus Klick- und
+   Tab-Reichweite. Diese Datei laedt nur welcome.html, login.html behaelt sein
+   eigenes, dauerhaft sichtbares Logo. Unterhalb 1081px ueberschreibt
+   responsive.css diese Keyframes komplett (eigene 0%/100%-Werte) und zeigt das
+   Logo weiter wie bisher an. */
 @keyframes splash__logo--animation {
     0% {
         top: 50%;
         left: 50%;
         width: 274px;
+        opacity: 1;
         transform: translate(-50%, -50%);
     }
 
@@ -50,6 +54,8 @@ body.welcome.welcome--step2 {
         top: 28px;
         left: calc(max(0px, (100vw - 1100px) / 2) + 24px);
         width: 48px;
+        opacity: 0;
+        visibility: hidden;
         transform: translate(0, 0);
     }
 }
