@@ -218,6 +218,27 @@
    .welcome__illustration {
       max-width: 320px;
    }
+
+   /* Wie in Schritt 1 (siehe Kommentar bei ".welcome__step1
+       .login__legalInformation--area" oben): die Fusszeile ist global
+       "position: absolute; bottom: 64px" (styles/login/layout.css), an den
+       Viewport-Rand gepinnt. Ab hier kann der Leitfaden-Inhalt (Titel,
+       Illustration, Texte, Mail-Knopf) hoeher werden als der Platz darueber -
+       dann rutscht die fixierte Fusszeile ueber den Mail-Knopf statt
+       darunter zu bleiben, statt in ihm mitzuwachsen. Figmas Mobile-Rahmen
+       "Stakeholder" stapelt sie stattdessen im normalen Fluss: 46px Luft
+       zwischen Knopf-Unterkante (y=827) und Fusszeilen-Oberkante (y=873),
+       dann 18px bis zum unteren Rahmenrand (y=926, Frame "Stakeholder",
+       428x926). #main-content .welcome__step2-main traegt an dieser Stelle
+       schon 64px (bzw. 48px ab 620px, siehe unten) Bottom-Padding - genau
+       wie bei Schritt 1 uebernimmt "margin-top: 8px" nur noch den Rest der
+       Luecke, "padding: 0 16px 16px" dieselben Seiten-/Unterabstaende wie
+       dort. */
+   .welcome__step2 .login__legalInformation--area {
+      position: static;
+      margin-top: 8px;
+      padding: 0 16px 16px;
+   }
 }
 
 @media (max-width: 820px) {

@@ -5,6 +5,31 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-02] Fusszeile ueberlappte den "Create Email Request"-Knopf auf schmalen Handys
+-------------------------------------------------------------------------------------
+- Problem: Auf der zweiten Welcome-Seite (E-Mail-Anleitung fuer Stakeholder,
+  "Easily create a ticket by sending an email...") lag auf schmalen
+  Handy-Bildschirmen (z.B. Galaxy S9+, 320px breit) die Fusszeile
+  ("Privacy Policy" / "Legal Notice") ueber dem blauen "Create Email
+  Request"-Knopf, sobald der Inhalt darueber (Ueberschrift, Bild, Texte)
+  hoeher war als der Bildschirm.
+- Grund: Die Fusszeile war fest an den unteren Bildschirmrand gepinnt
+  (unabhaengig davon, wie hoch der Inhalt ist). Fuer die erste Welcome-Seite
+  (Rollenwahl) gab es dafuer schon eine Loesung - fuer diese zweite Seite
+  fehlte die gleiche Loesung.
+- Aenderung: Die Fusszeile steht ab einer Bildschirmbreite von 1080px
+  abwaerts jetzt im normalen Textfluss direkt unter dem Knopf, mit etwas
+  Abstand dazwischen - genau wie bei der ersten Welcome-Seite. Dadurch
+  rutscht sie nie wieder ueber den Knopf, egal wie hoch der Inhalt wird
+  (kurzer Bildschirm, groessere Systemschrift usw.).
+- Geprueft: Mit einem automatisierten Browser-Test bei allen Bildschirm-
+  groessen des Projekts (320, 620, 820, 1080px sowie Desktop) und in beiden
+  Zustaenden der Seite (normal und "10 von 10 Anfragen erreicht") - nirgends
+  ueberlappt die Fusszeile noch den Knopf, per Vergleich mit den
+  Figma-Vorlagen fuer diese Seite.
+- Betroffene Datei: styles/welcome/responsive.css (eine neue Regel ergaenzt,
+  keine bestehende Regel veraendert).
+
 [2026-09-01] Logo auf der Welcome-Seite verschwindet jetzt auf Desktop
 -------------------------------------------------------------------------------------
 - Aenderung: Auf der "Welcome"-Seite (Rollenwahl: "Are you a stakeholder?" /
