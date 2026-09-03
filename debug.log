@@ -5,6 +5,38 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] E-Mail-Tickets: Teilaufgaben aus der Mail landen jetzt im Ticket
+----------------------------------------------------------------------------
+- Problem: Wenn jemand in seiner Mail Teilaufgaben aufgezaehlt hat ("subtasks:
+  Pizza bestellen, Buero aufraeumen, Getraenke bestellen"), stand im fertigen
+  Ticket auf dem Board trotzdem "No subtasks". Die Aufzaehlung ging verloren.
+- Ursache: Der Fragebogen, den die KI ausfuellt, hatte gar kein Feld fuer
+  Teilaufgaben - die KI konnte also nichts liefern. Und der Baustein, der aus
+  der KI-Antwort das Ticket zusammensetzt, hat die Teilaufgaben-Liste fest auf
+  "leer" gesetzt.
+- Was jetzt anders ist:
+  - Die KI bekommt ein neues Pflichtfeld "subtasks" und die Anweisung, nur
+    das aufzunehmen, was der Absender wirklich aufzaehlt. Sie erfindet keine
+    Aufgaben dazu; steht nichts in der Mail, bleibt die Liste leer.
+    Fremdsprachige Punkte werden ins Deutsche uebersetzt ("order pizza" wird
+    zu "Pizza bestellen"), damit das Ticket nicht halb Deutsch, halb Englisch
+    ist. Hoechstens 20 Teilaufgaben, damit eine Werbemail das Board nicht
+    zumuellt.
+  - Die Beschreibung zaehlt die Punkte nicht mehr zusaetzlich auf, sonst
+    stuende alles doppelt im Ticket.
+  - Die Bestaetigungsmail an den Absender listet die erkannten Teilaufgaben
+    mit auf, damit er sofort sieht, was verstanden wurde, und widersprechen
+    kann.
+  - Nebenbei: Die KI konnte bisher nur Angaben wie "naechsten Freitag"
+    umrechnen. Geschriebene Datumsangaben wie "30.09.2026" oder
+    "30. September 2026" versteht sie jetzt auch. Bei Zahlenformaten gilt
+    immer die europaeische Lesart, Tag zuerst - "09/05/2026" ist der 9. Mai.
+- Datei: n8n/issue-collector.json (Bausteine "KI analysiert Mail",
+  "Ticket bauen", "Bestaetigung vorbereiten" und die Erklaer-Notiz dazu)
+- Hinweis: Diese Datei ist nur die Sicherungskopie im Projekt. Der Workflow
+  auf dem Server wurde bereits auf denselben Stand gebracht.
+
+
 [2026-09-02] Fusszeile ueberlappte den "Create Email Request"-Knopf auf schmalen Handys
 -------------------------------------------------------------------------------------
 - Problem: Auf der zweiten Welcome-Seite (E-Mail-Anleitung fuer Stakeholder,
