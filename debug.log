@@ -5,6 +5,34 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Startseite und Infoseite getauscht
+-----------------------------------------------
+- Was: Wenn man die Adresse "join..." ohne weiteren Pfad aufruft (die
+  Startseite), erscheint jetzt sofort die Rollenwahl ("Bist du Stakeholder
+  oder Team-Mitglied?"). Die bunte Info-/Werbeseite mit Scroll-Animation
+  ("Every task on one board...") ist jetzt unter "welcome.html" zu finden,
+  statt vorher andersrum.
+- Warum: Der Projektinhaber wollte, dass Besucher direkt zur Rollenwahl
+  kommen, ohne erst durch die Infoseite zu muessen.
+- Wichtig: Die Datei heisst technisch weiterhin "index.html" (das ist die
+  Adresse, die der Server automatisch als Startseite auffasst) - getauscht
+  wurde nur, welcher Inhalt darin steht.
+- Links angepasst: "Get started" und "request page" auf der Infoseite
+  fuehren jetzt zur Rollenwahl (Startseite). Das Logo auf der Rollenwahl-
+  Seite fuehrt jetzt zur Infoseite (vorher war es ein "zurueck zur
+  Startseite"-Link, das ergibt jetzt keinen Sinn mehr). Der "Zurueck"-Knopf
+  auf den rechtlichen Seiten (Datenschutz, Impressum) landet je nachdem,
+  von welcher Seite man kam, wieder auf der richtigen Seite. Der Login-
+  Bildschirm und sein Logo bleiben unveraendert, die Startseite ist von dort
+  weiterhin "Zuhause".
+- Betroffene Dateien: index.html, welcome.html (Inhalte komplett getauscht),
+  scripts/legalInformation.js (Links der "Zurueck"-Knoepfe gedreht),
+  scripts/auth/index.js (nur ein erklaerender Kommentar angepasst),
+  README.md und CLAUDE.md (Beschreibung der Dateien aktualisiert).
+- Nicht enthalten: das geplante Info-Icon auf der neuen Startseite - das
+  kommt in einem separaten Schritt.
+
+
 [2026-09-02] Fusszeile ueberlappte den "Create Email Request"-Knopf auf schmalen Handys
 -------------------------------------------------------------------------------------
 - Problem: Auf der zweiten Welcome-Seite (E-Mail-Anleitung fuer Stakeholder,

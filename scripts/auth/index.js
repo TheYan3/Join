@@ -208,7 +208,7 @@ function setMobileSplashBackground() {
  *
  * Plays the splash animation and the delayed fade-in only once per browser
  * session (see SPLASH_SESSION_KEY). On repeat visits within the same session
- * (e.g. coming back from welcome.html) the logo appears directly at its
+ * (e.g. coming back from index.html) the logo appears directly at its
  * final position and the page content is visible without delay.
  * @returns {void} Nothing.
  */
