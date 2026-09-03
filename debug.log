@@ -5,6 +5,23 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Logo auf der Startseite ist kein Link mehr
+---------------------------------------------------------------------------
+- Was: Das Join-Logo oben links auf der Startseite (Rollenwahl) ist jetzt
+  reine Dekoration. Vorher konnte man - vor allem auf dem Handy, wo das Logo
+  nach der Einblend-Animation stehen bleibt - darauf tippen und landete auf
+  der Info-/Werbeseite.
+- Warum: Dieses Antippen war ungewollt, das Logo soll dort nichts auslösen.
+  Der Weg zur Info-/Werbeseite läuft ausschließlich über das Info-Zeichen
+  oben rechts. Das Logo auf der Anmeldeseite (login.html) bleibt unverändert
+  ein Link zur Startseite.
+- Wo: index.html (die Verlinkung um das Logo herum wurde entfernt, das Bild
+  selbst bleibt unverändert).
+- Geprüft: Auf Handy-Breiten (428 und 375 Pixel) und auf Desktop (1440 Pixel)
+  nachgesehen - Logo sieht unverändert aus, ist aber nicht mehr anklickbar,
+  das Info-Zeichen funktioniert weiter, keine Fehlermeldungen im Browser.
+
+
 [2026-09-03] Sign-up-Zeile auf der Startseite auf Desktop wieder ausgeblendet
 ---------------------------------------------------------------------------
 - Was: Die Zeile "Not a Join user? Sign up" oben rechts auf der Startseite
