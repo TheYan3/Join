@@ -64,23 +64,63 @@ body.welcome.welcome--step2 {
     display: none;
 }
 
+/* ---------- Info icon (both steps) ---------- */
+
+/* Die Marketing-/Scrollytelling-Seite ist von der Startseite auf
+   ./welcome.html umgezogen (siehe index.html) - dieses Icon ist von hier aus
+   der einzige sichtbare Weg dorthin. Ein einziges, fest positioniertes
+   Element bedient beide Schritte: die Farbe folgt derselben
+   ".welcome--step2"-Klasse an <body>, die weiter oben in dieser Datei schon
+   Schritt 1s dunklen gegen Schritt 2s hellen Hintergrund tauscht - so bleibt
+   das Icon auf beiden lesbar, ohne das Markup zu verdoppeln. "position:
+   fixed" (statt an Schritt 1s .header__flex-instructions oder Schritt 2s
+   .welcome__step2-nav gehaengt) haelt das Icon unabhaengig vom Sign-up-Text
+   bzw. Zaehler daneben, die je nach Breite unterschiedlich viel Platz
+   beanspruchen. 44x44px Flaeche = Mindest-Treffergroesse, das SVG darin ist
+   kleiner (24x24). */
+.welcome__info {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    color: #fff;
+    transition: background-color 100ms ease-in-out;
+}
+
+.welcome__info svg {
+    width: 24px;
+    height: 24px;
+}
+
+.welcome__info:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.welcome__info:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+body.welcome--step2 .welcome__info {
+    color: #2a3647;
+}
+
+body.welcome--step2 .welcome__info:hover {
+    background-color: rgba(42, 54, 71, 0.08);
+}
+
 
 /* ---------- Step 1: role choice ---------- */
 
 .welcome__step1-main {
     padding: 48px 0;
-}
-
-/* Ab 1081px entfaellt die "Not a Join user? Sign up"-Zeile auf Wunsch
-   komplett - der Signup-Weg fuer bestehende Nicht-Nutzer laeuft auf Desktop
-   ueber die Startseite (styles/landing.css), nicht ueber Step 1 selbst.
-   Markup und Knopf-Wiring (#signup-button) bleiben unveraendert bestehen,
-   damit die Mobile-Fassung darunter (siehe responsive.css, gilt bis 1080px)
-   unangetastet weiterlaeuft. */
-@media (min-width: 1081px) {
-    .welcome__step1 .header__flex-instructions {
-        display: none;
-    }
 }
 
 /* .login__signup is reused as-is (structure + JS wiring via #signup-button

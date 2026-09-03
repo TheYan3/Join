@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Info-Knopf oben rechts und Sign-up-Zeile auch auf Desktop sichtbar
+---------------------------------------------------------------------------
+- Was: Auf der neuen Startseite (Rollenwahl) gibt es jetzt oben rechts ein
+  rundes Info-Zeichen (i). Ein Klick darauf öffnet, im selben Browser-Tab,
+  die bunte Info-/Werbeseite mit der Scroll-Animation ("welcome.html"). Das
+  Zeichen ist auf beiden Ansichten der Startseite sichtbar - bei der
+  Rollenwahl selbst und beim E-Mail-Leitfaden danach - und passt seine Farbe
+  automatisch an den jeweiligen Hintergrund an (weiß auf dunkel, dunkel auf
+  hell). Zusätzlich: die Zeile "Not a Join user? Sign up" oben rechts war auf
+  großen Bildschirmen (Desktop) versteckt, das galt aus der Zeit, in der
+  diese Seite noch nicht die Startseite war. Jetzt ist sie auch auf Desktop
+  sichtbar, direkt neben dem neuen Info-Zeichen.
+- Warum: Seit dem letzten Umbau (siehe Eintrag darunter) ist die
+  Info-/Werbeseite nicht mehr die erste Seite, die Besucher sehen - ohne
+  diesen Knopf hätte niemand mehr einen sichtbaren Weg dorthin gefunden. Und
+  ohne die sichtbare Sign-up-Zeile hätten neue Nutzer auf großen Bildschirmen
+  keinen direkten Weg mehr zur Registrierung gehabt.
+- Wo: index.html (neues Info-Zeichen als Icon eingefügt),
+  styles/welcome/layout.css (Aussehen und Positionierung des Info-Zeichens;
+  die alte Regel, die die Sign-up-Zeile auf Desktop versteckt hat, wurde
+  entfernt).
+- Geprüft: Icon und Sign-up-Zeile wurden auf sieben Bildschirmgrößen (von
+  großem Desktop-Monitor bis kleinem Handy) angesehen - nirgends überlappen
+  sie sich mit Logo, Karte oder Fußzeile. Klick auf das Icon wurde getestet
+  und führt zuverlässig zur Info-Seite im gleichen Tab.
+
+
 [2026-09-03] Startseite und Infoseite getauscht
 -----------------------------------------------
 - Was: Wenn man die Adresse "join..." ohne weiteren Pfad aufruft (die
