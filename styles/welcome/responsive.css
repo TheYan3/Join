@@ -20,36 +20,10 @@
       }
    }
 
-   /* Schritt 1 fuellt genau eine Bildschirmhoehe: Kopfzeile oben, Fusszeile
-       unten, die Karte mittig im Rest dazwischen. Ist die Karte auf sehr
-       flachen Bildschirmen doch groesser als der Platz, waechst die Seite
-       nach unten und scrollt - sie ueberlappt nichts mehr.
-       "100vh" steht als Rueckfallwert fuer aeltere Browser vor "100dvh";
-       "dvh" ist die tatsaechlich sichtbare Hoehe, also ohne die ein- und
-       ausfahrende Adressleiste mobiler Browser. */
-   .welcome__step1 {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-   }
-
-   /* Vorher stand hier "height: 55vh" - eine feste Hoehe, die auf flachen
-       Handy-Bildschirmen kleiner war als die Karte selbst. Ein zu grosses
-       Element in einem zu kleinen, mittig ausrichtenden Kasten ragt oben UND
-       unten heraus: die Karte schob sich dadurch ueber die
-       "Not a Join user?"-Zeile und die Fusszeile. Jetzt nimmt der Bereich
-       einfach den uebrigen Platz ein (flex: 1) und wird nie kleiner als sein
-       Inhalt. Die 100vh aus styles/login/layout.css werden hier abgeloest. */
-   .main-content main,
-   .main-content--signup main {
-      width: 100%;
-      flex: 1;
-      height: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-   }
+   /* Die Flex-Spalte fuer Schritt 1 (Kopfzeile oben, Karte mittig, Fusszeile
+       unten im Fluss) steht seit dem Desktop-Ueberlappungs-Fix in layout.css
+       und gilt auf jeder Breite - hier bleiben nur noch die Abstaende, die
+       sich zwischen Desktop und Mobile unterscheiden. */
 
    /* Unter 1080px folgt Step 1 durchgehend bis 320px der Mobile-Figma-Vorlage
        (Frame "Screen 1 - logo", 428px breit): Karte auf die dort gemessene
@@ -138,7 +112,9 @@
        (styles/login/layout.css), an den Viewport-Rand gepinnt. Welcomes Karte
        ist hoch genug, dass das ueberlappen wuerde - Figmas Mobile-Rahmen
        stapelt die Fusszeile stattdessen im normalen Fluss unter der Karte. */
-   .welcome__step1-main {
+   /* Muss wie in layout.css ueber "#main-content" adressiert werden, sonst
+       schlaegt die dortige ID-Regel diese Werte hier. */
+   #main-content .welcome__step1-main {
       padding: clamp(12px, 2vh, 24px) 16px;
    }
 

@@ -119,8 +119,44 @@ body.welcome--step2 .welcome__info:hover {
 
 /* ---------- Step 1: role choice ---------- */
 
-.welcome__step1-main {
-    padding: 48px 0;
+/* Schritt 1 fuellt genau eine Bildschirmhoehe: Kopfzeile oben, Fusszeile
+   unten, die Karte mittig im Rest dazwischen. Ist die Karte auf flachen
+   Fenstern doch groesser als der Platz, waechst die Seite nach unten und
+   scrollt - sie ueberlappt nichts mehr.
+   Das galt bisher nur unterhalb 1080px (responsive.css); ab 1081px blieb die
+   Login-Fassung stehen: <main> fest auf 100vh und die Fusszeile
+   "position: absolute; bottom: 64px" (styles/login/layout.css), also an den
+   Rand gepinnt statt im Fluss. Bei flachen Desktop-Fenstern (gemessen bei
+   1281x594) schob sich die mittig zentrierte Karte dadurch ueber
+   "Privacy Policy"/"Legal Notice". Jetzt liegt beides auf jeder Breite im
+   selben Fluss, responsive.css passt darunter nur noch die Abstaende an.
+   "100vh" steht als Rueckfallwert fuer aeltere Browser vor "100dvh". */
+.welcome__step1 {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ueber "#main-content" adressiert wie schon die Schritt-2-Regel weiter
+   unten: die Hoehe 100vh kommt aus ".main-content main" (styles/login/
+   layout.css) und ist staerker als eine reine Klassenregel - ohne die ID
+   bliebe der Bereich starr eine Bildschirmhoehe hoch. */
+/* Die beiden Abstaende sind "clamp(minimum, mitwachsender Wert, maximum)":
+   bei normal hohen Fenstern gelten unveraendert 48px ueber/unter der Karte
+   und 64px unter der Fusszeile, bei flachen Fenstern schrumpfen sie mit der
+   Fensterhoehe mit - so bleibt die Startseite auch dort ohne Scrollbalken.
+   Dasselbe Muster nutzt die Mobile-Fassung in responsive.css. */
+#main-content .welcome__step1-main {
+    flex: 1;
+    height: auto;
+    padding: clamp(16px, 4vh, 48px) 0;
+}
+
+.welcome__step1 .login__legalInformation--area {
+    position: static;
+    margin-top: 8px;
+    padding: 0 16px clamp(16px, 7vh, 64px);
 }
 
 /* Ab 1081px entfaellt die "Not a Join user? Sign up"-Zeile auf Wunsch

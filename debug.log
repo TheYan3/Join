@@ -5,6 +5,33 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Startseite: Karte schiebt sich am Desktop nicht mehr über die
+Fußzeilen-Links
+---------------------------------------------------------------------------
+- Was: Auf dem Desktop lagen "Privacy Policy" und "Legal Notice" fest am
+  unteren Fensterrand, während die weiße Karte in der Mitte schwebte. War das
+  Browserfenster flach (z. B. 1281 x 594 Pixel), überdeckte die Karte die
+  beiden Links. Jetzt stehen Karte und Links - genau wie auf dem Handy - in
+  einer gemeinsamen Spalte untereinander: Karte mittig, Links darunter, mit
+  festem Abstand dazwischen.
+- Warum: Die Startseite hatte diese Aufteilung bisher nur unterhalb von
+  1080 Pixel Breite. Darüber galt noch die alte Anmeldeseiten-Fassung, bei der
+  der mittlere Bereich starr eine volle Bildschirmhöhe hoch ist und die
+  Fußzeile unabhängig davon am Rand klebt - beide wissen dann nichts
+  voneinander und können sich überlappen. Zusätzlich schrumpfen die Abstände
+  über und unter der Karte bei flachen Fenstern mit (48 statt starr 48 Pixel
+  nur bei genug Platz), damit auch dort kein Scrollbalken nötig wird.
+- Wo: styles/welcome/layout.css (neue gemeinsame Spalten-Aufteilung für die
+  Rollenwahl, mitwachsende Abstände), styles/welcome/responsive.css (die
+  doppelten Handy-Regeln entfallen, die Handy-Abstände bleiben unverändert).
+- Geprüft: Im echten Browser bei 11 Fenstergrößen nachgemessen (1920x1080,
+  1440x900, 1366x768, 1281x594, 1100x650, 1081x600, 1080x600, 820x700,
+  428x926, 375x667). Vorher überlappten sich Karte und Links bei 1281x594 um
+  9 Pixel und bei 1081x600 um 6 Pixel; jetzt bleiben überall mindestens
+  28 Pixel Abstand. Die Handy-Ansichten (1080 Pixel und schmaler) liegen
+  Pixel für Pixel auf denselben Werten wie vorher.
+
+
 [2026-09-03] Logo auf der Startseite ist kein Link mehr
 ---------------------------------------------------------------------------
 - Was: Das Join-Logo oben links auf der Startseite (Rollenwahl) ist jetzt
