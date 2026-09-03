@@ -5,6 +5,17 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Summary: Kacheln auf dem Handy rücken enger zusammen
+-----------------------------------------------------------------
+- Was: Auf der Summary-Seite ("Join 360") ist der Abstand zwischen den weißen
+  Kacheln auf Handy-Breite (bis 620 Pixel) von 24 auf 12 Pixel halbiert - sowohl
+  zwischen den Kacheln nebeneinander als auch zwischen den Reihen untereinander.
+- Warum: Die Kacheln standen auf schmalen Displays unnötig weit auseinander, der
+  Block wirkte auseinandergerissen.
+- Datei: styles/summary/responsive.css (Block "max-width: 620px", die vier
+  Abstands-Angaben für Kachelreihen und den Gesamtblock)
+
+
 [2026-09-03] Startseite: Karte schiebt sich am Desktop nicht mehr über die
 Fußzeilen-Links
 ---------------------------------------------------------------------------
