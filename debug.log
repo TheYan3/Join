@@ -37,6 +37,133 @@ neuester Eintrag oben.
   auf dem Server wurde bereits auf denselben Stand gebracht.
 
 
+[2026-09-03] Summary: Kacheln auf dem Handy rücken enger zusammen
+-----------------------------------------------------------------
+- Was: Auf der Summary-Seite ("Join 360") ist der Abstand zwischen den weißen
+  Kacheln auf Handy-Breite (bis 620 Pixel) von 24 auf 12 Pixel halbiert - sowohl
+  zwischen den Kacheln nebeneinander als auch zwischen den Reihen untereinander.
+- Warum: Die Kacheln standen auf schmalen Displays unnötig weit auseinander, der
+  Block wirkte auseinandergerissen.
+- Datei: styles/summary/responsive.css (Block "max-width: 620px", die vier
+  Abstands-Angaben für Kachelreihen und den Gesamtblock)
+
+
+[2026-09-03] Startseite: Karte schiebt sich am Desktop nicht mehr über die
+Fußzeilen-Links
+---------------------------------------------------------------------------
+- Was: Auf dem Desktop lagen "Privacy Policy" und "Legal Notice" fest am
+  unteren Fensterrand, während die weiße Karte in der Mitte schwebte. War das
+  Browserfenster flach (z. B. 1281 x 594 Pixel), überdeckte die Karte die
+  beiden Links. Jetzt stehen Karte und Links - genau wie auf dem Handy - in
+  einer gemeinsamen Spalte untereinander: Karte mittig, Links darunter, mit
+  festem Abstand dazwischen.
+- Warum: Die Startseite hatte diese Aufteilung bisher nur unterhalb von
+  1080 Pixel Breite. Darüber galt noch die alte Anmeldeseiten-Fassung, bei der
+  der mittlere Bereich starr eine volle Bildschirmhöhe hoch ist und die
+  Fußzeile unabhängig davon am Rand klebt - beide wissen dann nichts
+  voneinander und können sich überlappen. Zusätzlich schrumpfen die Abstände
+  über und unter der Karte bei flachen Fenstern mit (48 statt starr 48 Pixel
+  nur bei genug Platz), damit auch dort kein Scrollbalken nötig wird.
+- Wo: styles/welcome/layout.css (neue gemeinsame Spalten-Aufteilung für die
+  Rollenwahl, mitwachsende Abstände), styles/welcome/responsive.css (die
+  doppelten Handy-Regeln entfallen, die Handy-Abstände bleiben unverändert).
+- Geprüft: Im echten Browser bei 11 Fenstergrößen nachgemessen (1920x1080,
+  1440x900, 1366x768, 1281x594, 1100x650, 1081x600, 1080x600, 820x700,
+  428x926, 375x667). Vorher überlappten sich Karte und Links bei 1281x594 um
+  9 Pixel und bei 1081x600 um 6 Pixel; jetzt bleiben überall mindestens
+  28 Pixel Abstand. Die Handy-Ansichten (1080 Pixel und schmaler) liegen
+  Pixel für Pixel auf denselben Werten wie vorher.
+
+
+[2026-09-03] Logo auf der Startseite ist kein Link mehr
+---------------------------------------------------------------------------
+- Was: Das Join-Logo oben links auf der Startseite (Rollenwahl) ist jetzt
+  reine Dekoration. Vorher konnte man - vor allem auf dem Handy, wo das Logo
+  nach der Einblend-Animation stehen bleibt - darauf tippen und landete auf
+  der Info-/Werbeseite.
+- Warum: Dieses Antippen war ungewollt, das Logo soll dort nichts auslösen.
+  Der Weg zur Info-/Werbeseite läuft ausschließlich über das Info-Zeichen
+  oben rechts. Das Logo auf der Anmeldeseite (login.html) bleibt unverändert
+  ein Link zur Startseite.
+- Wo: index.html (die Verlinkung um das Logo herum wurde entfernt, das Bild
+  selbst bleibt unverändert).
+- Geprüft: Auf Handy-Breiten (428 und 375 Pixel) und auf Desktop (1440 Pixel)
+  nachgesehen - Logo sieht unverändert aus, ist aber nicht mehr anklickbar,
+  das Info-Zeichen funktioniert weiter, keine Fehlermeldungen im Browser.
+
+
+[2026-09-03] Sign-up-Zeile auf der Startseite auf Desktop wieder ausgeblendet
+---------------------------------------------------------------------------
+- Was: Die Zeile "Not a Join user? Sign up" oben rechts auf der Startseite
+  (Rollenwahl) ist auf großen Bildschirmen (Desktop, ab 1081 Pixel Breite)
+  wieder unsichtbar. Auf Handy und Tablet steht sie unverändert wie bisher
+  über der weißen Karte.
+- Warum: Sie war im Eintrag darunter absichtlich wieder eingeblendet worden,
+  ist auf Desktop aber nicht erwünscht - dort soll die Startseite nur die
+  Rollenwahl zeigen. Wer sich neu registrieren will, kommt weiterhin über das
+  Info-Zeichen oben rechts auf die Info-/Werbeseite (dort steht "Sign up" in
+  der Kopfzeile) oder über "Member log in" auf die Anmeldeseite.
+- Wo: styles/welcome/layout.css (die Regel, die die Zeile auf Desktop
+  versteckt, ist zurück - mit korrigierter Begründung im Kommentar).
+- Geprüft: Startseite auf Desktop-Breite angesehen - Zeile weg, das
+  Info-Zeichen oben rechts steht unverändert an seinem Platz.
+
+
+[2026-09-03] Info-Knopf oben rechts und Sign-up-Zeile auch auf Desktop sichtbar
+---------------------------------------------------------------------------
+- Was: Auf der neuen Startseite (Rollenwahl) gibt es jetzt oben rechts ein
+  rundes Info-Zeichen (i). Ein Klick darauf öffnet, im selben Browser-Tab,
+  die bunte Info-/Werbeseite mit der Scroll-Animation ("welcome.html"). Das
+  Zeichen ist auf beiden Ansichten der Startseite sichtbar - bei der
+  Rollenwahl selbst und beim E-Mail-Leitfaden danach - und passt seine Farbe
+  automatisch an den jeweiligen Hintergrund an (weiß auf dunkel, dunkel auf
+  hell). Zusätzlich: die Zeile "Not a Join user? Sign up" oben rechts war auf
+  großen Bildschirmen (Desktop) versteckt, das galt aus der Zeit, in der
+  diese Seite noch nicht die Startseite war. Jetzt ist sie auch auf Desktop
+  sichtbar, direkt neben dem neuen Info-Zeichen.
+- Warum: Seit dem letzten Umbau (siehe Eintrag darunter) ist die
+  Info-/Werbeseite nicht mehr die erste Seite, die Besucher sehen - ohne
+  diesen Knopf hätte niemand mehr einen sichtbaren Weg dorthin gefunden. Und
+  ohne die sichtbare Sign-up-Zeile hätten neue Nutzer auf großen Bildschirmen
+  keinen direkten Weg mehr zur Registrierung gehabt.
+- Wo: index.html (neues Info-Zeichen als Icon eingefügt),
+  styles/welcome/layout.css (Aussehen und Positionierung des Info-Zeichens;
+  die alte Regel, die die Sign-up-Zeile auf Desktop versteckt hat, wurde
+  entfernt).
+- Geprüft: Icon und Sign-up-Zeile wurden auf sieben Bildschirmgrößen (von
+  großem Desktop-Monitor bis kleinem Handy) angesehen - nirgends überlappen
+  sie sich mit Logo, Karte oder Fußzeile. Klick auf das Icon wurde getestet
+  und führt zuverlässig zur Info-Seite im gleichen Tab.
+
+
+[2026-09-03] Startseite und Infoseite getauscht
+-----------------------------------------------
+- Was: Wenn man die Adresse "join..." ohne weiteren Pfad aufruft (die
+  Startseite), erscheint jetzt sofort die Rollenwahl ("Bist du Stakeholder
+  oder Team-Mitglied?"). Die bunte Info-/Werbeseite mit Scroll-Animation
+  ("Every task on one board...") ist jetzt unter "welcome.html" zu finden,
+  statt vorher andersrum.
+- Warum: Der Projektinhaber wollte, dass Besucher direkt zur Rollenwahl
+  kommen, ohne erst durch die Infoseite zu muessen.
+- Wichtig: Die Datei heisst technisch weiterhin "index.html" (das ist die
+  Adresse, die der Server automatisch als Startseite auffasst) - getauscht
+  wurde nur, welcher Inhalt darin steht.
+- Links angepasst: "Get started" und "request page" auf der Infoseite
+  fuehren jetzt zur Rollenwahl (Startseite). Das Logo auf der Rollenwahl-
+  Seite fuehrt jetzt zur Infoseite (vorher war es ein "zurueck zur
+  Startseite"-Link, das ergibt jetzt keinen Sinn mehr). Der "Zurueck"-Knopf
+  auf den rechtlichen Seiten (Datenschutz, Impressum) landet je nachdem,
+  von welcher Seite man kam, wieder auf der richtigen Seite. Der Login-
+  Bildschirm und sein Logo bleiben unveraendert, die Startseite ist von dort
+  weiterhin "Zuhause".
+- Betroffene Dateien: index.html, welcome.html (Inhalte komplett getauscht),
+  scripts/legalInformation.js (Links der "Zurueck"-Knoepfe gedreht),
+  scripts/auth/index.js (nur ein erklaerender Kommentar angepasst),
+  README.md und CLAUDE.md (Beschreibung der Dateien aktualisiert).
+- Nicht enthalten: das geplante Info-Icon auf der neuen Startseite - das
+  kommt in einem separaten Schritt.
+
+
 [2026-09-02] Fusszeile ueberlappte den "Create Email Request"-Knopf auf schmalen Handys
 -------------------------------------------------------------------------------------
 - Problem: Auf der zweiten Welcome-Seite (E-Mail-Anleitung fuer Stakeholder,

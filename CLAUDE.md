@@ -9,6 +9,8 @@ Statisches Kanban-Projekt (Vanilla HTML/CSS/JS, kein Build-Step, kein npm).
 öffnen. Kein Dev-Server, kein Watch-Mode.
 
 **Dateikarte:**
+- `index.html` — Welcome-/Rollenwahl-Einstieg (Stakeholder-Request oder Team-Login); lädt `script.js` + `scripts/welcome.js`
+- `welcome.html` — Marketing-/Scrollytelling-Seite; lädt `scripts/landing/scrollcraft.js` + `scripts/landing/hero-fit.js`
 - `login.html` — Einstieg fürs Board (Login/Signup/Guest); lädt `script.js` + `scripts/auth/*`
 - `templates/board.html` — das Kanban-Board selbst; Scripts unter `scripts/board/*` und `scripts/tasks/*`
 - `script.js` (Root) — globale Config, u. a. Firebase-Basis-URL (`DEFAULT_BASE_URL`)

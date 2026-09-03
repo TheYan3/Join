@@ -119,7 +119,8 @@ only from the home network.
 
 | Path | Contents |
 |---|---|
-| `index.html` | Stakeholder landing page |
+| `index.html` | Welcome screen: role selection (stakeholder request / team log in) |
+| `welcome.html` | Marketing / scrollytelling landing page |
 | `login.html` | Log in / sign up / guest access |
 | `templates/` | Board, add task, contacts, summary, help, legal pages |
 | `scripts/` | Frontend JavaScript, grouped by feature (`auth`, `board`, `tasks`, `contacts`) |

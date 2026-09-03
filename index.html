@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Join – Kanban board with an AI issue collector</title>
-      <meta
-         name="description"
-         content="Join is a kanban board for running a project: cards from Triage to Done with priorities, due dates, subtasks and assignees. Anyone can also send a plain e-mail, and an AI files it as a ticket on the same board." />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome – Join</title>
+    <meta
+        name="description"
+        content="Find out how Join works before you create a feature request by e-mail or log in as a team member." />
 
-      <link
+    <link
          rel="icon"
          href="./assets/icons/desktop/logoFavicon.svg"
          type="image/svg+xml"
@@ -19,356 +19,158 @@
          type="image/svg+xml"
          media="(prefers-color-scheme: dark)" />
 
-      <link rel="stylesheet" href="./style.css" />
-      <link rel="stylesheet" href="./styles/landing.css" />
-      <link rel="stylesheet" href="./styles/landing-showcase.css" />
-   </head>
+    <script src="./script.js"></script>
+    <script src="./scripts/welcome.js"></script>
 
-   <body class="landing">
-      <a class="landing__skip" href="#main">Skip to main content</a>
+    <link rel="stylesheet" href="./styles/standard.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/login/layout.css">
+    <link rel="stylesheet" href="./styles/login/buttons.css">
+    <link rel="stylesheet" href="./styles/welcome/layout.css">
+    <link rel="stylesheet" href="./styles/welcome/responsive.css">
+</head>
+<body class="welcome">
 
-      <header class="landing__header">
-         <img
-            class="landing__logo"
-            src="./assets/icons/desktop/Dark_Logo.svg"
-            alt="Join" />
-         <nav class="landing__nav" aria-label="Primary">
-            <p class="landing__signup-question">Not a Join user?</p>
-            <a
-               class="landing__nav-link landing__nav-link--primary"
-               href="./templates/signup.html">
-               Sign up
-            </a>
-            <a class="landing__nav-link" href="./login.html">Log in</a>
-         </nav>
-      </header>
+    <!-- Reine Deko: das Logo dieser Seite ist bewusst kein Link mehr. Auf
+         Desktop blendet die Splash-Animation es am Ende aus, auf Mobile bleibt
+         es stehen - dort fuehrte der frueher hier haengende Link ungewollt auf
+         die Marketingseite. Dieser Weg laeuft jetzt nur noch ueber das
+         Info-Icon oben rechts. login.html behaelt sein verlinktes Logo. -->
+    <div class="splash__logo">
+        <img src="./assets/icons/desktop/logo.svg" alt="Join Logo" class="splash__logo--image">
+    </div>
 
-      <main id="main">
-         <section class="landing__hero" aria-labelledby="hero-title">
-            <p class="landing__eyebrow">Kanban board · AI issue collector</p>
-            <h1 id="hero-title" class="landing__title">
-               Every task on one board.<br />Even the ones sent by e-mail.
-            </h1>
-            <p class="landing__lead">
-               A kanban board for running a project: cards from
-               <strong>Triage</strong> to <strong>Done</strong>, with
-               priorities, due dates, subtasks and assignees.<span
-                  class="landing__lead-more">
-                  Plus a mailbox anyone can write to — an AI files the mail
-                  straight onto the board.</span>
-            </p>
+    <a href="./welcome.html" class="welcome__info" aria-label="How Join works">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+            <line x1="12" y1="11" x2="12" y2="16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <circle cx="12" cy="7.5" r="1.15" fill="currentColor" stroke="none" />
+        </svg>
+    </a>
 
-            <div class="landing__actions">
-               <a
-                  class="landing__button landing__button--primary landing__button--cta"
-                  href="./welcome.html">
-                  Get started
-                  <img
-                     src="./assets/icons/desktop/arrowBack.svg"
-                     alt=""
-                     class="landing__button-icon" />
-               </a>
-            </div>
+    <div id="main-content" class="main-content">
 
-            <p class="landing__address">
-               No sign-up needed: the board has a guest log-in, or write to
-               <a href="mailto:join-issues@gmx.de">join-issues@gmx.de</a>.
-            </p>
-         </section>
+        <!-- Step 1: pick a role -->
+        <section class="welcome__step1">
+            <header class="header__flex-instructions">
+                <div class="login__signup">
+                    <p class="login__signup--question">Not a Join user?</p>
+                    <button id="signup-button" class="login__button button">Sign up</button>
+                </div>
+            </header>
+            <main class="welcome__step1-main">
+                <div class="login__window welcome__card">
+                    <div class="login__headline">
+                        <h1 class="login__header">Welcome</h1>
+                        <img src="./assets/icons/desktop/login__dividingLine.svg" alt="" class="login__headline--line">
+                    </div>
+                    <p class="welcome__intro">
+                        Pick the option that suits your role: create a request as a
+                        stakeholder or log in if you're part of the team.
+                    </p>
+                    <div class="welcome__roles">
+                        <div class="welcome__role">
+                            <p class="welcome__role-question">
+                                <img src="./assets/icons/Guide/work.svg" alt="" class="welcome__role-icon">
+                                Are you a stakeholder?
+                            </p>
+                            <button type="button" id="welcome-create-request" class="login__button--login login__button">
+                                Create request
+                            </button>
+                        </div>
+                        <div class="welcome__role">
+                            <p class="welcome__role-question">
+                                <img src="./assets/icons/Guide/group.svg" alt="" class="welcome__role-icon">
+                                Are you a team member?
+                            </p>
+                            <a href="./login.html" class="login__button--login login__button--guest">
+                                Member log in
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="login__legalInformation--area">
+                <a href="./templates/privacy-Policy.html?from=welcome" class="login__legalInformation">
+                    Privacy Policy
+                </a>
+                <a href="./templates/legalnotice.html?from=welcome" class="login__legalInformation">
+                    Legal Notice
+                </a>
+            </footer>
+        </section>
 
-         <section
-            class="landing__showcase"
-            aria-labelledby="showcase-title"
-            data-sc-act="pan"
-            data-sc-span="2.5">
-            <div class="landing__showcase-stage" data-sc-stage>
-               <div class="landing__showcase-head">
-                  <p class="landing__showcase-eyebrow">What is inside</p>
-                  <h2 id="showcase-title" class="landing__showcase-title">
-                     Four screens and one mailbox.
-                  </h2>
-                  <p class="landing__showcase-lead">
-                     A dashboard for the day, the board itself, a task editor
-                     and a contact list — plus the address that feeds all of
-                     them from outside.
-                  </p>
-                  <p class="landing__showcase-hint" data-sc-cue="0 0.3 0 0.6">Keep scrolling</p>
-               </div>
+        <!-- Step 2: e-mail guide -->
+        <section class="welcome__step2">
+            <header class="welcome__step2-header">
+                <img src="./assets/icons/desktop/Dark_Logo.svg" alt="Join" class="welcome__step2-logo">
+                <div class="welcome__step2-nav">
+                    <button type="button" class="welcome__back welcome__back--brand" aria-label="Back to role selection">
+                        <img src="./assets/icons/desktop/arrowBack.svg" alt="">
+                    </button>
+                    <p class="welcome__counter welcome__counter--brand">
+                        <strong class="welcome__counter-used">0</strong> of <strong>10</strong> requests used today
+                    </p>
+                </div>
+            </header>
+            <main class="welcome__step2-main">
+                <h1 class="welcome__step2-title">
+                    Welcome
+                    <button type="button" class="welcome__back welcome__back--inline" aria-label="Back to role selection">
+                        <img src="./assets/icons/desktop/arrowBack.svg" alt="">
+                    </button>
+                </h1>
+                <p class="welcome__counter welcome__counter--inline">
+                    <strong class="welcome__counter-used">0</strong> of <strong>10</strong> requests used today
+                </p>
+                <div class="welcome__guide">
+                    <h2 class="welcome__guide-title">
+                        Easily create a ticket by sending an email — no extra steps needed.
+                    </h2>
+                    <img src="./assets/icons/Guide/Rectangle 11.svg" alt="" class="welcome__illustration welcome__illustration--normal">
+                    <img src="./assets/icons/Guide/Artboard 60 3.svg" alt="" class="welcome__illustration welcome__illustration--limit">
+                    <div class="welcome__guide-normal">
+                        <p>
+                            On this platform, you can submit your feature requests via
+                            email. Our AI system will automatically generate a ticket
+                            with a deadline and priority level.
+                        </p>
+                        <p>
+                            A total of 10 requests can be created per day. After this
+                            limit, emails can still be sent, but they will be manually
+                            reviewed by our team instead of generating AI tickets.
+                        </p>
+                    </div>
+                    <div class="welcome__guide-limit">
+                        <p class="welcome__limit-banner">
+                            The daily 10-request limit has been reached!
+                        </p>
+                        <p>
+                            Need more? No worries — you can still send emails, but our
+                            team will review them manually instead of using AI to
+                            create tickets.
+                        </p>
+                    </div>
+                    <a href="#" class="login__button--login login__button welcome__mailto" id="welcome-create-request-mail">
+                        <span class="welcome__mailto-label welcome__mailto-label--normal">Create Email Request</span>
+                        <span class="welcome__mailto-label welcome__mailto-label--limit">Send an email</span>
+                        <svg class="welcome__mailto-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M4 12.5 9.5 18 20 7" fill="none" stroke="currentColor"
+                                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </main>
+            <footer class="login__legalInformation--area">
+                <a href="./templates/privacy-Policy.html?from=welcome" class="login__legalInformation">
+                    Privacy Policy
+                </a>
+                <a href="./templates/legalnotice.html?from=welcome" class="login__legalInformation">
+                    Legal Notice
+                </a>
+            </footer>
+        </section>
 
-               <div class="landing__showcase-rail" data-sc-pan="0">
-                  <article class="landing__feature">
-                     <span class="landing__feature-icon">
-                        <img src="./assets/icons/desktop/summary.svg" alt="" />
-                     </span>
-                     <p class="landing__feature-step">Summary</p>
-                     <h3 class="landing__feature-title">The day at a glance</h3>
-                     <p class="landing__feature-text">
-                        How many tasks sit in each stage, how many are marked
-                        urgent, and the next deadline coming up — the first
-                        screen after you log in.
-                     </p>
-                     <a class="landing__feature-link" href="./login.html">
-                        Log in and look
-                     </a>
-                  </article>
-
-                  <article
-                     class="landing__feature landing__feature--wide">
-                     <span class="landing__feature-icon">
-                        <img src="./assets/icons/desktop/board.svg" alt="" />
-                     </span>
-                     <p class="landing__feature-step">Board</p>
-                     <h3 class="landing__feature-title">Five columns, drag and drop</h3>
-                     <p class="landing__feature-text">
-                        Every task moves left to right as the work progresses.
-                        Drag a card into the next column, or open it to edit,
-                        tick off subtasks or delete it.
-                     </p>
-                     <ul class="landing__feature-columns">
-                        <li>Triage</li>
-                        <li>To do</li>
-                        <li>In progress</li>
-                        <li>Await feedback</li>
-                        <li>Done</li>
-                     </ul>
-                     <img
-                        class="landing__feature-preview"
-                        src="./assets/readme/board-preview.png"
-                        alt="Screenshot of the Join board with its five columns and task cards"
-                        loading="lazy" />
-                  </article>
-
-                  <article class="landing__feature">
-                     <span class="landing__feature-icon">
-                        <img src="./assets/icons/desktop/addTask.svg" alt="" />
-                     </span>
-                     <p class="landing__feature-step">Add task</p>
-                     <h3 class="landing__feature-title">Write a ticket yourself</h3>
-                     <p class="landing__feature-text">
-                        Title, description, due date, priority, category,
-                        who it is assigned to and a checklist of subtasks.
-                        Tasks made here start in Triage, same as the ones the
-                        AI files.
-                     </p>
-                     <a class="landing__feature-link" href="./login.html">
-                        Try it 
-                     </a>
-                  </article>
-
-                  <article class="landing__feature">
-                     <span class="landing__feature-icon">
-                        <img src="./assets/icons/desktop/contacts.svg" alt="" />
-                     </span>
-                     <p class="landing__feature-step">Contacts</p>
-                     <h3 class="landing__feature-title">The people behind the cards</h3>
-                     <p class="landing__feature-text">
-                        An address book with name, e-mail and phone number.
-                        Everyone in it can be assigned to a task and shows up
-                        on the card as a coloured initial.
-                     </p>
-                     <a class="landing__feature-link" href="./login.html">
-                        Get start it
-                     </a>
-                  </article>
-
-                  <article class="landing__feature">
-                     <span class="landing__feature-icon">
-                        <img src="./assets/icons/desktop/mail.svg" alt="" />
-                     </span>
-                     <p class="landing__feature-step">Issue collector</p>
-                     <h3 class="landing__feature-title">And the door from outside</h3>
-                     <p class="landing__feature-text">
-                        People with no account can just send an e-mail. An AI
-                        turns it into a ticket in Triage and keeps the sender
-                        posted whenever it moves.
-                     </p>
-                     <img
-                        src="./assets/icons/desktop/Note _ KI generiert.svg"
-                        alt="Badge reading: generated by AI"
-                        width="177"
-                        height="22" />
-                     <a class="landing__feature-link" href="#how-title">
-                        See how that works
-                     </a>
-                  </article>
-               </div>
-            </div>
-         </section>
-
-         <section class="landing__section" aria-labelledby="how-title">
-            <h2 id="how-title" class="landing__section-title">How it works</h2>
-            <ol class="landing__steps">
-               <li class="landing__step">
-                  <span class="landing__step-number" aria-hidden="true">1</span>
-                  <h3 class="landing__step-title">You write an e-mail</h3>
-                  <p class="landing__step-text">
-                     Describe your request in normal sentences — no form, no
-                     account, no special format. Mention a date if you need it by
-                     a certain day.
-                  </p>
-               </li>
-               <li class="landing__step">
-                  <span class="landing__step-number" aria-hidden="true">2</span>
-                  <h3 class="landing__step-title">The AI reads it</h3>
-                  <p class="landing__step-text">
-                     It writes a short title, decides whether this is a technical
-                     task or a user story, sets a priority from the wording, and
-                     picks up any deadline you mentioned.
-                  </p>
-               </li>
-               <li class="landing__step">
-                  <span class="landing__step-number" aria-hidden="true">3</span>
-                  <h3 class="landing__step-title">A ticket appears</h3>
-                  <p class="landing__step-text">
-                     Your request lands in the <strong>Triage</strong> column of
-                     the board, with you recorded as its author. You get a
-                     confirmation e-mail, and another one when the ticket moves.
-                  </p>
-               </li>
-            </ol>
-            <a
-               class="landing__button landing__button--primary landing__steps-cta"
-               href="./welcome.html">
-               Get started
-            </a>
-         </section>
-
-         <section class="landing__section landing__section--notes" aria-labelledby="notes-title">
-            <h2 id="notes-title" class="landing__section-title">Good to know</h2>
-            <ul class="landing__notes">
-               <li class="landing__note">
-                  <h3 class="landing__note-title">Ten requests per day</h3>
-                  <p class="landing__note-text">
-                     To keep AI costs predictable, the collector creates
-                     <strong>10 tickets per day</strong> in total. After that you
-                     can still send e-mails — our team then reviews them by hand
-                     instead of letting the AI create a ticket. The
-                     <a class="landing__note-link" href="./welcome.html">request page</a>
-                     shows how many of today's ten are already used.
-                  </p>
-               </li>
-               <li class="landing__note">
-                  <h3 class="landing__note-title">Your text goes to Google</h3>
-                  <p class="landing__note-text">
-                     Messages are analysed with Google Gemini on its free tier.
-                     Google states that content sent through the free tier is
-                     used to improve its products. Please do not send anything
-                     confidential.
-                  </p>
-               </li>
-               <li class="landing__note">
-                  <h3 class="landing__note-title">This is a demo</h3>
-                  <p class="landing__note-text">
-                     Join is a student project from the Developer Akademie, not a
-                     production service. Tickets on the board are publicly
-                     visible. Use made-up data when you try it out.
-                  </p>
-               </li>
-            </ul>
-         </section>
-
-         <section class="landing__section landing__try" aria-labelledby="try-title">
-            <h2 id="try-title" class="landing__section-title">Try it yourself</h2>
-            <p class="landing__try-text">
-               Write to
-               <a class="landing__try-address" href="mailto:join-issues@gmx.de"
-                  >join-issues@gmx.de</a
-               >
-               in your own words. Here is a sample mail and everything that gets
-               pulled out of it.
-            </p>
-
-            <div class="landing__example">
-               <article class="landing__mail" aria-label="Sample e-mail">
-                  <p class="landing__mail-head">
-                     <span class="landing__mail-field">To</span>
-                     join-issues@gmx.de
-                  </p>
-                  <p class="landing__mail-head">
-                     <span class="landing__mail-field">Subject</span>
-                     Login stopped working
-                  </p>
-                  <p class="landing__mail-body">
-                     Hi, since this morning none of our staff can sign in. After
-                     entering the password nothing happens at all. This is
-                     blocking our whole production, we urgently need a fix by
-                     05/09/2026.
-                  </p>
-               </article>
-
-               <div class="landing__result" aria-label="Resulting ticket">
-                  <h3 class="landing__result-title">What ends up on the ticket</h3>
-                  <dl class="landing__fields">
-                     <dt class="landing__field-name">Is it a real request?</dt>
-                     <dd class="landing__field-value">
-                        Yes — spam, adverts and out-of-office replies are
-                        recognised and never become tickets
-                     </dd>
-
-                     <dt class="landing__field-name">Title</dt>
-                     <dd class="landing__field-value">
-                        “Staff login fails after password entry”
-                     </dd>
-
-                     <dt class="landing__field-name">Category</dt>
-                     <dd class="landing__field-value">
-                        Technical Task — a bug report, as opposed to a User Story
-                        for feature wishes
-                     </dd>
-
-                     <dt class="landing__field-name">Priority</dt>
-                     <dd class="landing__field-value">
-                        Urgent — taken from wording like “urgently” and “blocking
-                        our whole production”
-                     </dd>
-
-                     <dt class="landing__field-name">Due date</dt>
-                     <dd class="landing__field-value">
-                        05/09/2026 — picked up from the text; left empty when no
-                        date is mentioned
-                     </dd>
-
-                     <dt class="landing__field-name">Summary</dt>
-                     <dd class="landing__field-value">
-                        Two or three plain sentences, greetings stripped out
-                     </dd>
-
-                     <dt class="landing__field-name">Author</dt>
-                     <dd class="landing__field-value">
-                        Your e-mail address, marked as an external request
-                     </dd>
-                  </dl>
-               </div>
-            </div>
-
-            <p class="landing__try-text">
-               The ticket then appears in the <strong>Triage</strong> column with a
-               note that it was generated by AI.
-            </p>
-            <a class="landing__button landing__button--ghost" href="./login.html">
-               Open the board
-            </a>
-         </section>
-      </main>
-
-      <footer class="landing__footer">
-         <nav aria-label="Legal">
-            <a class="landing__footer-link" href="./templates/privacy-Policy.html?from=landing">
-               Privacy Policy
-            </a>
-            <a class="landing__footer-link" href="./templates/legalnotice.html?from=landing">
-               Legal Notice
-            </a>
-         </nav>
-         <p class="landing__fineprint">
-            Join — Kanban Project Management Tool. A learning project; availability
-            and accuracy are not guaranteed.
-         </p>
-      </footer>
-      <script src="./scripts/landing/scrollcraft.js"></script>
-      <script>
-         ScrollCraft.mount(document.querySelector(".landing__showcase").parentNode);
-      </script>
-      <script src="./scripts/landing/hero-fit.js"></script>
-   </body>
+    </div>
+</body>
 </html>

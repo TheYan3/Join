@@ -12,14 +12,14 @@
         const urlParams = new URLSearchParams(window.location.search);
         const from = urlParams.get("from");
         if (from === "landing") {
-            const previousPage = isInTemplates ? "../index.html" : "./index.html";
+            const previousPage = isInTemplates ? "../welcome.html" : "./welcome.html";
             replaceNavMenuWithBackButton("Back", previousPage);
             hideHeaderElements();
             centerHeaderContent();
             return;
         }
         if (from === "welcome") {
-            const previousPage = isInTemplates ? "../welcome.html" : "./welcome.html";
+            const previousPage = isInTemplates ? "../index.html" : "./index.html";
             replaceNavMenuWithBackButton("Back", previousPage);
             hideHeaderElements();
             centerHeaderContent();
