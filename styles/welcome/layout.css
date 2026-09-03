@@ -123,6 +123,20 @@ body.welcome--step2 .welcome__info:hover {
     padding: 48px 0;
 }
 
+/* Ab 1081px entfaellt die "Not a Join user? Sign up"-Zeile auf Wunsch
+   komplett - auf Desktop soll dieser Screen nur die Rollenwahl zeigen. Wer
+   sich neu anmelden will, kommt ueber das Info-Icon oben rechts auf die
+   Marketing-Seite (welcome.html, "Sign up" in ihrer Kopfzeile) oder ueber
+   "Member log in" auf die Login-Seite. Markup und Knopf-Wiring
+   (#signup-button) bleiben unveraendert bestehen, damit die Mobile-Fassung
+   darunter (siehe responsive.css, gilt bis 1080px) unangetastet
+   weiterlaeuft. */
+@media (min-width: 1081px) {
+    .welcome__step1 .header__flex-instructions {
+        display: none;
+    }
+}
+
 /* .login__signup is reused as-is (structure + JS wiring via #signup-button
    in script.js), only its button colours are inverted here: the default
    dark-filled .login__button would blend into this page's dark background. */

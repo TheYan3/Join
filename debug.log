@@ -5,6 +5,23 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-03] Sign-up-Zeile auf der Startseite auf Desktop wieder ausgeblendet
+---------------------------------------------------------------------------
+- Was: Die Zeile "Not a Join user? Sign up" oben rechts auf der Startseite
+  (Rollenwahl) ist auf großen Bildschirmen (Desktop, ab 1081 Pixel Breite)
+  wieder unsichtbar. Auf Handy und Tablet steht sie unverändert wie bisher
+  über der weißen Karte.
+- Warum: Sie war im Eintrag darunter absichtlich wieder eingeblendet worden,
+  ist auf Desktop aber nicht erwünscht - dort soll die Startseite nur die
+  Rollenwahl zeigen. Wer sich neu registrieren will, kommt weiterhin über das
+  Info-Zeichen oben rechts auf die Info-/Werbeseite (dort steht "Sign up" in
+  der Kopfzeile) oder über "Member log in" auf die Anmeldeseite.
+- Wo: styles/welcome/layout.css (die Regel, die die Zeile auf Desktop
+  versteckt, ist zurück - mit korrigierter Begründung im Kommentar).
+- Geprüft: Startseite auf Desktop-Breite angesehen - Zeile weg, das
+  Info-Zeichen oben rechts steht unverändert an seinem Platz.
+
+
 [2026-09-03] Info-Knopf oben rechts und Sign-up-Zeile auch auf Desktop sichtbar
 ---------------------------------------------------------------------------
 - Was: Auf der neuen Startseite (Rollenwahl) gibt es jetzt oben rechts ein
