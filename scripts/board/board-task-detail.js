@@ -343,8 +343,8 @@
    /**
     * Shows the creator action button as a profile link.
     *
-    * The actual navigation target is wired up separately (contacts deeplink);
-    * here the button only carries the matched contact's ID.
+    * Carries the real deeplink as href so middle-click and "copy link"
+    * work; the click handler still closes the dialog before navigating.
     * @param {string|number} contactId - The matched contact's ID.
     * @returns {void} Nothing.
     */
@@ -352,7 +352,7 @@
       const action = document.getElementById("taskDetailCreatorAction");
       if (!action) return;
       action.classList.remove("d-none");
-      action.href = "#";
+      action.href = buildContactsDeeplinkUrl(contactId);
       action.dataset.contactId = String(contactId);
       const icon = document.getElementById("taskDetailCreatorActionIcon");
       if (icon) {

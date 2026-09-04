@@ -5,6 +5,18 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Profil-Knopf ist jetzt ein echter Link
+---------------------------------------------------
+- Was: Der "Profil"-Knopf in der Creator-Zeile des Aufgaben-Fensters zeigt
+  jetzt schon vorab auf die richtige Adresse der Kontaktseite.
+- Warum: Bisher stand dort nur ein Platzhalter, und erst der Mausklick hat
+  die Adresse berechnet. Fuer den normalen Klick war das egal, aber
+  Mausrad-Klick ("in neuem Tab oeffnen") und Rechtsklick > "Link kopieren"
+  liefen ins Leere.
+- Am Verhalten beim normalen Klick aendert sich nichts: das Fenster schliesst
+  weiterhin zuerst und springt dann zum Kontakt.
+- Dateien: scripts/board/board-task-detail.js
+
 [2026-09-04] Eigener Name in der Zugewiesen-Liste jetzt mit "(You)" markiert
 ---------------------------------------------------------------------------
 - Was: In der Liste "Assigned To" im Aufgaben-Fenster steht hinter dem
