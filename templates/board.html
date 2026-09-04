@@ -798,6 +798,29 @@
                      id="taskDetailDescription"
                      class="task-detail__description"></p>
 
+                  <div id="taskDetailCreatorRow" class="task-detail__creator">
+                     <div class="task-detail__creator-main">
+                        <span class="task-detail__field-label">Creator:</span>
+                        <span class="task-detail__creator-person">
+                           <img
+                              id="taskDetailCreatorBadge"
+                              class="task-detail__creator-badge"
+                              src=""
+                              alt="" />
+                           <span
+                              id="taskDetailCreator"
+                              class="task-detail__creator-name"></span>
+                        </span>
+                     </div>
+                     <a
+                        id="taskDetailCreatorAction"
+                        class="task-detail__creator-action"
+                        href="#">
+                        <img id="taskDetailCreatorActionIcon" src="" alt="" />
+                        <span id="taskDetailCreatorActionLabel"></span>
+                     </a>
+                  </div>
+
                   <div class="task-detail__field">
                      <span class="task-detail__field-label">Due date:</span>
                      <span
@@ -810,16 +833,6 @@
                      <span class="task-detail__priority">
                         <span id="taskDetailPriorityText"></span>
                         <img id="taskDetailPriorityIcon" src="" alt="" />
-                     </span>
-                  </div>
-
-                  <div class="task-detail__field">
-                     <span class="task-detail__field-label">Created by:</span>
-                     <span class="task-detail__field-value">
-                        <span id="taskDetailCreator"></span>
-                        <span
-                           id="taskDetailCreatorType"
-                           class="task-detail__creator-badge"></span>
                      </span>
                   </div>
 
@@ -840,10 +853,14 @@
 
                <footer class="task-detail__footer">
                   <button id="taskDetailDelete" class="task-detail__action-btn">
+                     <span
+                        class="task-detail__action-icon task-detail__action-icon--delete"></span>
                      Delete
                   </button>
                   <span class="task-detail__divider"></span>
                   <button id="taskDetailEdit" class="task-detail__action-btn">
+                     <span
+                        class="task-detail__action-icon task-detail__action-icon--edit"></span>
                      Edit
                   </button>
                </footer>

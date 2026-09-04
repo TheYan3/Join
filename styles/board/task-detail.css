@@ -6,7 +6,7 @@
    padding: 0;
    border: none;
    border-radius: 30px;
-   box-shadow: 0 24px 32px #00000040;
+   box-shadow: 0 0 4px rgba(0, 0, 0, 0.16);
    background: #ffffff;
    overflow: hidden;
 }
@@ -22,7 +22,7 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
-   padding: 24px 24px 0;
+   padding: 48px 40px 0;
 }
 
 .task-detail__header-labels {
@@ -33,10 +33,11 @@
 }
 
 .task-detail__label {
-   font-size: 16px;
+   font-size: 23px;
    font-weight: 400;
+   line-height: 1.2;
    color: #ffffff;
-   padding: 4px 18px;
+   padding: 4px 24px;
    border-radius: 8px;
    /* Grundfarbe = User Story, gleiche Farbe wie auf der Karte. */
    background: #7b3acf;
@@ -59,6 +60,7 @@
 .task-detail__close {
    width: 32px;
    height: 32px;
+   flex-shrink: 0;
    display: inline-flex;
    align-items: center;
    justify-content: center;
@@ -75,13 +77,13 @@
 .task-detail__content {
    display: flex;
    flex-direction: column;
-   gap: 20px;
-   padding: 12px 24px 20px;
+   gap: 24px;
+   padding: 24px 40px 0;
    overflow-y: auto;
 }
 
 .task-detail__title {
-   font-size: 48px;
+   font-size: 56px;
    font-weight: 700;
    line-height: 1.2;
    color: #000000;
@@ -90,52 +92,91 @@
 .task-detail__description {
    font-size: 20px;
    line-height: 1.2;
-   color: #2a3647;
+   color: #000000;
 }
 
 .task-detail__field {
    display: flex;
    align-items: center;
-   gap: 24px;
+   gap: 25px;
 }
 
 .task-detail__field-label {
    font-size: 20px;
+   line-height: 1.2;
    color: #2a3647;
 }
 
 .task-detail__field-value {
    font-size: 20px;
+   line-height: 1.2;
    color: #000000;
 }
 
+.task-detail__creator {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 16px;
+}
+
+.task-detail__creator-main {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+}
+
+.task-detail__creator-person {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+}
+
+/* Breite kommt aus der Grafik (Member 93px, Extern 75px). */
 .task-detail__creator-badge {
-   font-size: 14px;
-   line-height: 1;
-   padding: 4px 10px;
-   margin-left: 8px;
-   border-radius: 8px;
-   color: #ffffff;
-   vertical-align: middle;
+   height: 22px;
+   width: auto;
+   flex-shrink: 0;
 }
 
-.task-detail__creator-badge:empty {
+.task-detail__creator-name {
+   font-size: 19px;
+   line-height: 1.2;
+   color: #000000;
+}
+
+.task-detail__creator-action {
+   display: inline-flex;
+   align-items: center;
+   gap: 4px;
+   flex-shrink: 0;
+   /* Figma fixiert die Hoehe auf 24px - haelt zugleich das Klickziel gross genug. */
+   min-height: 24px;
+   padding: 0 3px;
+   border-radius: 4px;
+   font-size: 16px;
+   line-height: 1.2;
+   color: #42526e;
+   text-decoration: none;
+}
+
+.task-detail__creator-action:hover,
+.task-detail__creator-action:focus-visible {
+   color: #29abe2;
+}
+
+/* Solange kein Bild gesetzt ist, kein Platzhalter-Icon zeigen. */
+.task-detail__creator img[src=""] {
    display: none;
-}
-
-.task-detail__creator-badge--intern {
-   background: #2a3647;
-}
-
-.task-detail__creator-badge--extern {
-   background: #ff7a00;
 }
 
 .task-detail__priority {
    display: inline-flex;
    align-items: center;
-   gap: 8px;
+   gap: 10px;
+   padding: 4px 18px;
    font-size: 20px;
+   line-height: 1.2;
    color: #000000;
 }
 
@@ -147,12 +188,13 @@
 .task-detail__group {
    display: flex;
    flex-direction: column;
-   gap: 12px;
+   gap: 8px;
 }
 
 .task-detail__group-title {
    font-size: 20px;
    font-weight: 400;
+   line-height: 1.2;
    color: #2a3647;
 }
 
@@ -160,22 +202,39 @@
 .task-detail__subtasks-list {
    display: flex;
    flex-direction: column;
-   gap: 10px;
+   gap: 4px;
    padding: 0;
    margin: 0;
    list-style: none;
 }
 
-.task-detail__assigned-item,
-.task-detail__subtask-item {
+.task-detail__assigned-item {
    display: flex;
    align-items: center;
-   gap: 12px;
+   gap: 16px;
+   padding: 7px 16px;
+   border-radius: 10px;
+}
+
+.task-detail__assigned-item .avatar {
+   width: 42px;
+   height: 42px;
+   flex-shrink: 0;
+   font-size: 16px;
+   font-weight: 400;
 }
 
 .task-detail__assigned-name {
    font-size: 19px;
+   line-height: 1.2;
    color: #000000;
+}
+
+.task-detail__subtask-item {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding: 6px 16px;
 }
 
 .task-detail__subtask-checkbox {
@@ -197,6 +256,7 @@
 
 .task-detail__subtask-text {
    font-size: 16px;
+   line-height: 1.2;
    color: #000000;
 }
 
@@ -214,28 +274,55 @@
    display: flex;
    justify-content: flex-end;
    align-items: center;
-   gap: 10px;
+   gap: 8px;
    margin-top: auto;
-   padding: 20px 24px 24px;
-   border-top: 1px solid #ececec;
+   padding: 24px 40px 48px;
 }
 
 .task-detail__action-btn {
-   font-size: 20px;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   padding: 0;
+   font-size: 16px;
    font-weight: 400;
+   line-height: 1.2;
    color: #2a3647;
    border: none;
    background: transparent;
    cursor: pointer;
 }
 
-.task-detail__action-btn:last-child {
-   width: 40px;
+.task-detail__action-icon {
+   width: 24px;
+   height: 24px;
+   flex-shrink: 0;
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: contain;
 }
 
-.task-detail__action-btn:hover {
+.task-detail__action-icon--delete {
+   background-image: url("../../assets/icons/desktop/subtask__trash.svg");
+}
+
+.task-detail__action-icon--edit {
+   background-image: url("../../assets/icons/desktop/subtask__pencil.svg");
+}
+
+.task-detail__action-btn:hover,
+.task-detail__action-btn:focus-visible {
    color: #29abe2;
-   font-weight: 700;
+}
+
+.task-detail__action-btn:hover .task-detail__action-icon--delete,
+.task-detail__action-btn:focus-visible .task-detail__action-icon--delete {
+   background-image: url("../../assets/icons/desktop/deleteHover.svg");
+}
+
+.task-detail__action-btn:hover .task-detail__action-icon--edit,
+.task-detail__action-btn:focus-visible .task-detail__action-icon--edit {
+   background-image: url("../../assets/icons/desktop/editHover.svg");
 }
 
 .task-detail__divider {

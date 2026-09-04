@@ -5,6 +5,40 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Aufgaben-Ansicht auf dem Board sieht jetzt aus wie im Entwurf
+--------------------------------------------------------------------------
+- Was: Wenn man auf dem Board eine Karte anklickt, oeffnet sich das grosse
+  Fenster mit allen Details. Dieses Fenster wurde optisch komplett an den
+  aktuellen Figma-Entwurf angeglichen - Groessen, Abstaende, Schriftgroessen
+  und Farben stimmen jetzt mit dem Entwurf ueberein.
+- Im Einzelnen:
+  - Mehr Luft am Rand (48 Pixel oben/unten, 40 Pixel links/rechts) und ein
+    einheitlicher Abstand von 24 Pixeln zwischen allen Bloecken.
+  - Die Ueberschrift ist deutlich groesser (56 statt 48), der Beschreibungstext
+    jetzt schwarz statt dunkelblau.
+  - Die Zeile "Erstellt von" heisst jetzt "Creator:" und ist nach oben
+    gerueckt - direkt unter die Beschreibung, ueber "Due date". Der Typ des
+    Erstellers wird kuenftig als fertige kleine Grafik gezeigt ("Member" bzw.
+    "Extern") statt als selbstgebaute Textpille, und ganz rechts in der Zeile
+    steht ein Knopf ("Profil" bzw. "E-mail").
+  - Die Liste der zugewiesenen Personen ruecken enger zusammen, die runden
+    Namenskuerzel sind groesser (42 statt 32 Pixel).
+  - Unten rechts haben "Delete" und "Edit" jetzt ein Symbol davor
+    (Muelleimer und Stift), das beim Drueberfahren mit der Maus zusammen mit
+    der Schrift blau wird. Die graue Trennlinie ueber der Fusszeile ist weg.
+- Wichtig: In diesem Schritt wurde nur das Aussehen gebaut. Die Grafik
+  "Member"/"Extern" und der Knopf rechts werden noch nicht automatisch mit
+  echten Daten gefuellt - das passiert in den naechsten Schritten. Bis dahin
+  bleibt die Zeile an dieser Stelle leer.
+- Ebenfalls offen: Auf dem Handy sitzt das Fenster nach dem Umbau noch nicht
+  richtig (der Knopf rechts in der Creator-Zeile laeuft aus dem Bild). Das ist
+  ein eigenes, bereits eingeplantes Thema.
+- Dateien: templates/board.html (Aufbau des Fensters),
+  styles/board/task-detail.css (alle Groessen und Abstaende),
+  assets/icons/desktop/ (vier neue Symbole: Member-batch.svg, Extern-batch.svg,
+  person-creatror-btn.svg, attach_email.svg)
+
+
 [2026-09-03] E-Mail-Tickets: Teilaufgaben aus der Mail landen jetzt im Ticket
 ----------------------------------------------------------------------------
 - Problem: Wenn jemand in seiner Mail Teilaufgaben aufgezaehlt hat ("subtasks:
