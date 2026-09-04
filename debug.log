@@ -5,6 +5,19 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] "Profil"-Knopf im Aufgaben-Fenster springt jetzt zur Kontaktseite
+----------------------------------------------------------------------------------
+- Was: Klickt man im Aufgaben-Fenster auf den "Profil"-Knopf, schliesst sich
+  das Fenster und man landet auf der Kontakte-Seite, wo der passende Kontakt
+  schon aufgeklappt ist.
+- Warum: Vorher war der Knopf nur eine Attrappe (fuehrte noch nirgendwohin,
+  siehe letzter Eintrag). Wichtig dabei: der Login-Zustand darf beim
+  Seitenwechsel nicht verloren gehen, sonst wirft die Seite einen sofort
+  zurueck zum Login. Eine unbekannte Kontakt-ID (kann bei kaputten Links
+  vorkommen) fuehrt zu keinem Fehler, die Seite laedt dann einfach normal.
+- Dateien: scripts/board/board-task-detail.js, scripts/contacts/contacts.js
+
+
 [2026-09-04] Creator-Zeile im Aufgaben-Fenster zeigt jetzt Name, Grafik und Knopf
 ------------------------------------------------------------------------------------
 - Was: Die "Creator:"-Zeile im Aufgaben-Fenster zeigt jetzt den Namen des

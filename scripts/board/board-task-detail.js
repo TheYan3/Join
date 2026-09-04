@@ -604,6 +604,38 @@
    }
 
    /**
+    * Builds the contacts page URL that opens one contact directly.
+    *
+    * Reuses the shared getPagePath/withAuthUserQuery helpers from script.js
+    * so the "uid" (and "from") query params survive the jump - otherwise
+    * the auth guard on contacts.html would bounce back to login.html.
+    * @param {string|number} contactId - The contact ID to open.
+    * @returns {string} The contacts page URL.
+    */
+   function buildContactsDeeplinkUrl(contactId) {
+      const target = new URL(withAuthUserQuery(getPagePath(PAGE_FILES.contacts)), window.location.href);
+      target.searchParams.set("contact", String(contactId));
+      return `${target.pathname}${target.search}`;
+   }
+
+   /**
+    * Handles clicks on the creator action button.
+    *
+    * Mailto links (no contactId) are left alone so the browser opens the
+    * mail client as usual. Profile links close the dialog first, then
+    * navigate to the matched contact on the contacts page.
+    * @param {MouseEvent} event - The click event.
+    * @returns {void} Nothing.
+    */
+   function handleTaskDetailCreatorActionClick(event) {
+      const contactId = event.currentTarget.dataset.contactId;
+      if (!contactId) return;
+      event.preventDefault();
+      closeTaskDetailDialog();
+      window.location.href = buildContactsDeeplinkUrl(contactId);
+   }
+
+   /**
     * Binds the detail action buttons.
     *
     * @param {HTMLDialogElement} dialog - The dialog.
@@ -613,6 +645,7 @@
       bindTaskDetailButton("taskDetailClose", "click", closeTaskDetailDialog);
       bindTaskDetailButton("taskDetailDelete", "click", () => handleTaskDetailDeleteButtonClick(dialog));
       bindTaskDetailButton("taskDetailEdit", "click", () => handleTaskDetailEditButtonClick(dialog));
+      bindTaskDetailButton("taskDetailCreatorAction", "click", handleTaskDetailCreatorActionClick);
    }
 
    /**

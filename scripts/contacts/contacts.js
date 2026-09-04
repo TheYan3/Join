@@ -30,7 +30,22 @@
    async function initContactsPage() {
       await data.loadContacts();
       refreshContactView();
+      applyContactDeeplinkFromUrl();
       bindEvents();
+   }
+
+   /**
+    * Opens the contact given by the "contact" URL parameter, if any.
+    *
+    * Reached from the task detail overlay's "Profil" button. An unknown or
+    * missing ID is ignored - the page just loads normally.
+    * @returns {void} Nothing.
+    */
+   function applyContactDeeplinkFromUrl() {
+      const contactId = new URLSearchParams(window.location.search).get("contact");
+      if (!contactId || !getContactById(contactId)) return;
+      showSelectedContact(contactId);
+      refreshContactView();
    }
 
    /**
