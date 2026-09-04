@@ -234,7 +234,8 @@
    display: flex;
    align-items: center;
    gap: 16px;
-   padding: 6px 16px;
+   /* Figma fixiert die Zeile auf 32px Hoehe - mit 24px Checkbox bleiben 4px. */
+   padding: 4px 16px;
 }
 
 .task-detail__subtask-checkbox {

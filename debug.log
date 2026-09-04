@@ -5,6 +5,17 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Abstand in den Teilaufgaben-Zeilen korrigiert
+----------------------------------------------------------
+- Was: Die Zeilen unter "Subtasks" waren 4 Pixel zu hoch.
+- Warum: Im Figma-Entwurf steht an dieser Stelle zweierlei - ein Innenabstand
+  von 6 Pixeln, gleichzeitig aber eine fest vorgegebene Zeilenhoehe von 32
+  Pixeln. Beides zusammen geht nicht auf; die fest vorgegebene Hoehe ist die
+  richtige Angabe, daraus ergeben sich 4 Pixel Innenabstand. Im Arbeitsplan
+  stand versehentlich der falsche der beiden Werte.
+- Folge: Das Detail-Fenster ist jetzt genau so hoch wie im Entwurf.
+- Dateien: styles/board/task-detail.css
+
 [2026-09-04] Aufgaben-Ansicht auf dem Board sieht jetzt aus wie im Entwurf
 --------------------------------------------------------------------------
 - Was: Wenn man auf dem Board eine Karte anklickt, oeffnet sich das grosse
