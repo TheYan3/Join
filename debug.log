@@ -5,6 +5,26 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Creator-Zeile im Aufgaben-Fenster zeigt jetzt Name, Grafik und Knopf
+------------------------------------------------------------------------------------
+- Was: Die "Creator:"-Zeile im Aufgaben-Fenster zeigt jetzt den Namen des
+  Erstellers (statt bisher die E-Mail-Adresse), daneben die passende kleine
+  Grafik ("Member" fuer Team-Mitglieder, "Extern" fuer Kunden-Anfragen per
+  Mail) und ganz rechts einen Knopf.
+- Der Knopf zeigt "Profil", wenn zum Ersteller ein bekannter Kontakt
+  gefunden wurde (fuehrt noch nirgendwo hin, das kommt im naechsten
+  Schritt). Sonst zeigt er "E-mail" und oeffnet direkt das Mailprogramm mit
+  vorausgefuellter Adresse und Betreff "Re: <Aufgaben-Titel>". Gibt es
+  weder Kontakt noch E-Mail-Adresse, verschwindet nur der Knopf.
+- Hat eine Aufgabe gar keinen Ersteller hinterlegt (z. B. sehr alte
+  Aufgaben oder Gast-Login), verschwindet die komplette Zeile.
+- Warum: Registrierte Team-Mitglieder landen aktuell nicht automatisch in
+  der Kontaktliste - das ist eine bekannte Luecke, die bewusst nicht an
+  dieser Stelle behoben wird. Der "E-mail"-Knopf ist der Ausweg dafuer,
+  damit trotzdem jeder erreichbar bleibt.
+- Dateien: scripts/board/board-task-detail.js
+
+
 [2026-09-04] Kontaktliste steht jetzt auch im Aufgaben-Fenster bereit
 -----------------------------------------------------------------------
 - Was: Beim Anklicken einer Aufgabenkarte laedt das Programm jetzt einmalig

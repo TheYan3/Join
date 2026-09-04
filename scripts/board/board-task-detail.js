@@ -2,6 +2,19 @@
 
 {
    const TASK_DETAIL_AVATAR_COLORS = ["orange", "teal", "purple"];
+   const TASK_DETAIL_ASSET_BASE_PATH = window.location.pathname.includes("/templates/")
+      ? "../assets/"
+      : "./assets/";
+
+   /**
+    * Returns the task detail asset path.
+    *
+    * @param {string} relativePath - The relative path.
+    * @returns {string} The task detail asset path.
+    */
+   function taskDetailAssetPath(relativePath) {
+      return `${TASK_DETAIL_ASSET_BASE_PATH}${relativePath}`;
+   }
 
    // Module-level cache: contacts.json is only fetched once per page load,
    // reused by every task detail open (creator lookup, "(You)" suffix).
@@ -223,23 +236,141 @@
    }
 
    /**
-    * Sets the task detail creator line.
+    * Finds the cached contact whose e-mail matches the given address.
     *
-    * Shows the reporter and whether they are a team member ("intern") or an
-    * external stakeholder who submitted the request by e-mail ("extern").
-    * @param {object|null} creator - The creator object.
+    * @param {string} email - The e-mail address to look up.
+    * @returns {object|null} The matching contact, or null if none was found.
+    */
+   function findTaskDetailContactByEmail(email) {
+      const normalized = String(email || "").toLowerCase().trim();
+      if (!normalized) return null;
+      return (
+         (taskDetailContactsCache || []).find(
+            (contact) => contact.email.toLowerCase().trim() === normalized
+         ) || null
+      );
+   }
+
+   /**
+    * Builds a mailto href with a "Re: <task title>" subject.
+    *
+    * @param {string} email - The recipient e-mail address.
+    * @param {string} taskTitle - The task title.
+    * @returns {string} The mailto href.
+    */
+   function buildTaskDetailMailtoHref(email, taskTitle) {
+      return `mailto:${email}?subject=${encodeURIComponent(`Re: ${taskTitle}`)}`;
+   }
+
+   /**
+    * Sets the creator badge image (Member vs. Extern).
+    *
+    * @param {string} type - The resolved creator type ("intern" or "extern").
     * @returns {void} Nothing.
     */
-   function setTaskDetailCreator(creator) {
-      const label = creator?.email || creator?.name || "";
-      setTaskDetailText("taskDetailCreator", label, "Unknown");
-      const badge = document.getElementById("taskDetailCreatorType");
+   function setTaskDetailCreatorBadge(type) {
+      const badge = document.getElementById("taskDetailCreatorBadge");
       if (!badge) return;
-      const type = creator?.type === "extern" ? "extern" : creator?.type === "intern" ? "intern" : "";
-      badge.textContent = type ? (type === "extern" ? "External" : "Internal") : "";
-      badge.className = type
-         ? `task-detail__creator-badge task-detail__creator-badge--${type}`
-         : "task-detail__creator-badge";
+      const isExtern = type === "extern";
+      badge.src = taskDetailAssetPath(`icons/desktop/${isExtern ? "Extern-batch.svg" : "Member-batch.svg"}`);
+      badge.alt = isExtern ? "Extern" : "Member";
+   }
+
+   /**
+    * Hides the creator action button (no button applies).
+    * @returns {void} Nothing.
+    */
+   function hideTaskDetailCreatorAction() {
+      document.getElementById("taskDetailCreatorAction")?.classList.add("d-none");
+   }
+
+   /**
+    * Shows the creator action button as a mailto link.
+    *
+    * @param {string} email - The recipient e-mail address.
+    * @param {string} taskTitle - The task title, used in the mail subject.
+    * @returns {void} Nothing.
+    */
+   function showTaskDetailCreatorEmailAction(email, taskTitle) {
+      const action = document.getElementById("taskDetailCreatorAction");
+      if (!action) return;
+      action.classList.remove("d-none");
+      action.href = buildTaskDetailMailtoHref(email, taskTitle);
+      delete action.dataset.contactId;
+      const icon = document.getElementById("taskDetailCreatorActionIcon");
+      if (icon) {
+         icon.src = taskDetailAssetPath("icons/desktop/attach_email.svg");
+         icon.alt = "E-mail";
+      }
+      setTaskDetailText("taskDetailCreatorActionLabel", "E-mail", "E-mail");
+   }
+
+   /**
+    * Shows the creator action button as a profile link.
+    *
+    * The actual navigation target is wired up separately (contacts deeplink);
+    * here the button only carries the matched contact's ID.
+    * @param {string|number} contactId - The matched contact's ID.
+    * @returns {void} Nothing.
+    */
+   function showTaskDetailCreatorProfileAction(contactId) {
+      const action = document.getElementById("taskDetailCreatorAction");
+      if (!action) return;
+      action.classList.remove("d-none");
+      action.href = "#";
+      action.dataset.contactId = String(contactId);
+      const icon = document.getElementById("taskDetailCreatorActionIcon");
+      if (icon) {
+         icon.src = taskDetailAssetPath("icons/desktop/person-creatror-btn.svg");
+         icon.alt = "Profil";
+      }
+      setTaskDetailText("taskDetailCreatorActionLabel", "Profil", "Profil");
+   }
+
+   /**
+    * Renders the creator action button (Profile or E-mail), or hides it.
+    *
+    * Member creators with a matching contact get a Profile button; everyone
+    * else (extern creators, or intern creators without a matching contact -
+    * a known gap between users.json and contacts.json) falls back to the
+    * e-mail button. No e-mail at all means no button.
+    * @param {object} creator - The creator object.
+    * @param {string} taskTitle - The task title, used in the mail subject.
+    * @returns {void} Nothing.
+    */
+   function renderTaskDetailCreatorAction(creator, taskTitle) {
+      if (creator.type === "extern") {
+         if (creator.email) return showTaskDetailCreatorEmailAction(creator.email, taskTitle);
+         return hideTaskDetailCreatorAction();
+      }
+      const contact = findTaskDetailContactByEmail(creator.email);
+      if (contact) return showTaskDetailCreatorProfileAction(contact.id);
+      if (creator.email) return showTaskDetailCreatorEmailAction(creator.email, taskTitle);
+      hideTaskDetailCreatorAction();
+   }
+
+   /**
+    * Sets the task detail creator line.
+    *
+    * Shows the reporter's display name, a badge for whether they are a team
+    * member ("intern") or an external stakeholder who submitted the request
+    * by e-mail ("extern"), and an action button (Profile/E-mail). Hides the
+    * whole row when there is no usable creator data.
+    * @param {object|null} creator - The creator object.
+    * @param {string} taskTitle - The task title, used in the mail subject.
+    * @returns {void} Nothing.
+    */
+   function setTaskDetailCreator(creator, taskTitle) {
+      const row = document.getElementById("taskDetailCreatorRow");
+      if (!row) return;
+      if (!creator || (!creator.name && !creator.email)) {
+         row.classList.add("d-none");
+         return;
+      }
+      row.classList.remove("d-none");
+      setTaskDetailText("taskDetailCreator", creator.name || creator.email, "");
+      setTaskDetailCreatorBadge(creator.type === "extern" ? "extern" : "intern");
+      renderTaskDetailCreatorAction(creator, taskTitle);
    }
 
    /**
@@ -267,7 +398,7 @@
       setTaskDetailText("taskDetailDescription", taskData.description, "No description");
       setTaskDetailText("taskDetailDate", taskData.date, "No due date");
       setTaskDetailPriority(taskData.priority);
-      setTaskDetailCreator(taskData.creator);
+      setTaskDetailCreator(taskData.creator, taskData.title);
       setTaskDetailAiBadge(taskData.creator);
       renderTaskDetailAssigned(taskData.assigned || []);
       renderTaskDetailSubtasks(taskData.subtasks || []);
