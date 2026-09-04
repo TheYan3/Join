@@ -80,6 +80,7 @@ function mapAssignedContactEntry(entry) {
       name: resolvedName,
       initials: getInitialsFromName(resolvedName),
       color: String(contact.color || "").trim(),
+      email: String(contact.email || "").trim(),
    };
 }
 

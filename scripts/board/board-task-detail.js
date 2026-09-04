@@ -3,6 +3,50 @@
 {
    const TASK_DETAIL_AVATAR_COLORS = ["orange", "teal", "purple"];
 
+   // Module-level cache: contacts.json is only fetched once per page load,
+   // reused by every task detail open (creator lookup, "(You)" suffix).
+   let taskDetailContactsCache = null;
+
+   /**
+    * Normalizes raw contacts.json data into a flat lookup array.
+    *
+    * @param {object|Array<object>} data - The raw Firebase contacts data.
+    * @returns {Array<object>} The normalized contacts with id, name and email.
+    */
+   function normalizeTaskDetailContacts(data) {
+      if (!data) return [];
+      const entries = Array.isArray(data)
+         ? data.map((contact, index) => [String(index), contact])
+         : Object.entries(data);
+      return entries
+         .filter(([, contact]) => contact && typeof contact === "object")
+         .map(([key, contact]) => ({
+            id: contact.id ?? key,
+            name: String(contact.name || "").trim(),
+            email: String(contact.email || "").trim(),
+         }));
+   }
+
+   /**
+    * Loads and caches the contacts list for the task detail overlay.
+    *
+    * Fails soft: a load error leaves the cache at an empty list so the
+    * overlay still renders, just without contact-matched creator info.
+    * @returns {Promise<Array<object>>} A promise that resolves to the contacts list.
+    */
+   async function loadTaskDetailContacts() {
+      if (taskDetailContactsCache) return taskDetailContactsCache;
+      try {
+         const response = await fetch(`${window.JOIN_CONFIG.BASE_URL}contacts.json`);
+         if (!response.ok) throw new Error(`HTTP ${response.status}`);
+         taskDetailContactsCache = normalizeTaskDetailContacts(await response.json());
+      } catch (error) {
+         console.error("Loading contacts for task detail failed:", error);
+         taskDetailContactsCache = [];
+      }
+      return taskDetailContactsCache;
+   }
+
    /**
     * Returns the task detail dialog.
     * @returns {HTMLDialogElement|null} The task detail dialog.
@@ -232,13 +276,17 @@
    /**
     * Opens the task detail.
     *
+    * Loads the contacts cache first (once per page, see
+    * loadTaskDetailContacts) so the creator row and the assigned list can
+    * resolve a matching contact right away.
     * @param {string|number} taskId - The task ID.
-    * @returns {void} Nothing.
+    * @returns {Promise<void>} A promise that resolves when the dialog is open.
     */
-   function openTaskDetail(taskId) {
+   async function openTaskDetail(taskId) {
       const dialog = getTaskDetailDialog();
       const taskData = window.BoardData?.getTask(taskId);
       if (!dialog || !taskData) return;
+      await loadTaskDetailContacts();
       dialog.dataset.taskId = String(taskId);
       renderTaskDetail(taskData);
       dialog.showModal();

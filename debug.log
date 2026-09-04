@@ -5,6 +5,21 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Kontaktliste steht jetzt auch im Aufgaben-Fenster bereit
+-----------------------------------------------------------------------
+- Was: Beim Anklicken einer Aufgabenkarte laedt das Programm jetzt einmalig
+  die komplette Kontaktliste mit und behaelt sie im Speicher, solange die
+  Seite offen ist.
+- Warum: Vorbereitung fuer die naechsten Schritte - damit im Aufgaben-Fenster
+  gleich erkannt werden kann, ob der Ersteller einer Aufgabe ein bekannter
+  Kontakt ist (fuer den "Profil"-Knopf) und ob ein zugewiesener Kontakt der
+  eingeloggte Nutzer selbst ist (fuer den Zusatz "(You)"). Bisher fehlte dafuer
+  die E-Mail-Adresse in der geladenen Kontaktliste.
+- Aussehen: Es aendert sich optisch noch nichts, das kommt in den naechsten
+  Schritten.
+- Dateien: scripts/board/board-task-detail.js, scripts/tasks/dropdownAssigned.js
+
+
 [2026-09-04] Abstand in den Teilaufgaben-Zeilen korrigiert
 ----------------------------------------------------------
 - Was: Die Zeilen unter "Subtasks" waren 4 Pixel zu hoch.
