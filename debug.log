@@ -5,6 +5,17 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-04] Eigener Name in der Zugewiesen-Liste jetzt mit "(You)" markiert
+---------------------------------------------------------------------------
+- Was: In der Liste "Assigned To" im Aufgaben-Fenster steht hinter dem
+  eigenen Namen jetzt der Zusatz "(You)" - so sieht man auf einen Blick, ob
+  man selbst an der Aufgabe beteiligt ist.
+- Warum: Der Zusatz erscheint nur bei eingeloggten Team-Mitgliedern, deren
+  E-Mail-Adresse zu einem Kontakt in der Liste passt. Beim Gast-Login (kein
+  echter Kontakt) und bei allen anderen Namen bleibt die Liste wie bisher.
+- Dateien: scripts/board/board-task-detail.js, scripts/template.js
+
+
 [2026-09-04] "Profil"-Knopf im Aufgaben-Fenster springt jetzt zur Kontaktseite
 ----------------------------------------------------------------------------------
 - Was: Klickt man im Aufgaben-Fenster auf den "Profil"-Knopf, schliesst sich

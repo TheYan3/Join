@@ -168,9 +168,44 @@
     */
    function createTaskDetailAssignedItem(assignee, index) {
       const html = typeof taskDetailAssignedItemHTML === "function"
-         ? taskDetailAssignedItemHTML(getTaskDetailAvatarColor(index), assignee.initials || "?", assignee.name || "Unnamed")
+         ? taskDetailAssignedItemHTML(
+              getTaskDetailAvatarColor(index),
+              assignee.initials || "?",
+              assignee.name || "Unnamed",
+              isTaskDetailAssigneeCurrentUser(assignee)
+           )
          : "";
       return createTaskDetailListItem("task-detail__assigned-item", html);
+   }
+
+   /**
+    * Extracts the contact ID from an assignee's "contact-<id>" value.
+    *
+    * @param {object} assignee - The assignee object.
+    * @returns {string} The contact ID, or an empty string if not present.
+    */
+   function getTaskDetailAssigneeContactId(assignee) {
+      const value = String(assignee?.value || "");
+      return value.startsWith("contact-") ? value.slice("contact-".length) : "";
+   }
+
+   /**
+    * Checks whether an assignee is the signed-in user.
+    *
+    * Resolves the assignee's contact via the Phase 2 contacts cache to get
+    * its e-mail, then compares it against window.JOIN_CURRENT_USER. Guests
+    * have no matching contact e-mail, so nobody gets flagged for them.
+    * @param {object} assignee - The assignee object.
+    * @returns {boolean} Whether the assignee is the signed-in user.
+    */
+   function isTaskDetailAssigneeCurrentUser(assignee) {
+      const currentEmail = String(window.JOIN_CURRENT_USER?.email || "").toLowerCase().trim();
+      if (!currentEmail) return false;
+      const contactId = getTaskDetailAssigneeContactId(assignee);
+      if (!contactId) return false;
+      const contact = (taskDetailContactsCache || []).find((c) => String(c.id) === contactId);
+      const contactEmail = String(contact?.email || "").toLowerCase().trim();
+      return Boolean(contactEmail) && contactEmail === currentEmail;
    }
 
    /**

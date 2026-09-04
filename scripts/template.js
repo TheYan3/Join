@@ -267,10 +267,12 @@ function taskDetailEmptyItemHTML(text) {
  * @param {string} colorClass - The avatar color class.
  * @param {string} initialsText - The initials text.
  * @param {string} name - The display name.
+ * @param {boolean} [isCurrentUser=false] - Whether this assignee is the signed-in user.
  * @returns {string} The task detail assigned item HTML.
  */
-function taskDetailAssignedItemHTML(colorClass, initialsText, name) {
-   return `<span class="avatar avatar--${colorClass}">${escapeHtml(initialsText)}</span><span class="task-detail__assigned-name">${escapeHtml(name)}</span>`;
+function taskDetailAssignedItemHTML(colorClass, initialsText, name, isCurrentUser = false) {
+   const displayName = isCurrentUser ? `${name} (You)` : name;
+   return `<span class="avatar avatar--${colorClass}">${escapeHtml(initialsText)}</span><span class="task-detail__assigned-name">${escapeHtml(displayName)}</span>`;
 }
 
 
