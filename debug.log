@@ -5,6 +5,31 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-06] Aufgaben-Fenster passt sich jetzt an schmale Bildschirme an
+------------------------------------------------------------------------
+- Was: Das grosse Aufgaben-Fenster (oeffnet sich, wenn man auf eine Karte im
+  Board klickt) ist jetzt auch auf Handy und Tablet richtig nutzbar. Bisher lief
+  auf schmalen Bildschirmen der "Profil"/"E-Mail"-Knopf rechts oben in der
+  Ersteller-Zeile aus dem Fenster raus, der Ersteller-Name brach in drei Zeilen
+  um, und die Seitenraender waren zu breit.
+- Was sich aendert: Auf Handy-Breite (bis 620px) hat das Fenster jetzt die
+  passenden Abstaende, Schriftgroessen und einen 30er-Eckenradius nach Vorlage.
+  Unter 375px werden die Seitenraender nochmal schmaler (16 statt 24 Pixel).
+  Auf Tablet UND Handy steht das Ersteller-Abzeichen ("Member"/"Extern") jetzt
+  ueber dem Wort "Creator:", und Name + Knopf stehen rechts daneben in einer
+  Zeile - der Abzeichen-Block und der Knopf koennen dadurch nie mehr aus dem
+  Fenster laufen. Wird es auch dann noch zu eng, schrumpft zuerst der Freiraum
+  zwischen Name und Knopf, erst danach bricht ausschliesslich der Name um.
+  Bei vielen zugewiesenen Personen wird jetzt nur noch der mittlere Bereich
+  scrollbar - Kopf (Kategorie + Schliessen-Kreuz) und Fuss (Loeschen/Bearbeiten)
+  bleiben immer sichtbar und klickbar, auch auf kleinen Bildschirmen mit
+  ausgeklappter Adressleiste.
+- Warum: Der Umbau auf die neuen, groesseren Desktop-Masse (04.09.) war bewusst
+  ohne Ruecksicht auf schmale Bildschirme gebaut. Diese Nacharbeit war von
+  Anfang an eingeplant und ist jetzt nach der endgueltigen Mobil-Vorlage
+  umgesetzt.
+- Dateien: styles/board/task-detail.css
+
 [2026-09-04] Profil-Knopf ist jetzt ein echter Link
 ---------------------------------------------------
 - Was: Der "Profil"-Knopf in der Creator-Zeile des Aufgaben-Fensters zeigt

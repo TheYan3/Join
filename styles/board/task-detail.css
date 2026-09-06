@@ -2,6 +2,9 @@
    width: 525px;
    max-width: calc(100% - 32px);
    max-height: calc(100vh - 64px);
+   /* dvh haelt den Dialog bei ausklappender Mobil-Adressleiste innerhalb des
+      tatsaechlich sichtbaren Bereichs - vh bleibt als Rueckfall fuer Browser ohne dvh. */
+   max-height: calc(100dvh - 64px);
    margin: auto;
    padding: 0;
    border: none;
@@ -16,6 +19,7 @@
    flex-direction: column;
    min-height: 280px;
    max-height: calc(100vh - 64px);
+   max-height: calc(100dvh - 64px);
 }
 
 .task-detail__header {
@@ -80,6 +84,10 @@
    gap: 24px;
    padding: 24px 40px 0;
    overflow-y: auto;
+   /* Ohne min-height:0 verweigert der Flex-Kindknoten das Schrumpfen unter seine
+      Inhaltshoehe - dann wuerde bei vielen Assigned-Personen der ganze Dialog statt
+      nur dieses Feld wachsen, und Kopf/Fuss wuerden aus dem Bild laufen. */
+   min-height: 0;
 }
 
 .task-detail__title {
@@ -336,14 +344,86 @@ dialog::backdrop {
    background: rgba(0, 0, 0, 0.4);
 }
 
+@media (max-width: 1080px) {
+   /* Tablet + Mobil: die Creator-Zeile bekommt hier schon die Mobile-Anordnung
+      (Badge-Pille ueber "Creator:", rechts daneben Name + Aktions-Knopf), obwohl
+      Dialogbreite und Aussenpolster im Tablet-Bereich noch der Desktop-Fassung
+      entsprechen (bleiben unten in den 620px-Regeln unangetastet). Bewusste
+      Abweichung vom Desktop-Figma-Export fuer den Tablet-Bereich, mit Yannic
+      abgestimmt - dafuer liegt keine eigene Figma-Vorlage vor.
+      Kein Markup-Umbau: die beiden Wrapper werden per display:contents aufgeloest,
+      damit Badge, "Creator:"-Label, Name und Aktions-Knopf direkte Grid-Kinder von
+      .task-detail__creator werden und sich per grid-area neu anordnen lassen - die
+      DOM-Reihenfolge (Label, Badge, Name, Aktion) bleibt dabei unveraendert. */
+   .task-detail__creator-main,
+   .task-detail__creator-person {
+      display: contents;
+   }
+
+   .task-detail__creator {
+      display: grid;
+      /* Linke Spalte 95px + 8px Spaltenabstand = 103px - exakt der Abstand, den
+         beide Mobile-Figma-Exports fuer den Start von Name/Aktion vorgeben (Frame
+         394, relativeX 103, identisch in Member- und Extern-Variante). Die Badge-
+         Pille ist darin maximal 93px breit (Member), passt mit Rand hinein. */
+      grid-template-columns: 95px minmax(0, 1fr) auto;
+      grid-template-areas:
+         "badge  .     ."
+         "label  name  action";
+      column-gap: 8px;
+      row-gap: 4px;
+      align-items: end;
+   }
+
+   .task-detail__creator-badge {
+      grid-area: badge;
+   }
+
+   .task-detail__creator .task-detail__field-label {
+      grid-area: label;
+   }
+
+   .task-detail__creator-name {
+      grid-area: name;
+      /* Erlaubt der Namensspalte, unter ihre Textbreite zu schrumpfen - sonst
+         verweigert der Grid-Platz das Zusammenschieben und der Name kann nicht
+         umbrechen (siehe Vorgabe 5: erst Fuellraum weg, dann Namensumbruch). */
+      min-width: 0;
+   }
+
+   .task-detail__creator-action {
+      grid-area: action;
+   }
+}
+
 @media (max-width: 620px) {
    .task-detail-dialog {
       width: calc(100% - 32px);
       max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px);
    }
 
    .task-detail {
       max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px);
+   }
+
+   .task-detail__header {
+      padding: 32px 24px 0;
+   }
+
+   .task-detail__content {
+      gap: 16px;
+      padding: 16px 24px 0;
+   }
+
+   .task-detail__footer {
+      padding: 16px 24px 32px;
+   }
+
+   .task-detail__label {
+      font-size: 16px;
+      padding: 4px 16px;
    }
 
    .task-detail__title {
@@ -355,6 +435,22 @@ dialog::backdrop {
    .task-detail__field-value,
    .task-detail__priority,
    .task-detail__group-title {
-      font-size: 18px;
+      font-size: 16px;
+   }
+
+   .task-detail__creator-name,
+   .task-detail__assigned-name {
+      font-size: 16px;
+   }
+}
+
+@media (max-width: 374px) {
+   /* Unter 375px reicht das 24px-Seitenpolster nicht mehr - auf 16px verkleinert,
+      wie im Interview mit Yannic festgelegt (Vorgabe 2). */
+   .task-detail__header,
+   .task-detail__content,
+   .task-detail__footer {
+      padding-left: 16px;
+      padding-right: 16px;
    }
 }
