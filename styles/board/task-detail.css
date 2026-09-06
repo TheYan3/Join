@@ -132,12 +132,18 @@
    display: flex;
    align-items: center;
    gap: 16px;
+   /* Erlaubt dem Block, unter seine Inhaltsbreite zu schrumpfen - sonst
+      verweigert der Flex-Platz das Zusammenschieben und der Name in
+      .task-detail__creator-person kann nicht gekuerzt werden. */
+   min-width: 0;
 }
 
 .task-detail__creator-person {
    display: inline-flex;
    align-items: center;
    gap: 8px;
+   /* Gleicher Grund wie bei .task-detail__creator-main - eine Ebene tiefer. */
+   min-width: 0;
 }
 
 /* Breite kommt aus der Grafik (Member 93px, Extern 75px). */
@@ -151,6 +157,17 @@
    font-size: 19px;
    line-height: 1.2;
    color: #000000;
+   /* Sicherheitsnetz fuer ungewoehnlich lange Namen (laenger als in den Figma-
+      Beispielen): statt umzubrechen oder Nachbarelemente rauszudruecken, wird
+      der Name einzeilig gekuerzt ("..."). Gilt an jeder Breite (auch Desktop),
+      ersetzt nicht die Platzrechnung in den Breakpoints unten, faengt nur den
+      Fall ab, dass ein echter Name sie sprengt. min-width:0 ist noetig, sonst
+      verweigert die Flex-/Grid-Zelle das Schrumpfen unter die Textbreite und
+      die Kuerzung greift nie. */
+   min-width: 0;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
 }
 
 .task-detail__creator-action {
@@ -367,14 +384,16 @@ dialog::backdrop {
          394, relativeX 103, identisch in Member- und Extern-Variante). Die Badge-
          Pille ist darin maximal 93px breit (Member), passt mit Rand hinein. */
       grid-template-columns: 95px minmax(0, 1fr) auto;
-      /* Zeile 1 (Badge, 22px) und Zeile 2 (Label/Name, 19px einzeilig, waechst bei
-         Namensumbruch) bilden zusammen die 45px aus dem Export. Der Aktions-Knopf
-         (24px hoch) darf Zeile 2 dabei NICHT mitaufspannen - im Export liegen
-         Badge+Label (Frame 393, 45px) und Name+Aktion (Frame 394, nur 24px hoch,
-         unten buendig) als zwei eigenstaendige Spalten nebeneinander, nicht als
-         gemeinsame Grid-Zeile. Dafuer spannt der Knopf unten beide Grid-Zeilen
-         (siehe grid-row an .task-detail__creator-action) und haengt per
-         align-self:end unten an der Gesamthoehe, statt sie selbst zu bestimmen. */
+      /* Zeile 1 (Badge, 22px) und Zeile 2 (Label/Name, 19px einzeilig - der Name
+         bricht nicht um, sondern wird bei Platzmangel gekuerzt, siehe
+         .task-detail__creator-name) bilden zusammen die 45px aus dem Export. Der
+         Aktions-Knopf (24px hoch) darf Zeile 2 dabei NICHT mitaufspannen - im
+         Export liegen Badge+Label (Frame 393, 45px) und Name+Aktion (Frame 394,
+         nur 24px hoch, unten buendig) als zwei eigenstaendige Spalten
+         nebeneinander, nicht als gemeinsame Grid-Zeile. Dafuer spannt der Knopf
+         unten beide Grid-Zeilen (siehe grid-row an .task-detail__creator-action)
+         und haengt per align-self:end unten an der Gesamthoehe, statt sie selbst
+         zu bestimmen. */
       grid-template-rows: auto minmax(19px, auto);
       grid-template-areas:
          "badge  .     ."
@@ -393,11 +412,10 @@ dialog::backdrop {
    }
 
    .task-detail__creator-name {
+      /* min-width:0, Kuerzung per Ellipsis und die Begruendung dazu stehen in
+         der Basis-Regel weiter oben - gilt hier unveraendert mit, nur die
+         Grid-Flaeche kommt dazu. */
       grid-area: name;
-      /* Erlaubt der Namensspalte, unter ihre Textbreite zu schrumpfen - sonst
-         verweigert der Grid-Platz das Zusammenschieben und der Name kann nicht
-         umbrechen (siehe Vorgabe 5: erst Fuellraum weg, dann Namensumbruch). */
-      min-width: 0;
    }
 
    .task-detail__creator-action {
@@ -468,5 +486,30 @@ dialog::backdrop {
    .task-detail__footer {
       padding-left: 16px;
       padding-right: 16px;
+   }
+}
+
+@media (max-width: 427px) {
+   /* Unter dieser Grenze wandert der Aktions-Knopf ("Profil"/"E-mail") zum
+      Badge in Zeile 1 hoch (rechtsbuendig), der Name bekommt dafuer die volle
+      Restbreite in Zeile 2 und bleibt dadurch bevorzugt einzeilig. Ausdruecklich
+      auf 427px begrenzt (nicht 428px), damit der abgenommene Figma-Zustand bei
+      exakt 396px Dialogbreite (= Viewport 428px) unangetastet bleibt - dort
+      bleibt der Knopf neben dem Namen. Fuer den Bereich unterhalb 428px gibt es
+      keinen eigenen Figma-Export, die Zeilenhoehe von Zeile 1 ist hier bewusst
+      frei (wird jetzt vom 24px hohen Knopf statt vom 22px hohen Badge bestimmt -
+      auto-Sizing macht das automatisch, keine eigene Regel noetig). Kein
+      Markup-Umbau: nur die Grid-Flaechen werden neu zugeschnitten, dieselben
+      vier Elemente (Badge, Label, Name, Aktion) bleiben unangetastet. */
+   .task-detail__creator {
+      grid-template-areas:
+         "badge  .     action"
+         "label  name  name";
+   }
+
+   .task-detail__creator-action {
+      /* Ersetzt den Zwei-Zeilen-Span aus der 428px-Fassung wieder durch ein
+         normales Zeile-1-Item, das sich die Zeile mit dem Badge teilt. */
+      grid-area: action;
    }
 }

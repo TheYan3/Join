@@ -5,6 +5,26 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-06] Knopf wandert auf ganz schmalen Handys hoch + zu lange Namen werden gekuerzt
+--------------------------------------------------------------------------------------------
+- Was 1: Ab einer Fensterbreite unter 428 Pixel steht der "Profil"/"E-Mail"-Knopf
+  jetzt oben neben dem Abzeichen ("Member"/"Extern"), statt unten neben dem
+  Namen. Der Name bekommt dadurch die ganze restliche Breite und bleibt auch
+  auf sehr schmalen Handys (ab 320 Pixel) einzeilig. Ab 428 Pixel aufwaerts
+  aendert sich nichts - dort bleibt alles wie in der Vorlage.
+- Was 2: Ein Ersteller-Name, der deutlich laenger ist als die Namen aus den
+  Testdaten, wird jetzt mit "..." abgeschnitten statt umzubrechen oder das
+  Fenster zu verschieben. Das gilt auf jeder Fenstergroesse, auch am Desktop.
+  Fahrt man mit der Maus ueber den abgeschnittenen Namen, zeigt der Browser den
+  vollen Namen als kleinen Tooltip an (auf Handys mit Touch geht das nicht,
+  da es dort kein Maus-Hover gibt - das ist bekannt und so in Ordnung).
+- Warum: Punkt 1 ist eine neue Vorgabe, damit der Name auf sehr schmalen
+  Handys nicht mehr umbricht. Punkt 2 ist ein Sicherheitsnetz fuer den Fall,
+  dass irgendwann ein echter Name auftaucht, der laenger ist als alle
+  bisherigen Testfaelle - ohne das wuerde entweder der Name umbrechen oder der
+  Knopf verschoben werden.
+- Dateien: styles/board/task-detail.css, scripts/board/board-task-detail.js
+
 [2026-09-06] Ersteller-Zeile im Aufgaben-Fenster jetzt exakt so hoch wie in der Vorlage
 -----------------------------------------------------------------------------------------
 - Was: Nacharbeit am letzten Eintrag von heute. Die Ersteller-Zeile (Abzeichen

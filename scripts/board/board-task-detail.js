@@ -403,7 +403,15 @@
          return;
       }
       row.classList.remove("d-none");
-      setTaskDetailText("taskDetailCreator", creator.name || creator.email, "");
+      const creatorDisplayName = creator.name || creator.email;
+      setTaskDetailText("taskDetailCreator", creatorDisplayName, "");
+      // Der Name kann per CSS auf schmalen Breiten mit "..." gekuerzt werden -
+      // das title-Attribut zeigt den vollen Namen zumindest per Maus-Hover.
+      const creatorNameEl = document.getElementById("taskDetailCreator");
+      if (creatorNameEl) {
+         if (creatorDisplayName) creatorNameEl.title = creatorDisplayName;
+         else creatorNameEl.removeAttribute("title");
+      }
       setTaskDetailCreatorBadge(creator.type === "extern" ? "extern" : "intern");
       renderTaskDetailCreatorAction(creator, taskTitle);
    }
