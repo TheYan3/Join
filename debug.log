@@ -5,6 +5,18 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-06] Ersteller-Zeile im Aufgaben-Fenster jetzt exakt so hoch wie in der Vorlage
+-----------------------------------------------------------------------------------------
+- Was: Nacharbeit am letzten Eintrag von heute. Die Ersteller-Zeile (Abzeichen
+  ueber "Creator:", Name + Knopf daneben) war auf Handy und Tablet 5 Pixel
+  hoeher als in der Vorlage vorgesehen (50 statt 45 Pixel).
+- Warum: Der "Profil"/"E-Mail"-Knopf ist als Klickflaeche etwas hoeher gebaut
+  als der Text daneben (24 statt 19 Pixel). Dadurch hat der Knopf versehentlich
+  die ganze Zeile in die Hoehe gezogen. Jetzt haengt der Knopf nur noch unten an
+  der Zeile, statt sie mit aufzuspannen - optisch aendert sich fuer Nutzer kaum
+  etwas, die Zeile ist nur wieder so kompakt wie vorgesehen.
+- Dateien: styles/board/task-detail.css
+
 [2026-09-06] Aufgaben-Fenster passt sich jetzt an schmale Bildschirme an
 ------------------------------------------------------------------------
 - Was: Das grosse Aufgaben-Fenster (oeffnet sich, wenn man auf eine Karte im

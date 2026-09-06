@@ -367,6 +367,15 @@ dialog::backdrop {
          394, relativeX 103, identisch in Member- und Extern-Variante). Die Badge-
          Pille ist darin maximal 93px breit (Member), passt mit Rand hinein. */
       grid-template-columns: 95px minmax(0, 1fr) auto;
+      /* Zeile 1 (Badge, 22px) und Zeile 2 (Label/Name, 19px einzeilig, waechst bei
+         Namensumbruch) bilden zusammen die 45px aus dem Export. Der Aktions-Knopf
+         (24px hoch) darf Zeile 2 dabei NICHT mitaufspannen - im Export liegen
+         Badge+Label (Frame 393, 45px) und Name+Aktion (Frame 394, nur 24px hoch,
+         unten buendig) als zwei eigenstaendige Spalten nebeneinander, nicht als
+         gemeinsame Grid-Zeile. Dafuer spannt der Knopf unten beide Grid-Zeilen
+         (siehe grid-row an .task-detail__creator-action) und haengt per
+         align-self:end unten an der Gesamthoehe, statt sie selbst zu bestimmen. */
+      grid-template-rows: auto minmax(19px, auto);
       grid-template-areas:
          "badge  .     ."
          "label  name  action";
@@ -392,7 +401,14 @@ dialog::backdrop {
    }
 
    .task-detail__creator-action {
-      grid-area: action;
+      /* Spannt bewusst beide Grid-Zeilen (statt nur die "action"-Flaeche in Zeile 2)
+         und haengt sich per align-self:end unten an den 45px-Gesamtblock - so
+         bestimmt der 24px hohe Knopf nicht mehr die Hoehe von Zeile 2 mit (siehe
+         Begruendung oben bei .task-detail__creator). Spalte 3 bleibt dieselbe wie
+         die "action"-Flaeche im Grid-Template. */
+      grid-column: 3;
+      grid-row: 1 / 3;
+      align-self: end;
    }
 }
 
