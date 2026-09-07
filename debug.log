@@ -5,6 +5,31 @@ festgehalten: was wurde geändert, warum, in welcher Datei. Ein Eintrag pro Comm
 neuester Eintrag oben.
 
 
+[2026-09-07] Kategorie-Etikett passt sich an, Personen-Kreise draengen das Prioritaets-Symbol nicht mehr raus
+-----------------------------------------------------------------------------------------------------------
+- Was 1: Das farbige Etikett auf jeder Aufgaben-Karte ("User Story" / "Technical
+  Task") hatte bisher eine feste Groesse. Bei kurzem Text war viel Luft rechts
+  und links, bei laengerem Text war es zu knapp. Das Etikett passt sich jetzt
+  an seinen eigenen Text an, Farbe, Ecken-Rundung und Innenabstand bleiben
+  gleich wie vorher.
+- Was 2: Bei Fensterbreiten zwischen etwa 1080 und 1300 Pixel wurden die
+  Spalten schmaler als die Karten das eigentlich brauchen. Bei Karten mit
+  vielen zugewiesenen Personen (6 Kreise plus "+N"-Kreis) wurde dadurch das
+  kleine Prioritaets-Symbol rechts aus der Karte rausgedrueckt, es landete
+  teilweise ausserhalb der Karte im Abstand zur naechsten Spalte. Jetzt werden
+  auf jeder Karte hoechstens 4 Personen-Kreise gezeigt (bei mehr Personen der
+  vierte Kreis als "+N"), das passt auch in der schmalsten Spaltenbreite
+  wieder bequem neben das Symbol. Zusaetzlich kann das Symbol selbst jetzt nie
+  mehr zusammengedrueckt oder verschoben werden, das ist ein Sicherheitsnetz
+  fuer den Fall, dass eine Karte trotzdem mal zu voll wird.
+- Warum: Kundenwunsch (Vibe-Annotation) - beide Stellen waren im Browser klar
+  sichtbar (kurzer/langer Etikett-Text, Karte mit 14 zugewiesenen Personen bei
+  1244 Pixel Fensterbreite). Von den zwei angebotenen Loesungswegen (weniger
+  Kreise zeigen ODER Kreise staerker ueberlappen) wurde "weniger Kreise" ausgewaehlt,
+  weil im Test staerkeres Ueberlappen bei ganz schmalen Spalten trotzdem nicht
+  gereicht haette, ohne die Kreise unschoen extrem uebereinanderzuschieben.
+- Dateien: styles/board/cards.css, scripts/board/board-cards.js
+
 [2026-09-06] Knopf wandert auf ganz schmalen Handys hoch + zu lange Namen werden gekuerzt
 --------------------------------------------------------------------------------------------
 - Was 1: Ab einer Fensterbreite unter 428 Pixel steht der "Profil"/"E-Mail"-Knopf

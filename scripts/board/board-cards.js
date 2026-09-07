@@ -116,7 +116,9 @@
     * @returns {number} The avatar display count.
     */
    function getAvatarDisplayCount(totalAssignees) {
-      const maxAvatars = Math.floor((172 - 32) / (32 - 8)) + 1;
+      // ponytail: fester Wert statt Formel - Karten schieben ab 1300px sonst das
+      // Priority-Icon aus der Karte (siehe Vibe-Annotation), 4 Avatare passen ueberall.
+      const maxAvatars = 4;
       return totalAssignees > maxAvatars ? maxAvatars - 1 : totalAssignees;
    }
 
